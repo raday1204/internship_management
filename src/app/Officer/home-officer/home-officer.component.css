@@ -205,24 +205,22 @@ Dropdown Button .sidebar .nav-links .dropdown-btn {
     overflow: hidden;
 }
 
-.table-container {
-    max-height: 300px; /* Set your desired maximum height */
-    overflow-y: auto; /* Enable vertical scroll when content exceeds the height */
-    border-collapse: collapse; /* Optional: merge table borders */
-}
-
 table {
     width: 600px;
-}
-
-table {
     border: 3px solid #376987;
-    margin: 40px 45px;
+    margin: 25px 45px;
+    border-collapse: separate;
+    text-indent: initial;
+    line-height: normal;
+    text-align: start;
+    border-spacing: 2px;
+    white-space: normal;
+    font-variant: normal;
 }
 
 table th {
     padding: 10px;
-    border: 3px solid #1e5678;
+    /* border: 3px solid #1e5678; */
     background-color: #1e5678;
     text-align: center;
 }

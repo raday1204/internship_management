@@ -61,7 +61,7 @@ p {
 
 table {
     border: 2px solid #064469;
-    margin: 20px 40px 40px 40px;
+    margin: 20px 40px 30px 40px;
 }
 
 .table-container {
@@ -73,6 +73,25 @@ table th {
     border: 2px solid #064469;
     background-color: #DFEBF6;
     text-align: center;
+}
+
+th:nth-child(1),
+td:nth-child(1) {
+    width: 9%;
+}
+
+th:nth-child(2),
+td:nth-child(2) {
+    width: 20%;
+}
+
+th:nth-child(3),
+td:nth-child(3) {
+    width: 10%;
+}
+th:nth-child(4),
+td:nth-child(4) {
+    width: 30%;
 }
 
 table td {
@@ -111,4 +130,26 @@ h6 {
     list-style: none;
     font-size: 16px;
     font-weight: 600;
+}
+
+/* pagin part */
+.pagination-wrapper {
+    margin:  5px 20px 50px 20px;
+}
+
+.pagination button {
+    margin: 0px 20px 0px 20px;
+    border-radius: 10px;
+    padding: 0px 10px;
+    border: 2px solid #000;
+    background-color: #DFEBF6;
+    font-size: 17px;
+    font-weight: 500;
+}
+
+.pagination span {
+    font-size: 17px; 
+    font-weight: 500;
+    border: 2px solid #000;
+    padding: 0px 10px;
 }

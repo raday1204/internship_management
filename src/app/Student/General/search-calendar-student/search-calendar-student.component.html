@@ -1,0 +1,42 @@
+<body class="mx-auto d-block" style="width: 980px;">
+
+    <header class="header mx-auto d-block text-center" style="width: 980px;">
+        <nav>
+            <ul>
+                <div class="header-list">
+                    <li class="list-item"><a routerLink="/home-student">ข้อมูลทั่วไป </a> > </li>
+                    <li class="list-item">ปฏิทินฝึกงาน</li>
+                </div>
+                <button (click)="logout()">
+                    ออกจากระบบ <i class="fa-solid fa-arrow-right-from-bracket p-1"></i>
+                </button>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="form-container">
+        <p>กรุณากรอกข้อมูล</p>
+
+        <form (ngSubmit)="submitForm()" [formGroup]="searchForm">
+            <div class="form-group">
+                <label for="year">ปีการศึกษา</label><br>
+                <select formControlName="selectedOption5" required>
+                    <option value="">-- เลือกปีการศึกษา --</option>
+                    <option *ngFor="let option of selectedOption5" [value]="option">{{ option }}</option>
+                </select><br>
+
+                <label for="term">ภาคเรียนที่</label><br>
+                <select formControlName="selectedOption6" required>
+                    <option value="">-- เลือกประเภท --</option>
+                    <option *ngFor="let option of selectedOption6" [value]="option">{{ option }}</option>
+                </select>
+            </div>
+
+            <div class="button-container">
+                <button class="button" style="background-color: #FDFDF6; color: #072D44;"
+                    [routerLink]="['/home-student']">ย้อนกลับ</button>
+                <button class="button" style="background-color: #064469; color: #FDFDF6;">ยืนยัน</button>
+            </div>
+        </form>
+    </div>
+</body>

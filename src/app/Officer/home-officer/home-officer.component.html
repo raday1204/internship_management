@@ -60,7 +60,7 @@
     </div>
 
     <div class="content">
-        <table class="table-container">
+        <table cellpadding="0" cellspacing="0" class="table-container">
             <thead class="text-center" style="font-size: 15px;">
                 <tr style="color: #e6ecf0;">
                     <th><i class="fa-solid fa-satellite-dish"></i>ข่าวประชาสัมพันธ์<i
@@ -69,14 +69,15 @@
             </thead>
             <tbody style="font-size: 15px;">
                 <tr *ngFor="let relationItem of relations">
-                    <td>
+                    <td width="550">
                         <i class="fa-solid fa-square" style="color: #FF8A00;"></i>
                         {{ relationItem.relation_content }} - [ {{ relationItem.relation_date }} ]
                         <ng-container *ngIf="isNew(relationItem.relation_date)">
                             <img src="https://media.tenor.com/h8wC3_J4yh8AAAAi/new-post.gif" /> 
                         </ng-container>
                     </td>
-                </tr>
+                </tr><br>
+
                 <tr style="text-align: right;"><a [routerLink]="['/relation-officer']"
                         style="margin: 15px 15px 20px 15px; text-decoration: none; font-size: 17px;">แก้ไขข่าวประชาสัมพันธ์
                         >>></a></tr>

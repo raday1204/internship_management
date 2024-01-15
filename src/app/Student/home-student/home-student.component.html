@@ -15,7 +15,8 @@
         <div class="nav-links" id="nav-links">
             <ng-container *ngFor="let item of menuSidebar">
                 <li *ngIf="item.link; else actionTemplate" #itemEl routerLinkActive="active">
-                    <a [routerLink]="[item.link]" [queryParams]="{ username: username }">
+                    <a [routerLink]="[item.link]" [queryParams]="{ username: username }"
+                        target="{{ item.openInNewTab ? '_blank' : '_self' }}" [title]="item.link_name">
                         <i [class]="item.icon"></i>
                         <span class="link_name">{{ item.link_name }}</span>
                     </a>
@@ -34,9 +35,10 @@
 
             <p class="text-center">แบบฟอร์ม</p>
             <li *ngFor="let item of formSidebar" #itemEl routerLinkActive="active">
-                <a [routerLink]="[item.link]">
+                <a [routerLink]="[item.link]" [queryParams]="{ username: username }"
+                    target="{{ item.openInNewTab ? '_blank' : '_self' }}" [title]="item.link_name">
                     <i [class]="item.icon"></i>
-                    <span class="link_name">{{item.link_name}}</span>
+                    <span class="link_name">{{ item.link_name }}</span>
                 </a>
             </li>
         </div>
@@ -46,21 +48,27 @@
         <table class="table-container">
             <thead class="text-center" style="font-size: 15px;">
                 <tr style="color: #e6ecf0;">
-                    <th><i class="fa-solid fa-satellite-dish"></i>ข่าวประชาสัมพันธ์<i class="fa-solid fa-satellite-dish"></i></th>
+                    <th>
+                        <i class="fa-solid fa-satellite-dish"></i>ข่าวประชาสัมพันธ์<i class="fa-solid fa-satellite-dish"></i>
+                    </th>
                 </tr>
             </thead>
             <tbody style="font-size: 15px;">
                 <tr *ngFor="let relationItem of relations">
                     <td>
-                        <i class="fa-solid fa-square" style="color: #FF8A00;"></i>
-                        {{ relationItem.relation_content }} - [ {{ relationItem.relation_date }} ]
-                        <ng-container *ngIf="isNew(relationItem.relation_date)">
-                            <img src="https://media.tenor.com/h8wC3_J4yh8AAAAi/new-post.gif" /> 
-                        </ng-container>
+                        <a href="javascript:void(0);" (click)="openInNewTab(relationItem)">
+                            <i class="fa-solid fa-square" style="color: #FF8A00;"></i>
+                            {{ relationItem.relation_content }} - [ {{ relationItem.relation_date }} ]
+                            <ng-container *ngIf="isNew(relationItem.relation_date)">
+                                <img src="https://media.tenor.com/h8wC3_J4yh8AAAAi/new-post.gif" />
+                            </ng-container>
+                        </a>
                     </td>
                 </tr>
-                <tr style="text-align: right;"><a [routerLink]="['/all-relation']" style="margin: 15px 15px 20px 15px; text-decoration: none; font-size: 17px;">ข่าวประชาสัมพันธ์ทั้งหมด >>></a></tr>
+                <tr style="text-align: right;"><a [routerLink]="['/all-relation']"
+                        style="margin: 15px 15px 20px 15px; text-decoration: none; font-size: 17px;">ข่าวประชาสัมพันธ์ทั้งหมด
+                        >>></a></tr>
             </tbody>
         </table>
-    </div>   
+    </div>
 </body>

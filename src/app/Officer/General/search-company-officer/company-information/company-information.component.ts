@@ -25,7 +25,7 @@ interface Student {
 interface CompanyInformation {
   company: Company;
   students: Student[];
-  need_student: NeedStudent[];
+  need_students: NeedStudent[];
 }
 
 interface CompanyResponse {
@@ -45,6 +45,12 @@ export class CompanyInformationComponent implements OnInit {
   selectedOption1: string | undefined;
   selectedOption2: string | undefined;
   username: string = '';
+
+  displayedCompanyInformation: any[] = [];
+
+  currentPage = 1;
+  itemsPerPage = 10;
+  totalItems = 0;
 
   constructor(
     private route: ActivatedRoute,
@@ -81,12 +87,15 @@ export class CompanyInformationComponent implements OnInit {
                 this.CompanyInformation = response.data;
 
                 this.CompanyInformation.forEach(company => {
-                  this.need_student[company.company.company_id] = company.need_student;
+                  this.need_student[company.company.company_id] = company.need_students;
                   this.student[company.company.company_id] = company.students;
                 });
 
                 // Sort the data alphabetically by company name (Thai)
               this.CompanyInformation.sort((a, b) => a.company.company_name.localeCompare(b.company.company_name, 'th'));
+
+              this.loadCompanyInformation();
+              this.totalItems = this.CompanyInformation.length;
 
               } else {
                 console.error('Invalid data structure in the server response.');
@@ -100,8 +109,7 @@ export class CompanyInformationComponent implements OnInit {
           }
         );
     }
-  }    
-  
+  }
 
   editCompany(companyId: string) {
     if (companyId) {
@@ -110,6 +118,18 @@ export class CompanyInformationComponent implements OnInit {
     } else {
       console.error('Invalid company ID.');
     }
+  }
+
+  loadCompanyInformation(): void {
+    const startIndex = (this.currentPage - 1) * this.itemsPerPage;
+    const endIndex = startIndex + this.itemsPerPage;
+
+    this.displayedCompanyInformation = this.CompanyInformation.slice(startIndex, endIndex);
+  }
+
+  paginate(pageNumber: number): void {
+    this.currentPage = pageNumber;
+    this.loadCompanyInformation();
   }
 
   logout() {

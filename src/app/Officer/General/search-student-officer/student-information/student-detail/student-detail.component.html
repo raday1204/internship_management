@@ -1,0 +1,158 @@
+<body class="mx-auto d-block" style="width: 980px;">
+
+    <header class="header mx-auto d-block text-center" style="width: 980px;">
+        <nav>
+            <ul>
+                <div class="header-list">
+                    <li class="list-item"><a routerLink="/home-officer">ข้อมูลทั่วไป </a> ></li>
+                    <li class="list-item">ข้อมูลประวัติส่วนตัว</li>
+                </div>
+                <button (click)="logout()">
+                    ออกจากระบบ <i class="fa-solid fa-arrow-right-from-bracket p-1"></i>
+                </button>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="profile">
+        <div [formGroup]="studentForm">
+            <div class="list p-3"
+                style="display: flex; justify-content: center; align-items: center; text-align: center;">
+                <img *ngIf="displayedFilePath" [src]="displayedFilePath"
+                    style="max-width: auto; max-height: 250px; display: inline-block;">
+            </div>
+
+            <p>รายละเอียดส่วนตัว</p>
+
+            <div class="list">
+                <label for="type_name">ประเภท :</label>
+                <span style="width: 245px;">{{ studentForm.get('type_name')?.value || '-' }}</span>
+            </div>
+
+            <div class="list">
+                <label for="student_citizen">หมายเลขประจำวันประชาชน:</label>
+                <span>{{ studentForm.get('student_citizen')?.value || '-' }}</span>
+            </div>
+
+            <div class="list">
+                <label for="student_name">ชื่อ-นามสกุล :</label>
+                <span style="width: 245px;">{{ studentForm.get('student_name')?.value || '-' }} {{
+                    studentForm.get('student_lastname')?.value
+                    }}</span>
+            </div>
+
+            <div class="list">
+                <label for="student_nickname">ชื่อเล่น :</label>
+                <span>{{ studentForm.get('student_nickname')?.value || '-' }}</span>
+            </div>
+
+            <div class="list">
+                <label for="student_email">Email :</label>
+                <span style="width: 245px;">{{ studentForm.get('student_email')?.value || '-' }}</span>
+            </div>
+
+            <div class="list">
+                <label for="student_mobile">โทรศัพท์มือถือ :</label>
+                <span>{{ studentForm.get('student_mobile')?.value || '-' }}</span>
+            </div>
+
+            <div class="list">
+                <label for="student_facebook">Fackbook URL :</label>
+                <span style="width: 245px;">{{ studentForm.get('student_facebook')?.value || '-' }}</span>
+            </div>
+
+            <div class="list">
+                <label for="student_line">Line ID :</label>
+                <span>{{ studentForm.get('student_line')?.value || '-' }}</span>
+            </div>
+            <br><br>
+
+
+            <p>ที่อยู่ตามภูมิลำเนา</p>
+            <div class="list">
+                <label for="st_address">ที่อยู่ :</label>
+                <span>{{ studentForm.get('st_address')?.value || '-' }}</span>
+            </div>
+            <div class="list">
+                <label for="st_tambol">ตำบล/แขวง :</label>
+                <span>{{ studentForm.get('st_tambol')?.value || '-' }}</span>
+            </div>
+            <div class="list">
+                <label for="st_ampher">อำเภอ/เขต :</label>
+                <span>{{ studentForm.get('st_ampher')?.value || '-' }}</span>
+            </div>
+            <div class="list">
+                <label for="st_province">จังหวัด :</label>
+                <span>{{ studentForm.get('st_province')?.value || '-' }}</span>
+            </div>
+            <div class="list">
+                <label for="st_zipcode">รหัสไปรษณีย์ :</label>
+                <span>{{ studentForm.get('st_zipcode')?.value || '-' }}</span>
+            </div>
+            <div class="list">
+                <label for="st_tel">โทรศัพท์บ้าน :</label>
+                <span>{{ studentForm.get('st_tel')?.value || '-' }}</span>
+            </div>
+            <div class="list">
+                <label for="st_contact">บุคคลอ้างอิง :</label>
+                <span>{{ studentForm.get('st_contact')?.value || '-' }}</span>
+            </div>
+            <div class="list">
+                <label for="st_mobile">โทรศัพท์มือถือ :</label>
+                <span>{{ studentForm.get('st_mobile')?.value || '-' }}</span>
+            </div>
+            <br><br>
+
+            <p>ที่อยู่ปัจจุบัน ที่สามารถติดต่อได้</p>
+            <div class="list">
+                <label for="ct_address">ที่อยู่ :</label>
+                <span>{{ studentForm.get('ct_address')?.value || '-' }}</span>
+            </div>
+            <div class="list">
+                <label for="ct_tambol">ตำบล/แขวง :</label>
+                <span>{{ studentForm.get('ct_tambol')?.value || '-' }}</span>
+            </div>
+            <div class="list">
+                <label for="ct_ampher">อำเภอ/เขต :</label>
+                <span>{{studentForm.get('ct_ampher')?.value || '-' }}</span>
+            </div>
+            <div class="list">
+                <label for="ct_province">จังหวัด :</label>
+                <span>{{ studentForm.get('ct_province')?.value || '-' }}</span>
+            </div>
+            <div class="list">
+                <label for="ct_zipcode">รหัสไปรษณีย์ :</label>
+                <span>{{ studentForm.get('ct_zipcode')?.value || '-' }}</span>
+            </div>
+            <div class="list">
+                <label for="ct_tel">โทรศัพท์บ้าน :</label>
+                <span>{{studentForm.get('ct_tel')?.value || '-' }}</span>
+            </div>
+            <br><br>
+
+            <p>ข้อมูลหน่วยงาน</p>
+            <div [formGroup]="companyForm">
+                <div class="list-text">
+                    <label for="company_name">ชื่อหน่วยงาน :</label>
+                    <span>{{companyForm.get('company_name')?.value || '-' }}</span>
+                </div><br>
+
+                <div class="list-text">
+                    <label for="company_building">ชื่อหน่วยงานภายใน :</label>
+                    <span>{{companyForm.get('company_building')?.value || '-' }}</span>
+                </div>
+                <br><br><br>
+            </div>
+                
+            <div class="button-container">
+                <button class="button" (click)="goback()"
+                    style="background-color: white; color: #064469;">ย้อนกลับ</button>
+            </div>
+        </div>
+    </div>
+    <div class="text-box">
+        <li class="text-list">หน่วยกิจการนิสิต สาขาวิศวกรรมคอมพิวเตอร์ คณะวิศวกรรมศาสตร์ มหาวิทยาลัยนเรศวร</li>
+        <li class="text-list">99 หมู่ 9 ถ.พิษณุโลก-นครสวรรค์ ต.ท่าโพธิ์ อ.เมือง จ.พิษณุโลก 65000</li>
+        <li class="text-list">โทรศัพท์ 0-5596-4015 โทรสาร 0-5596-4000</li>
+    </div>
+</body>

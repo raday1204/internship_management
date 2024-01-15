@@ -87,12 +87,12 @@ export class HomeOfficerComponent implements OnInit {
     },
 
     {
-      link_name: "หนังสือแจ้งรายชื่อนิสิตเข้าฝึกงาน",
+      link_name: "หนังสือแจ้งการยืนยันเข้าฝึกงาน",
       link: "/search-send-form-officer",
       icon: "fa-regular fa-file-pdf",
     },
     {
-      link_name: "หนังสือรายงานตัวนิสิตเข้าฝึกงาน",
+      link_name: "หนังสือขอส่งนิสิตเข้าฝึกงาน",
       link: "/search-report-form-officer",
       icon: "fa-regular fa-file-pdf",
     },
@@ -137,7 +137,7 @@ export class HomeOfficerComponent implements OnInit {
         (response: any) => {
           if (response.loggedIn) {
             this.username = response.username;
-            console.log(`Welcome, ${this.username}, to the home-student page!`);
+            console.log(`Welcome, ${this.username}, to the home-officer page!`);
             this.companyStudentService.setUsername(this.username);
             // Navigate to company-information with the username as a query parameter
             this.router.navigate([], {

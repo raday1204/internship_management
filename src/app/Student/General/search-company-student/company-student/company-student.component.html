@@ -13,7 +13,9 @@
             </ul>
         </nav>
     </header>
+
     <p>ปีการศึกษา {{ selectedOption5 }} ประเภทที่ {{ selectedOption6 }}</p>
+
     <table class="table-container" style="width: 900px;">
         <thead style="font-size: 13px;">
             <tr style="font-size: 13px;">
@@ -27,20 +29,21 @@
                 <th></th>
             </tr>
         </thead>
+
         <tbody style="font-size: 13px;">
-            <tr *ngFor="let company of CompanyInformation; let i = index">
+            <tr *ngFor="let company of companyInformation; let i = index">
                 <td class="text-center">{{ i + 1 }}</td>
                 <td style="word-wrap: break-word;">{{ company.company.company_name }}</td>
                 <td style="word-wrap: break-word;">{{ company.company.company_building }}</td>
                 <td style="word-wrap: break-word;">{{ company.company.company_job }}</td>
 
                 <td class="text-center">
-                    {{ company.need_student && company.need_student.length > 0 ?
-                    company.need_student[0].number_student_train : '' }} -
+                    {{ company.need_students && company.need_students.length > 0 ?
+                    company.need_students[0].number_student_train : '' }} -
                     {{ student[company.company.company_id].length }} -
                     {{
-                    (company.need_student && company.need_student.length > 0
-                    ? +company.need_student[0].number_student_train
+                    (company.need_students && company.need_students.length > 0
+                    ? +company.need_students[0].number_student_train
                     : 0) -
                     (student[company.company.company_id].length || 0)
                     }}
@@ -68,15 +71,14 @@
             </ng-container>
 
             <td class="text-center">
-                <button *ngIf="!(company.need_student && company.need_student.length > 0
-                                ? +company.need_student[0].number_student_train
+                <button *ngIf="!(company.need_students && company.need_students.length > 0
+                                ? +company.need_students[0].number_student_train
                                 : 0) ||
                                 (student[company.company.company_id] && student[company.company.company_id].length <
-                                (company.need_student && company.need_student.length > 0
-                                    ? +company.need_student[0].number_student_train
-                                    : 0))"
-                        (click)="selectCompany(company)" style="background-color: #66B366; color: #FDFDF6;"
-                        [disabled]="company.selected">
+                                (company.need_students && company.need_students.length > 0
+                                    ? +company.need_students[0].number_student_train
+                                    : 0))" (click)="selectCompany(company)"
+                    style="background-color: #66B366; color: #FDFDF6;" [disabled]="company.selected">
                     ยื่นขอเข้าฝึกงาน
                 </button>
             </td>

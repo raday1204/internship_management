@@ -13,7 +13,7 @@ import { CompanyStudentService } from '../../search-company-student/company-stud
 export class WaitStatusComponent implements OnInit {
   username: string | undefined;
   company = {
-    company_id: '',  
+    company_id: '',
     company_name: '',
     company_building: ''
   };
@@ -42,13 +42,13 @@ export class WaitStatusComponent implements OnInit {
     if (!this.username) {
       this.router.navigate(['/login-student']);
     }
-    
+
     if (this.username) {
       this.http
         .get(`http://localhost/PJ/Backend/Student/Training/get-training.php?username=${this.username}`)
         .subscribe(
           (response: any) => {
-            if (response && response.success) { 
+            if (response && response.success) {
               const company = response.data;
               this.companyForm.patchValue({
                 company_id: company.company_id,
@@ -75,6 +75,7 @@ export class WaitStatusComponent implements OnInit {
       .subscribe(
         () => {
           localStorage.removeItem('loggedInUsername');
+          localStorage.removeItem('companyID');
           // Replace the current navigation history with the login page
           this.router.navigateByUrl('/login-student', { replaceUrl: true });
         },

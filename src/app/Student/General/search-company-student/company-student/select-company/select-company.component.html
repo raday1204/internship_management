@@ -20,7 +20,6 @@
                 <th>ลำดับ</th>
                 <th>ชื่อหน่วยงาน</th>
                 <th>หน่วยงานภายใน</th>
-                <th>รับ-ลง-เหลือ</th>
                 <th>รหัสนิสิต</th>
                 <th>ชื่อนิสิตที่ลงทะเบียน</th>
             </tr>
@@ -30,17 +29,10 @@
                 <td class="text-center">{{ company.company_id }}</td>
                 <td style="word-break: break-all;">{{ company.company_name }}</td>
                 <td style="word-break: break-all;">{{ company.company_building }}</td>
-
-                <td class="text-center" *ngIf="need_student[company.company_id] && need_student[company.company_id].length > 0">
-                    {{ need_student[company.company_id][0].number_student_train }}
-                </td>
-                <td *ngIf="!need_student[company.company_id]">N/A</td>
-
                 <td class="text-center">{{ company.student_code }}</td>
                 <td>{{ company.student_name }} {{ company.student_lastname }}</td>
             </tr>
         </tbody>
     </table>
     <h6>*นิสิตสามารถลงทะเบียนได้เพียง 1 หน่วยงาน เท่านั้น*</h6>
-
 </body>

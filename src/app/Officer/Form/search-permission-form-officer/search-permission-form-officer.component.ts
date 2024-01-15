@@ -16,6 +16,7 @@ export class SearchPermissionFormOfficerComponent {
   searchForm: FormGroup;
   username: string = '';
   loggedInUsername: string = '';
+  companies: any[] = [];
 
   constructor(
     private router: Router,

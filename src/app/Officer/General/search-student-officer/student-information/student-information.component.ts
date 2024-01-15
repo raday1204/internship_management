@@ -11,9 +11,14 @@ import { CompanyStudentService } from 'src/app/Student/General/search-company-st
 })
 export class StudentInformationComponent implements OnInit {
   StudentInformation: any[] = [];
+  displayedStudentInformation: any[] = [];
   selectedOption3: any;
   selectedOption4: any;
   username: string = '';
+
+  currentPage = 1;
+  itemsPerPage = 10;
+  totalItems = 0;
 
   constructor(
     private router: Router,
@@ -31,12 +36,33 @@ export class StudentInformationComponent implements OnInit {
       this.selectedOption4 = studentInformation.type_name;
       // Handle accordingly, e.g., redirect to another page or show an error message
     }
+
     this.username = this.companyStudentService.getUsername();
     console.log('Username from service:', this.username);
+
     if (!this.username) {
       this.router.navigateByUrl('/login-officer', { replaceUrl: true });
       return;
     }
+
+    this.loadStudentInformation();
+    this.totalItems = this.StudentInformation.length;
+  }
+
+  handleStudentClick(student: any) {
+    // Navigate to the student details page, passing the student_code as a query parameter
+    this.router.navigate(['/student-detail'], { queryParams: { student_code: student.student_code } });
+  }
+
+  loadStudentInformation(): void {
+    const startIndex = (this.currentPage - 1) * this.itemsPerPage;
+    const endIndex = startIndex + this.itemsPerPage;
+    this.displayedStudentInformation = this.StudentInformation.slice(startIndex, endIndex);
+  }
+
+  paginate(pageNumber: number): void {
+    this.currentPage = pageNumber;
+    this.loadStudentInformation();
   }
 
   logout() {

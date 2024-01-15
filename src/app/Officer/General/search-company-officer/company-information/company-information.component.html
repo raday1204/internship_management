@@ -1,89 +1,97 @@
 <body class="mx-auto d-block" style="width: 980px;">
 
     <header class="header mx-auto d-block text-center" style="width: 980px;">
-        <nav>
-            <ul>
-                <div class="header-list">
-                    <li class="list-item"><a routerLink="/home-officer">ข้อมูลทั่วไป </a> > </li>
-                    <li class="list-item">ข้อมูลหน่วยงาน</li>
-                </div>
-                <button (click)="logout()">
-                    ออกจากระบบ <i class="fa-solid fa-arrow-right-from-bracket p-1"></i>
-                </button>
-            </ul>
-        </nav>
+      <nav>
+        <ul>
+          <div class="header-list">
+            <li class="list-item"><a routerLink="/home-officer">ข้อมูลทั่วไป </a> > </li>
+            <li class="list-item">ข้อมูลหน่วยงาน</li>
+          </div>
+          <button (click)="logout()">
+            ออกจากระบบ <i class="fa-solid fa-arrow-right-from-bracket p-1"></i>
+          </button>
+        </ul>
+      </nav>
     </header>
-
+  
     <p *ngIf="CompanyInformation.length === 0" style="color: red;">ไม่มีหน่วยงานที่นิสิตเลือก</p>
     <p *ngIf="CompanyInformation.length > 0">ปีการศึกษา {{ selectedOption1 }} ประเภทที่ {{ selectedOption2 }}</p>
-
-    <table class="table-container" style="width: 900px; margin-bottom: 50px;"
-        *ngIf="CompanyInformation && CompanyInformation">
-        <thead style="font-size: 13px;">
-            <tr style="font-size: 13px;">
-                <th>ลำดับ</th>
-                <th>ชื่อหน่วยงาน</th>
-                <th>หน่วยงานภายใน</th>
-                <th>รับ-ลง-เหลือ</th>
-                <th>รหัสนิสิต</th>
-                <th>ชื่อนิสิตที่ลงทะเบียน</th>
-                <th>โทรศัพท์มือถือ</th>
-
-            </tr>
-        </thead>
-
-        <tbody style="font-size: 13px;">
-            <tr *ngFor="let company of CompanyInformation; let i = index">
-                <td class="text-center">{{ i + 1 }}</td>
-                <td style="word-wrap: break-word;">{{ company.company.company_name }}</td>
-                <td style="word-wrap: break-word;">{{ company.company.company_building }}</td>
-
-                <td class="text-center">
-                    {{ company.need_student && company.need_student.length > 0 ?
-                    company.need_student[0].number_student_train : '' }} -
-                    {{ student[company.company.company_id].length }} -
-                    {{
-                    (company.need_student && company.need_student.length > 0
-                    ? +company.need_student[0].number_student_train
-                    : 0) -
-                    (student[company.company.company_id].length || 0)
-                    }}
-                </td>
-
-                <td *ngIf="student[company.company.company_id] && student[company.company.company_id].length > 0">
-                    <ng-container *ngFor="let studentItem of student[company.company.company_id]">
-            <tr>
+  
+    <table class="table-container" style="width: 900px;"
+      *ngIf="CompanyInformation && CompanyInformation">
+      <thead style="font-size: 13px;">
+        <tr style="font-size: 13px;">
+          <th>ลำดับ</th>
+          <th>ชื่อหน่วยงาน</th>
+          <th>หน่วยงานภายใน</th>
+          <th>รับ-ลง-เหลือ</th>
+          <th>รหัสนิสิต</th>
+          <th>ชื่อนิสิตที่ลงทะเบียน</th>
+          <th>โทรศัพท์มือถือ</th>
+        </tr>
+      </thead>
+  
+      <tbody style="font-size: 13px;">
+        <tr *ngFor="let company of displayedCompanyInformation; let i = index">
+          <td class="text-center">{{ i + 1 + (currentPage*10) - 10 }}</td>
+          <td style="word-wrap: break-word;">{{ company.company.company_name }}</td>
+          <td style="word-wrap: break-word;">{{ company.company.company_building }}</td>
+  
+          <td class="text-center">
+            {{ company.need_students && company.need_students.length > 0 ?
+            company.need_students[0].number_student_train : '' }} -
+            {{ student[company.company.company_id].length }} -
+            {{
+            (company.need_students && company.need_students.length > 0
+            ? +company.need_students[0].number_student_train
+            : 0) -
+            (student[company.company.company_id].length || 0)
+            }}
+          </td>
+  
+          <td *ngIf="student[company.company.company_id] && student[company.company.company_id].length > 0">
+            <ng-container *ngFor="let studentItem of student[company.company.company_id]">
+              <tr>
                 {{ studentItem.student_code }}
-            </tr>
+              </tr>
             </ng-container>
-            </td>
-
-            <td *ngIf="student[company.company.company_id] && student[company.company.company_id].length > 0">
-                <ng-container *ngFor="let studentItem of student[company.company.company_id]">
-                    <tr>
-                        {{ studentItem.student_name }} {{ studentItem.student_lastname }}
-                    </tr>
-                </ng-container>
-            </td>
-
-            <td *ngIf="student[company.company.company_id] && student[company.company.company_id].length > 0">
-                <ng-container *ngFor="let studentItem of student[company.company.company_id]">
-                    <tr>
-                        {{ studentItem.student_mobile }}
-                    </tr>
-                </ng-container>
-            </td>
-
-            <ng-container
-                *ngIf="!(student[company.company.company_id] && student[company.company.company_id].length > 0)">
-                <td colspan="3" class="text-center">No students available</td>
+          </td>
+  
+          <td *ngIf="student[company.company.company_id] && student[company.company.company_id].length > 0">
+            <ng-container *ngFor="let studentItem of student[company.company.company_id]">
+              <tr>
+                {{ studentItem.student_name }} {{ studentItem.student_lastname }}
+              </tr>
             </ng-container>
-
-            <td class="text-center">
-                <button (click)="editCompany(company.company.company_id)"
-                    style="background-color: #66B366; color: #FDFDF6;">แก้ไขข้อมูลหน่วยงาน</button>
-            </td>
-            </tr>
-        </tbody>
+          </td>
+  
+          <td *ngIf="student[company.company.company_id] && student[company.company.company_id].length > 0">
+            <ng-container *ngFor="let studentItem of student[company.company.company_id]">
+              <tr>
+                {{ studentItem.student_mobile }}
+              </tr>
+            </ng-container>
+          </td>
+  
+          <ng-container
+            *ngIf="!(student[company.company.company_id] && student[company.company.company_id].length > 0)">
+            <td colspan="3" class="text-center">No students available</td>
+          </ng-container>
+  
+          <td class="text-center">
+            <button (click)="editCompany(company.company.company_id)"
+              style="background-color: #66B366; color: #FDFDF6;">แก้ไขข้อมูลหน่วยงาน</button>
+          </td>
+        </tr>
+      </tbody>
     </table>
-</body>
+  
+    <div class="pagination-wrapper">
+      <div class="pagination">
+        <button (click)="paginate(currentPage - 1)" [disabled]="currentPage === 1">Previous</button>
+        <span>{{ currentPage }}</span>
+        <button (click)="paginate(currentPage + 1)" [disabled]="currentPage * itemsPerPage >= totalItems">Next</button>
+      </div>
+    </div>
+  </body>
+  

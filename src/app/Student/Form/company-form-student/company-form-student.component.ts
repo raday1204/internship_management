@@ -315,6 +315,7 @@ export class CompanyFormStudentComponent implements OnInit {
       .subscribe(
         () => {
           localStorage.removeItem('loggedInUsername');
+          localStorage.removeItem('companyID');
           this.username = ''; // Reset username
           this.router.navigateByUrl('/login-student', { replaceUrl: true });
         },

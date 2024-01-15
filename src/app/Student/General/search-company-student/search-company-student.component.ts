@@ -4,7 +4,6 @@ import { HttpClient } from '@angular/common/http';
 import { DataStorageService } from 'src/app/Officer/General/search-company-officer/company-information/data-storage.service';
 import { CompanyStudentService } from './company-student/company-student.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { Location } from '@angular/common';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Component({
@@ -24,7 +23,6 @@ export class SearchCompanyStudentComponent {
     private route: ActivatedRoute,
     private http: HttpClient,
     private snackBar: MatSnackBar,
-    private location: Location,
     private formBuilder: FormBuilder,
     private dataStorageService: DataStorageService,
     private companyStudentService: CompanyStudentService
@@ -111,12 +109,12 @@ export class SearchCompanyStudentComponent {
         });
   }
 
-
   logout() {
     this.http.post<any>('http://localhost/PJ/Backend/Student/logout.php', {})
       .subscribe(
         () => {
           localStorage.removeItem('loggedInUsername');
+          localStorage.removeItem('companyID');
           this.searchForm.reset();
           this.username = ''; // Reset username
           this.router.navigateByUrl('/login-student', { replaceUrl: true });

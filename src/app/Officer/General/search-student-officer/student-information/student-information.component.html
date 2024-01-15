@@ -23,26 +23,31 @@
                 <th>รหัสนิสิต</th>
                 <th>ชื่อ-นามสกุล</th>
                 <th>โทรศัพท์มือถือ</th>
-                <th>Email</th>
-                <th>Facebook</th>
-                <th>Line</th>
-                <th>ที่อยู่ปัจจุบัน</th>
+                <th>ข้อมูลเพิ่มเติม</th>
             </tr>
         </thead>
         <tbody style="font-size: 13px;">
-            <tr *ngFor="let student of StudentInformation; let i = index">
-                <td class="text-center">{{ i + 1 }}</td>
-                <td>{{ student.student_citizen }}</td>
-                <td>{{ student.student_code }}</td>
+            <tr *ngFor="let student of displayedStudentInformation; let i = index">
+                <td class="text-center">{{ i + 1 + (currentPage*10) - 10 }}</td>
+                <td class="text-center">{{ student.student_citizen }}</td>
+                <td class="text-center">{{ student.student_code }}</td>
                 <td>{{ student.student_name }} {{ student.student_lastname }}</td>
-                <td>{{ student.student_mobile }}</td>
-                <td>{{ student.student_email }}</td>
-                <td>{{ student.student_facebook }}</td>
-                <td>{{ student.student_line }}</td>
-                <td style="word-wrap: break-word;">{{ student.st_address }}</td>
+                <td class="text-center">{{ student.student_mobile }}</td>
+                <td class="text-center">
+                    <button (click)="handleStudentClick(student)"
+                        style="background-color: #66B366; color: #FDFDF6;">ข้อมูลนิสิต</button>
+                </td>
             </tr>
         </tbody>
     </table>
-    <p *ngIf="!StudentInformation || !StudentInformation || StudentInformation.length === 0">No student
-        information available.</p>
+
+    <p *ngIf="!displayedStudentInformation || displayedStudentInformation.length === 0">No student information available.</p>
+
+    <div class="pagination-wrapper">
+        <div class="pagination">
+          <button (click)="paginate(currentPage - 1)" [disabled]="currentPage === 1">Previous</button>
+          <span>{{ currentPage }}</span>
+          <button (click)="paginate(currentPage + 1)" [disabled]="currentPage * itemsPerPage >= totalItems">Next</button>
+        </div>
+    </div>
 </body>

@@ -51,11 +51,19 @@ export class AllRelationComponent implements OnInit {
     this.fetchRelations(this.currentPage, this.itemsPerPage);
   }
 
+  isNew(date: string): boolean {
+    const newsDate = new Date(date);
+    const today = new Date();
+    const differenceInDays = Math.floor((today.getTime() - newsDate.getTime()) / (1000 * 3600 * 24));
+    return differenceInDays < 2;
+  }
+
   logout() {
     this.http.post<any>('http://localhost/PJ/Backend/Student/logout.php', {})
       .subscribe(
         () => {
           localStorage.removeItem('loggedInUsername');
+          localStorage.removeItem('selectedCompanyID');
           // Replace the current navigation history with the login page
           this.router.navigateByUrl('/login-student', { replaceUrl: true });
         },

@@ -37,7 +37,7 @@ interface Training {
 interface CompanyInformation {
   company: Company;
   students: Student[];
-  need_student: NeedStudent[];
+  need_students: NeedStudent[];
   training: Training[];
 }
 
@@ -59,6 +59,11 @@ export class StatusInformationComponent implements OnInit {
   selectedOption2: string | undefined;
   filteredCompanyIds: string[] = [];
   username: string = '';
+
+  displayedCompanyInformation: any[] = [];
+  currentPage = 1;
+  itemsPerPage = 10;
+  totalItems = 0;
 
   constructor(
     private route: ActivatedRoute,
@@ -98,7 +103,11 @@ export class StatusInformationComponent implements OnInit {
                 // Filter out companies without students
                 return companyInfo.students && companyInfo.students.length > 0;
               });
+
+              this.loadCompanyInformation();
+              this.totalItems = this.companyInformation.length;
               this.updateLocalData();
+
             } else {
               console.error('Invalid data structure in the server response.');
             }
@@ -109,7 +118,6 @@ export class StatusInformationComponent implements OnInit {
         }
       );
   }
-
 
   updateLocalData() {
     this.companyInformation.forEach((company) => {
@@ -172,6 +180,7 @@ export class StatusInformationComponent implements OnInit {
   rejectCompanyStatus(studentCode: string) {
     const newStatus = 3;
     this.updateCompanyStatus(studentCode, newStatus);
+    localStorage.removeItem('selectedCompanyID');
   }
 
   confirmAssessmentStatus(studentCode: string) {
@@ -200,6 +209,7 @@ export class StatusInformationComponent implements OnInit {
         }
       );
   }
+
   updateAssessmentStatus(studentCode: string, newAssessmentStatus: number) {
     this.http
       .post(
@@ -220,6 +230,18 @@ export class StatusInformationComponent implements OnInit {
           console.error('HTTP Error:', error);
         }
       );
+  }
+
+  loadCompanyInformation(): void {
+    const startIndex = (this.currentPage - 1) * this.itemsPerPage;
+    const endIndex = startIndex + this.itemsPerPage;
+
+    this.displayedCompanyInformation = this.companyInformation.slice(startIndex, endIndex);
+  }
+
+  paginate(pageNumber: number): void {
+    this.currentPage = pageNumber;
+    this.loadCompanyInformation();
   }
 
   logout() {

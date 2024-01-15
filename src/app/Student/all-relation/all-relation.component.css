@@ -61,11 +61,18 @@ table {
     width: 800px;
     border: 3px solid #376987;
     margin: 30px 40px 40px 50px;
+    border-collapse: separate;
+    text-indent: initial;
+    line-height: normal;
+    text-align: start;
+    border-spacing: 2px;
+    white-space: normal;
+    font-variant: normal;
 }
 
 table th {
     padding: 10px;
-    border: 3px solid #376987;
+    /* border: 3px solid #376987; */
     background-color: #1e5678;
     text-align: center;
 }
@@ -86,6 +93,9 @@ table td i {
 }
 
 td {
+    /* font-family: "TH SarabunPSK";
+    font-weight: 500;
+    font-size: 22px; */
     word-wrap: break-word;
     word-break: break-all;
 }
@@ -100,6 +110,7 @@ td {
     border-radius: 10px;
     padding: 0px 10px;
     border: 2px solid #000;
+    background-color: #DFEBF6;
     font-size: 17px;
     font-weight: 500;
 }
@@ -111,3 +122,8 @@ td {
     padding: 0px 10px;
 }
 
+/* GIF part */
+.content img {
+    margin-left: 10px;
+    width: 40px;
+}

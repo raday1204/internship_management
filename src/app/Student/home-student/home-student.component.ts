@@ -3,11 +3,13 @@ import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { CompanyStudentService } from '../General/search-company-student/company-student/company-student.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 interface Relation {
   id: number;
   relation_date: string;
   relation_content: string;
+  relation_pic: string;
 }
 
 @Component({
@@ -22,14 +24,30 @@ export class HomeStudentComponent implements OnInit {
   username: string = '';
   loggedInUsername: string = '';
   relations: Relation[] = [];
+  hasSelectedCompany: boolean = false;
 
+  displayedFilePath: string = '';
+  relationForm: FormGroup;
+  relationId: any;
+  relation: any = {
+    relation_date: '',
+    relation_content: '',
+    relation_pic: ''
+  };
   constructor(
     private http: HttpClient,
     private route: ActivatedRoute,
     private router: Router,
     private snackBar: MatSnackBar,
+    private fb: FormBuilder,
     private companyStudentService: CompanyStudentService
-  ) { }
+  ) { 
+    this.relationForm = this.fb.group({
+      relation_date: ['', Validators.required],
+      relation_content: ['', Validators.required],
+      relation_pic: ['']
+    });
+  }
 
   ngOnInit() {
     this.dateTime = new Date();
@@ -49,41 +67,78 @@ export class HomeStudentComponent implements OnInit {
       }
     );
   }
+  
+  openInNewTab(relationItem: any): void {
+    if (relationItem) {
+      const relationId = relationItem.id; // Assuming id is the property holding relation_id
+      this.http.get(`http://localhost/PJ/Backend/Officer/Relation/get-relation-details.php?id=${relationId}`).subscribe(
+        (response: any) => {
+          console.log('Backend Response:', response);
+          this.displayedFilePath = `http://localhost${response.data.relation_pic}`;
+          const newTab = window.open('', '_blank');
+          if (newTab) {
+            newTab.document.write(`
+              <html>
+                <head>
+                  <title>Image Preview</title>
+                </head>
+                <body>
+                  <img src ="${this.displayedFilePath}" style="max-width: 100%;">
+                </body>
+              </html>
+            `);
+            newTab.document.close();
+          }
+        },
+        (error) => {
+          console.error('Error fetching relation data:', error);
+        }
+      );
+    }
+  }
+  
+  
 
   menuSidebar = [
     {
       link_name: "คำอธิบายรายวิชา",
-      link: "/course-student",
+      link: "/assets/pdfs/คำอธิบายรายวิชา.pdf",
       icon: "fa-regular fa-paste",
-      sub_menu: []
+      sub_menu: [],
+      openInNewTab: true
     },
 
     {
       link_name: "ข้อแนะนำฝึกงาน",
-      link: "/advice-student",
+      link: "/assets/pdfs/ข้อแนะนำฝึกงาน.pdf",
       icon: "fa-regular fa-thumbs-up",
-      sub_menu: []
+      sub_menu: [],
+      openInNewTab: true
     },
 
     {
       link_name: "ปฏิทินฝึกงาน",
-      link: "/calendar-student",
+      link: "/search-calendar-student",
       icon: "fa-regular fa-calendar",
-      sub_menu: []
+      sub_menu: [],
+      openInNewTab: false
     },
 
     {
       link_name: "ข้อมูลประวัติส่วนตัว",
       link: '/profile-student',
       icon: "fa-solid fa-clipboard-user",
-      sub_menu: []
+      sub_menu: [],
+      openInNewTab: false
+
     },
 
     {
       link_name: "ข้อมูลหน่วยงาน",
       link: "/search-company-student",
       icon: "fa-solid fa-list",
-      sub_menu: []
+      sub_menu: [],
+      openInNewTab: false
     },
 
     {
@@ -91,6 +146,7 @@ export class HomeStudentComponent implements OnInit {
       action: () => this.checkCompanyStatus(),// link: "/wait-status",
       icon: "fa-solid fa-user-check",
       sub_menu: [],
+      openInNewTab: false
     },
 
     {
@@ -98,43 +154,49 @@ export class HomeStudentComponent implements OnInit {
       action: () => this.checkAssessmentStatus(),// link: "/wait-status",
       icon: "fa-solid fa-file-circle-check",
       sub_menu: [],
+      openInNewTab: false
     },
 
     {
       link_name: "ผู้ประสานงานด้านการฝึกงาน",
-      link: "/coordinator-student",
+      link: "/assets/pdfs/ผู้ประสานงานด้านการฝึกงาน.pdf",
       icon: "fa-solid fa-person-circle-question",
-      sub_menu: []
+      sub_menu: [],
+      openInNewTab: true
     },
   ]
 
   formSidebar = [
     {
       link_name: "คู่มือการฝึกงานเสริมสร้างทักษะประสบการณ์วิชาชีพวิศวกรรม",
-      link: "/manual-form-student",
+      link: "/assets/pdfs/สำหรับนิสิตคอมพิวเตอร์-คู่มือการฝึกงานเสริมสร้างทักษะประสบการณ์วิชาชีพวิศวกรรม.pdf",
       icon: "fa-regular fa-circle-question",
-      sub_menu: []
+      sub_menu: [],
+      openInNewTab: true
     },
 
     {
       link_name: "01-ข้อมูลหน่วยงาน",
       link: "/company-form-student",
       icon: "fa-regular fa-file-pdf",
-      sub_menu: []
+      sub_menu: [],
+      openInNewTab: false
     },
 
     {
-      link_name: "04-แบบบันทึกประจำวัน",
-      link: "/diary-form-student",
+      link_name: "แบบบันทึกประจำวัน",
+      link: "/assets/pdfs/แบบบันทึกประจำวัน.pdf",
       icon: "fa-regular fa-file-pdf",
-      sub_menu: []
+      sub_menu: [],
+      openInNewTab: true
     },
 
     {
-      link_name: "06-สถานประกอบการในมุมมองของนิสิต",
-      link: "/evaluation-form-student",
+      link_name: "สถานประกอบการในมุมมองของนิสิต",
+      link: "/assets/pdfs/สถานประกอบการในมุมมองของนิสิต.pdf",
       icon: "fa-regular fa-file-pdf",
-      sub_menu: []
+      sub_menu: [],
+      openInNewTab: true
     },
   ]
 
@@ -150,12 +212,37 @@ export class HomeStudentComponent implements OnInit {
             this.username = response.username;
             console.log(`Welcome, ${this.username}, to the home-student page!`);
             this.companyStudentService.setUsername(this.username);
-            // Navigate to company-information with the username as a query parameter
-            this.router.navigate([], {
-              relativeTo: this.route,
-              queryParams: { username: this.username },
-              queryParamsHandling: 'merge'
-            });
+            // Check if the user already has a company ID
+            this.http.post<any>('http://localhost/PJ/Backend/Student/check-company-id.php', { username: this.username })
+              .subscribe(
+                (companyResponse: any) => {
+                  if (companyResponse.success) {
+                    if (companyResponse.hasCompanyID) {
+                      console.log('Welcome, Company ID:', companyResponse.companyID);
+
+                      // Store the company ID in localStorage
+                      localStorage.setItem('companyID', companyResponse.companyID);
+                      this.hasSelectedCompany = !!localStorage.getItem('companyID');
+                      this.hasSelectedCompany = true;
+                    } else {
+                      this.hasSelectedCompany = false;
+
+                      // Navigate to company-information with the username as a query parameter
+                      this.router.navigate([], {
+                        relativeTo: this.route,
+                        queryParams: { username: this.username },
+                        queryParamsHandling: 'merge'
+                      });
+                    }
+                  } else {
+                    console.error('An error occurred while checking company ID:', companyResponse.error);
+                  }
+                },
+                (error) => {
+                  console.error('An error occurred while checking company ID:', error);
+                }
+              );
+
           } else {
             this.router.navigate(['/login-student']);
           }
@@ -185,6 +272,7 @@ export class HomeStudentComponent implements OnInit {
               } else if (company_status === '2') {
                 this.router.navigate(['/confirm-status']);
               } else if (company_status === '3') {
+                localStorage.removeItem('selectedCompanyID');
                 this.router.navigate(['/cancel-status']);
               }
             } else {
@@ -243,6 +331,7 @@ export class HomeStudentComponent implements OnInit {
       .subscribe(
         () => {
           localStorage.removeItem('loggedInUsername');
+          localStorage.removeItem('companyID');
           this.username = ''; // Reset username
           this.router.navigateByUrl('/login-student', { replaceUrl: true });
         },
@@ -251,7 +340,6 @@ export class HomeStudentComponent implements OnInit {
         }
       );
   }
-
 
   isNew(date: string): boolean {
     const newsDate = new Date(date);

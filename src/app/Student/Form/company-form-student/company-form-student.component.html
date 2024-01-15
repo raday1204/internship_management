@@ -65,22 +65,22 @@
                 </div>
 
                 <div class="list">
-                    <label for="type_code">ประเภท</label>
-                    <select formControlName="type_name">
-                        <option value="">-- เลือกประเภท --</option>
-                        <option *ngFor="let option of selectedOption2" [value]="option">{{ option }}</option>
-                    </select>
-                </div>
-
-                <div class="list">
                     <label for="term">ภาคเรียนที่</label>
                     <select formControlName="term">
                         <option value="">-- เลือกภาคเรียน --</option>
                         <option value="1">1</option>
                         <option value="2">2</option>
-                    </select><br>
+                    </select>
                 </div>
 
+                <div class="list">
+                    <label for="type_code">ประเภท</label>
+                    <select formControlName="type_name">
+                        <option value="">-- เลือกประเภท --</option>
+                        <option *ngFor="let option of selectedOption2" [value]="option">{{ option }}</option>
+                    </select><br>
+                    <div style="color: red;">กรุณาเลือกประเภท: ฝึกงานตามายวิชา(หลักสูตร)</div>
+                </div>
                 <p>ข้อมูลหน่วยงาน</p>
 
                 <div class="list">
@@ -135,8 +135,8 @@
 
                 <div class="list">
                     <label for="type_special">4. คุณสมบัติ/ความสามารถ/ความรู้เพิ่มเติม
-                        ของนิสิตที่บริษัทต้องการ(ถ้ามี)</label>
-                    <input type="text" id="type_special" formControlName="type_special">
+                        ของนิสิตที่หน่วยงานต้องการ(ถ้ามี)</label>
+                    <input style="width: 730px;" type="text" id="type_special" formControlName="type_special">
                 </div>
 
                 <div class="list-date">

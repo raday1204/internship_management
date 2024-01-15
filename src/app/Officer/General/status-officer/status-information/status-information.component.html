@@ -30,11 +30,11 @@
             </tr>
         </thead>
         <tbody style="font-size: 13px;">
-            <ng-container *ngFor="let company of companyInformation; let i = index">
+            <ng-container *ngFor="let company of displayedCompanyInformation; let i = index">
                 <!-- Loop through students of each company -->
                 <ng-container *ngFor="let studentItem of company.students; let j = index">
                     <tr>
-                        <td class="text-center" *ngIf="j === 0" [attr.rowspan]="company.students.length">{{ i + 1 }}
+                        <td class="text-center" *ngIf="j === 0" [attr.rowspan]="company.students.length">{{ i + 1 + (currentPage*10) - 10 }}
                         </td>
 
                         <!-- Display company name and building for the first row of each company -->
@@ -47,49 +47,25 @@
                         </td>
 
                         <td class="text-center" *ngIf="j === 0" [attr.rowspan]="company.students.length">
-                            {{ company.need_student && company.need_student.length > 0 ?
-                            company.need_student[0].number_student_train : '' }} -
+                            {{ company.need_students && company.need_students.length > 0 ?
+                            company.need_students[0].number_student_train : '' }} -
+                            
                             {{ student[company.company.company_id].length }} -
+                            
                             {{
-                            (company.need_student && company.need_student.length > 0
-                            ? +company.need_student[0].number_student_train
+                            (company.need_students && company.need_students.length > 0
+                            ? +company.need_students[0].number_student_train
                             : 0) -
                             (student[company.company.company_id].length || 0)
                             }}
                         </td>
-
-
-                        <!-- <td class="text-center">
-                            <ng-container *ngFor="let trainingItem of training[company.company.company_id]">
-                                <button *ngIf="trainingItem.company_status === 1" class="button"
-                                    (click)="confirmCompany(trainingItem.student_code)"
-                                    style="background-color: white; color: #0075FF;">ยืนยัน</button>
-                                <button *ngIf="trainingItem.company_status === 1" class="button"
-                                    (click)="rejectCompany(trainingItem.student_code)"
-                                    style="background-color: white; color: #FF0000;">ไม่รับนิสิตฝึกงาน</button>
-                                <button *ngIf="trainingItem.company_status === 2" class="button"
-                                    style="background-color: white; color: #0075FF;">ยืนยันเรียบร้อย</button>
-                                <button *ngIf="trainingItem.company_status === 3" class="button"
-                                    style="background-color: white; color: #FF0000;">ไม่รับนิสิตฝึกงาน</button>
-                            </ng-container>
-                        </td>
-
-                        <td class="text-center">
-                            <ng-container *ngFor="let trainingItem of training[company.company.company_id]">
-                                <button *ngIf="trainingItem.assessment_status === 1" class="button"
-                                    (click)="confirmAssessments(trainingItem.student_code)"
-                                    style="background-color: white; color: #0075FF;">ยืนยัน</button>
-                                <button *ngIf="trainingItem.assessment_status === 2" class="button"
-                                    style="background-color: white; color: #4c9a4c;">ยืนยันเรียบร้อย</button>
-                            </ng-container>
-                        </td> -->
 
                         <ng-container *ngIf="studentItem.training && studentItem.training.length > 0">
                             <!-- Loop through training entries for each student -->
                             <ng-container *ngFor="let trainingItem of studentItem.training; let k = index">
                                 <td>{{ studentItem.student_code }}</td>
                                 <td>{{ studentItem.student_name }} {{ studentItem.student_lastname }}</td>
-            
+
                                 <td class="text-center">
                                     <button *ngIf="trainingItem.company_status === 1" class="button"
                                         (click)="confirmCompany(studentItem.student_code)"
@@ -102,7 +78,7 @@
                                     <button *ngIf="trainingItem.company_status === 3" class="button"
                                         style="background-color: white; color: #FF0000;">ไม่รับนิสิตฝึกงาน</button>
                                 </td>
-            
+
                                 <td class="text-center">
                                     <button *ngIf="trainingItem.assessment_status === 1" class="button"
                                         (click)="confirmAssessmentStatus(studentItem.student_code)"
@@ -118,4 +94,12 @@
             </ng-container>
         </tbody>
     </table>
+
+    <div class="pagination-wrapper">
+        <div class="pagination">
+          <button (click)="paginate(currentPage - 1)" [disabled]="currentPage === 1">Previous</button>
+          <span>{{ currentPage }}</span>
+          <button (click)="paginate(currentPage + 1)" [disabled]="currentPage * itemsPerPage >= totalItems">Next</button>
+        </div>
+      </div>
 </body>

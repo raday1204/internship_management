@@ -134,6 +134,7 @@ td:nth-child(3) {
     border-radius: 10px;
     padding: 0px 10px;
     border: 2px solid #000;
+    background-color: #DFEBF6;
     font-size: 17px;
     font-weight: 500;
 }

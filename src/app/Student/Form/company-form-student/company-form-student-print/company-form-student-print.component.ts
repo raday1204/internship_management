@@ -88,7 +88,7 @@ export class CompanyFormStudentPrintComponent {
       this.router.navigateByUrl('/login-student', { replaceUrl: true });
       return;
     }
-  
+
     if (this.username) {
       this.http
         .get(`http://localhost/PJ/Backend/Student/Company-Form/get-company-form-student.php?username=${this.username}`)
@@ -127,12 +127,11 @@ export class CompanyFormStudentPrintComponent {
         document.body.innerHTML = printContents;
         window.print();
       }
-        document.body.innerHTML = originalContents;
-      } else {
-        this.router.navigate(['/company-form-student']);
-      }
+      document.body.innerHTML = originalContents;
+    } else {
+      this.router.navigate(['/company-form-student']);
     }
-  
+  }
 
   generatePrintableHtml(data: any): string {
     const student = data || {};
@@ -268,7 +267,7 @@ export class CompanyFormStudentPrintComponent {
       .subscribe(
         () => {
           localStorage.removeItem('loggedInUsername');
-
+          localStorage.removeItem('companyID');
           // Disable browser back
           history.pushState('', '', window.location.href);
           window.onpopstate = function () {

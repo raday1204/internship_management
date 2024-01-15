@@ -8,7 +8,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatInputModule } from '@angular/material/input';
-import { MatNativeDateModule } from '@angular/material/core';
+import { MatNativeDateModule } from '@angular/material/core';;
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -35,7 +35,8 @@ import { ManualFormStudentComponent } from './Student/Form/manual-form-student/m
 import { CompanyStudentPopupComponent } from './Student/General/search-company-student/company-student/company-student-popup/company-student-popup.component';
 import { CompanyFormStudentPopupComponent } from './Student/Form/company-form-student/company-form-student-popup/company-form-student-popup.component';
 import { EditProfilePopupComponent } from './Student/General/profile-student/edit-profile/edit-profile-popup/edit-profile-popup.component';
-import { CompanyStudentService} from './Student/General/search-company-student/company-student/company-student.service';
+import { CompanyStudentService } from './Student/General/search-company-student/company-student/company-student.service';
+import { SearchCalendarStudentComponent } from './Student/General/search-calendar-student/search-calendar-student.component';
 
 import { SearchStudentOfficerComponent } from './Officer/General/search-student-officer/search-student-officer.component';
 import { StudentInformationComponent } from './Officer/General/search-student-officer/student-information/student-information.component';
@@ -76,8 +77,9 @@ import { ConfirmAssessmentStatusComponent } from './Student/General/assessment-s
 import { WaitAssessmentStatusComponent } from './Student/General/assessment-status/wait-assessment-status/wait-assessment-status.component';
 import { AllRelationComponent } from './Student/all-relation/all-relation.component';
 import { StatusInformationPopupComponent } from './Officer/General/status-officer/status-information/status-information-popup/status-information-popup.component';
-
-
+import { ExamplePdfViewerComponent } from './example-pdf-viewer/example-pdf-viewer.component';
+import { NgxExtendedPdfViewerModule } from 'ngx-extended-pdf-viewer';
+import { StudentDetailComponent } from './Officer/General/search-student-officer/student-information/student-detail/student-detail.component';
 
 @NgModule({
   declarations: [
@@ -95,7 +97,7 @@ import { StatusInformationPopupComponent } from './Officer/General/status-office
     LoginStudentComponent,
     ProfileStudentComponent,
     EditProfileComponent,
-    
+
     SearchStudentOfficerComponent,
     StudentInformationComponent,
     SearchCompanyOfficerComponent,
@@ -143,7 +145,11 @@ import { StatusInformationPopupComponent } from './Officer/General/status-office
     WaitAssessmentStatusComponent,
     AllRelationComponent,
     StatusInformationPopupComponent,
+    ExamplePdfViewerComponent,
+    SearchCalendarStudentComponent,
+    StudentDetailComponent,
   ],
+
   imports: [
     BrowserModule,
     AppRoutingModule,
@@ -157,6 +163,7 @@ import { StatusInformationPopupComponent } from './Officer/General/status-office
     MatDatepickerModule,
     MatInputModule,
     MatNativeDateModule,
+    NgxExtendedPdfViewerModule,
   ],
 
   providers: [

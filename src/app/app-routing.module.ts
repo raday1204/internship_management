@@ -22,7 +22,6 @@ import { EvaluationFormStudentComponent } from './Student/Form/evaluation-form-s
 import { ManualFormStudentComponent } from './Student/Form/manual-form-student/manual-form-student.component';
 import { SearchCompanyStudentComponent } from './Student/General/search-company-student/search-company-student.component';
 import { CompanyFormStudentPrintComponent } from './Student/Form/company-form-student/company-form-student-print/company-form-student-print.component';
-import { CompanyStudentService} from './Student/General/search-company-student/company-student/company-student.service';
 import { WaitAssessmentStatusComponent } from './Student/General/assessment-status/wait-assessment-status/wait-assessment-status.component';
 import { ConfirmAssessmentStatusComponent } from './Student/General/assessment-status/confirm-assessment-status/confirm-assessment-status.component';
 import { AllRelationComponent } from './Student/all-relation/all-relation.component';
@@ -56,6 +55,8 @@ import { PermissionFormComponent } from './Officer/Form/search-permission-form-o
 import { SendFormComponent } from './Officer/Form/search-send-form-officer/send-form/send-form.component';
 import { ThanksFormComponent } from './Officer/Form/search-thanks-form-officer/thanks-form/thanks-form.component';
 import { ReportFormComponent } from './Officer/Form/search-report-form-officer/report-form/report-form.component';
+import { SearchCalendarStudentComponent } from './Student/General/search-calendar-student/search-calendar-student.component';
+import { StudentDetailComponent } from './Officer/General/search-student-officer/student-information/student-detail/student-detail.component';
 
 const routes: Routes = [
   { path: 'app', component: AppComponent },
@@ -71,18 +72,19 @@ const routes: Routes = [
   { path: 'course-student', component: CourseStudentComponent },
   { path: 'home-student', component: HomeStudentComponent },
   { path: 'login-student', component: LoginStudentComponent },
-  { path: 'profile-student', component: ProfileStudentComponent },  
+  { path: 'profile-student', component: ProfileStudentComponent },
   { path: 'edit-profile', component: EditProfileComponent },
   { path: 'acceptance-form-student', component: AcceptanceFormStudentComponent },
   { path: 'company-form-student', component: CompanyFormStudentComponent },
   { path: 'diary-form-student', component: DiaryFormStudentComponent },
   { path: 'evaluation-form-student', component: EvaluationFormStudentComponent },
   { path: 'manual-form-student', component: ManualFormStudentComponent },
-  { path: 'search-company-student', component: SearchCompanyStudentComponent},
-  { path: 'company-form-student-print', component: CompanyFormStudentPrintComponent},
-  { path: 'wait-assessment-status', component: WaitAssessmentStatusComponent},
-  { path: 'confirm-assessment-status', component: ConfirmAssessmentStatusComponent},
-  { path: 'all-relation', component: AllRelationComponent},
+  { path: 'search-company-student', component: SearchCompanyStudentComponent },
+  { path: 'company-form-student-print', component: CompanyFormStudentPrintComponent },
+  { path: 'wait-assessment-status', component: WaitAssessmentStatusComponent },
+  { path: 'confirm-assessment-status', component: ConfirmAssessmentStatusComponent },
+  { path: 'all-relation', component: AllRelationComponent },
+  { path: 'search-calendar-student', component: SearchCalendarStudentComponent },
 
   { path: 'search-student-officer', component: SearchStudentOfficerComponent },
   { path: 'student-information', component: StudentInformationComponent },
@@ -113,6 +115,7 @@ const routes: Routes = [
   { path: 'send-form', component: SendFormComponent },
   { path: 'thanks-form', component: ThanksFormComponent },
   { path: 'report-form', component: ReportFormComponent },
+  { path: 'student-detail', component: StudentDetailComponent },
 ];
 
 @NgModule({

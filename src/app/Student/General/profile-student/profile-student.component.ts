@@ -83,18 +83,18 @@ export class ProfileStudentComponent implements OnInit {
   ngOnInit(): void {
     this.route.params.subscribe(params => {
       this.username = params['username'];
-      
+
       if (!this.username) {
         // Check queryParams directly instead of subscribing
         const queryParams = this.route.snapshot.queryParams;
         this.username = queryParams['username'];
-  
+
         if (!this.username) {
           this.router.navigateByUrl('/login-student', { replaceUrl: true });
           return;
         }
       }
-  
+
       this.fetchStudentData();
     });
   }
@@ -154,7 +154,7 @@ export class ProfileStudentComponent implements OnInit {
       .subscribe(
         () => {
           localStorage.removeItem('loggedInUsername');
-
+          localStorage.removeItem('companyID');
           // Clear navigation history and prevent going back
           const navigationExtras: NavigationExtras = {
             replaceUrl: true,
