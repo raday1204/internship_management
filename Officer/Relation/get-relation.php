@@ -18,9 +18,17 @@ if ($conn->connect_error) {
 $conn->set_charset("utf8mb4");
 
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
-    // Use prepared statement to avoid SQL injection
-    $select_query = "SELECT * FROM relation";
-    $result = $conn->query($select_query);
+    $page = isset($_GET['page']) ? intval($_GET['page']) : 1;
+    $limit = isset($_GET['limit']) ? intval($_GET['limit']) : 9;
+
+    $offset = ($page - 1) * $limit;
+
+    $select_query = "SELECT * FROM relation ORDER BY relation_date DESC LIMIT ?, ?";
+    $stmt = $conn->prepare($select_query);
+    $stmt->bind_param('ii', $offset, $limit);
+    $stmt->execute();
+
+    $result = $stmt->get_result();
 
     if ($result === false) {
         echo json_encode(['success' => false, 'message' => 'Error executing query: ' . $conn->error]);
@@ -38,10 +46,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
 
     echo json_encode(['success' => true, 'data' => $relations]);
 } else {
-    // Handle invalid request method
     echo json_encode(['success' => false, 'message' => 'Invalid request method']);
 }
 
-// Close the connection
 $conn->close();
 ?>

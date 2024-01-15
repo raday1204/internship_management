@@ -25,7 +25,7 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
     $response = [];
 
     // Retrieve company information using prepared statement
-    $sqlCompany = "SELECT company_id, company_name, company_building, company_job FROM company WHERE year = ? AND type_name = ?";
+    $sqlCompany = "SELECT company_id, company_name, company_building, company_job, send_name, year FROM company WHERE year = ? AND type_name = ?";
     $stmtCompany = $conn->prepare($sqlCompany);
     $stmtCompany->bind_param("ss", $year, $type_name);
 
@@ -44,11 +44,13 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
                 $needStudent = fetchRecords($resultNeedStudents);
 
                 // Retrieve information from the student table using prepared statement
-                $stmtStudents = $conn->prepare("SELECT student_code, student_name, student_lastname, student_mobile FROM student WHERE company_id = ?");
+                $stmtStudents = $conn->prepare("SELECT student_code, student_name, student_lastname, student_mobile, student.depart_code, depart.depart_name FROM student 
+                LEFT JOIN depart ON student.depart_code = depart.depart_code
+                WHERE student.company_id = ?");
                 $stmtStudents->bind_param("s", $company_id);
                 $stmtStudents->execute();
                 $resultStudents = $stmtStudents->get_result();
-                
+
                 $students = [];
 
                 // Check if there are students
@@ -69,16 +71,17 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
                             'student_name' => $rowStudent['student_name'],
                             'student_lastname' => $rowStudent['student_lastname'],
                             'student_mobile' => $rowStudent['student_mobile'],
+                            'depart_name' => $rowStudent['depart_name'],
                             'training' => $training,
                             'company_status' => isset($training[0]['company_status']) ? $training[0]['company_status'] : null,
                         ];
                     }
-                } 
+                }
 
                 $response[] = [
                     'company' => $rowCompany,
                     'students' => $students,
-                    'need_student' => $needStudent,
+                    'need_students' => $needStudent
                 ];
             }
         } else {
@@ -92,7 +95,7 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
     $conn->close();
 
     // Output the response
-    echo json_encode(['success' => true, 'data' => $response]); 
+    echo json_encode(['success' => true, 'data' => $response]);
 } else {
     echo json_encode(['error' => 'Invalid request method']);
 }
@@ -109,4 +112,3 @@ function fetchRecords($result)
 
     return $records;
 }
-?>

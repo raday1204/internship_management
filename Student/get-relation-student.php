@@ -19,7 +19,7 @@ $conn->set_charset("utf8mb4");
 
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     $page = isset($_GET['page']) ? intval($_GET['page']) : 1;
-    $limit = isset($_GET['limit']) ? intval($_GET['limit']) : 10;
+    $limit = isset($_GET['limit']) ? intval($_GET['limit']) : 5;
 
     $offset = ($page - 1) * $limit;
 
