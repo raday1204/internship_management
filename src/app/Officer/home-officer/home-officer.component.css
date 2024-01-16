@@ -54,7 +54,7 @@ body {
 
 .sidebar .nav-links {
     width: 290px;
-    height: 100%;
+    height: 1125px;
     padding-bottom: 50px;
     overflow: hidden;
 }
@@ -155,20 +155,24 @@ Dropdown Button .sidebar .nav-links .dropdown-btn {
     background: #44779F;
     display: none;
     transition: all 0.4s ease;
+    width: 290px;
 }
 
 .sidebar .nav-links li.showMenu .sub-menu {
     display: block;
-    width: 290px;
+    /* width: 290px; */
 }
 
 .sidebar .nav-links li .sub-menu a {
     color: #C5ECFF;
     height: 50px;
     font-size: 15px;
-    padding: 25px;
-    white-space: nowrap;
+    padding: 25px 10px 25px 25px;
+    /* white-space: nowrap; */
+    /* overflow-wrap: break-word; */
     transition: all 0.3s ease;
+    word-wrap: break-word;
+    word-break: break-all;
 }
 
 .sidebar .nav-links li .sub-menu li {
@@ -201,26 +205,31 @@ Dropdown Button .sidebar .nav-links .dropdown-btn {
 /* relation part */
 .content {
     margin-left: 290px;
-    height: 875px;
+    height: 1125px;
     overflow: hidden;
+}
+
+.table-container {
+    max-height: 300px;
+    /* Set your desired maximum height */
+    overflow-y: auto;
+    /* Enable vertical scroll when content exceeds the height */
+    border-collapse: collapse;
+    /* Optional: merge table borders */
 }
 
 table {
     width: 600px;
+}
+
+table {
     border: 3px solid #376987;
-    margin: 25px 45px;
-    border-collapse: separate;
-    text-indent: initial;
-    line-height: normal;
-    text-align: start;
-    border-spacing: 2px;
-    white-space: normal;
-    font-variant: normal;
+    margin: 40px 45px;
 }
 
 table th {
     padding: 10px;
-    /* border: 3px solid #1e5678; */
+    border: 3px solid #1e5678;
     background-color: #1e5678;
     text-align: center;
 }

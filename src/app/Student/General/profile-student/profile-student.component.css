@@ -79,6 +79,19 @@ p {
     margin-right: 15px;
 }
 
+.list-text {
+    display: inline-block;;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.list-text label {
+    min-width: 150px; 
+    font-size: 16px;
+    font-weight: 600;
+    margin-right: 15px;
+}
+
 span {
     font-size: 16px;
     font-weight: 400;

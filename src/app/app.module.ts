@@ -1,4 +1,5 @@
 import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
@@ -80,6 +81,11 @@ import { StatusInformationPopupComponent } from './Officer/General/status-office
 import { ExamplePdfViewerComponent } from './example-pdf-viewer/example-pdf-viewer.component';
 import { NgxExtendedPdfViewerModule } from 'ngx-extended-pdf-viewer';
 import { StudentDetailComponent } from './Officer/General/search-student-officer/student-information/student-detail/student-detail.component';
+import { SafePipe } from './Officer/Relation/safe.pipe';
+import { DatePipe } from '@angular/common';
+import { registerLocaleData } from '@angular/common';
+import localeTh from '@angular/common/locales/th';
+import { MAT_DATE_LOCALE } from '@angular/material/core';
 
 @NgModule({
   declarations: [
@@ -148,9 +154,11 @@ import { StudentDetailComponent } from './Officer/General/search-student-officer
     ExamplePdfViewerComponent,
     SearchCalendarStudentComponent,
     StudentDetailComponent,
+    SafePipe,
   ],
 
   imports: [
+    CommonModule,
     BrowserModule,
     AppRoutingModule,
     FormsModule,
@@ -169,7 +177,9 @@ import { StudentDetailComponent } from './Officer/General/search-student-officer
   providers: [
     MatDialog,
     DataStorageService,
-    CompanyStudentService
+    CompanyStudentService,
+    DatePipe,
+    { provide: MAT_DATE_LOCALE, useValue: 'th-TH' },
   ],
 
   bootstrap: [AppComponent]

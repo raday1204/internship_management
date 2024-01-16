@@ -96,14 +96,14 @@ export class CompanyFormStudentComponent implements OnInit {
       this.router.navigateByUrl('/login-student', { replaceUrl: true });
       return;
     }
-  
+
     if (this.username) {
       this.http
         .get(`http://localhost/PJ/Backend/Student/Company-Form/get-profile-student.php?username=${this.username}`)
         .subscribe(
           (response: any) => {
             if (response && response.success) {
-              this.studentyForm.patchValue(response.data); 
+              this.studentyForm.patchValue(response.data);
             } else {
               this.errorMessage = response.error || 'An error occurred while fetching student data.';
               console.error('API Error:', this.errorMessage);
@@ -194,7 +194,10 @@ export class CompanyFormStudentComponent implements OnInit {
 
                               const updatedStudentData = responseUpdateStudent.data;
                               console.log('Updated Student Data:', updatedStudentData);
-                              this.router.navigate(['/company-form-student-print']);
+
+                              // Close the dialog and open a new tab to display data
+                              // this.dialogRef.close({ saveData: true });
+                              this.openInNewTab(updatedStudentData, responseCompany);
                             } else {
                               console.error(responseUpdateStudent.message);
                             }
@@ -276,12 +279,295 @@ export class CompanyFormStudentComponent implements OnInit {
         }
       });
     } else {
-        this.snackBar.open('กรุณากรอกข้อมูลให้ครบถ้วน', 'Close', {
-          duration: 3000,
-        });
-      }
+      this.snackBar.open('กรุณากรอกข้อมูลให้ครบถ้วน', 'Close', {
+        duration: 3000,
+      });
     }
+  }
 
+  openInNewTab(updatedStudentData: any, responseCompany: any): void {
+    const newTab = window.open('', '_blank');
+    if (newTab) {
+      newTab.document.write(`
+        <html>
+          <head>
+            <title> แบบฟอร์ม 01-ข้อมูลหน่วยงาน </title>
+            <!-- Add any styles or meta tags if needed -->
+              <style type="text/css">
+                <!--
+                  .style3 {
+                    font-family: "TH SarabunPSK"; 
+                    font-size:16px; 
+                  }
+
+                  .style8 {
+                    font-family: "TH SarabunPSK"; 
+                    font-size:18px; 
+                  }
+                -->
+            </style>
+          </head>
+
+          <body topmargin="top">
+            <table width="620" border="0" align="center">
+              <tr>
+                <td>
+                  <table width="100" border="1" align="right" style="border-collapse: collapse; border-spacing: 0;">
+                    <tr>
+                      <td align="center">
+                        <span class="style3">
+                            01 ข้อมูลหน่วยงาน
+                        </span>
+                      </td>
+                    </tr>
+                  </table>
+                </td>
+              </tr>
+
+              <tr>
+                <td align="center">
+                  <span class="style8">
+                      <strong> แบบฟอร์มการศึกษาข้อมูลเบื้องต้นของหน่วยงานที่ต้องการไปฝึกงาน </strong><br/>
+                      ภาคเรียนที่ ${this.companyForm.value.term} ประจำปีการศึกษา ${this.companyForm.value.year}
+                  </span>
+                </td>
+              </tr>
+
+              <tr>
+                <td><span class="style3">&nbsp;</span></td>
+              </tr>
+              <tr>
+                <td>
+                  <span class="style8">
+                      <strong> ข้อมูลนิสิต </strong><br/>
+                  </span>
+                </td>
+              </tr>
+
+              <tr>
+                <td>
+                  <span class="style3">
+                      <strong> ชื่อ-นามสกุล: </strong> &nbsp;&nbsp; ${this.studentyForm.value.student_name} &nbsp; ${this.studentyForm.value.student_lastname} 
+                      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <strong> รหัสประจำตัวนิสิต: </strong> &nbsp;&nbsp; ${this.studentyForm.value.student_code}
+                  </span>
+                </td>
+              </tr>
+
+              <tr>
+                <td>
+                  <span class="style3">
+                      <strong> สาขาวิชาวิศวกรรม: </strong> &nbsp;&nbsp; ${this.studentyForm.value.depart_name} 
+                      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <strong> ภาควิชาวิศวกรรม: </strong> &nbsp;&nbsp; ${this.studentyForm.value.student_pak}
+                  </span>
+                </td>
+              </tr>
+
+              <tr>
+                <td>
+                  <span class="style3">
+                      <strong> เบอร์โทรศัพท์นิสิตที่สามารถติดต่อได้: </strong> &nbsp;&nbsp; ${this.studentyForm.value.student_mobile}
+                      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <strong> Facebook: </strong> &nbsp;&nbsp; ${this.studentyForm.value.student_facebook}
+                  </span>
+                </td>
+              </tr>
+
+              <tr>
+                <td><span class="style3">&nbsp;</span></td>
+              </tr>
+              <tr>
+                <td>
+                  <span class="style8">
+                      <strong> ข้อมูลหน่วยงาน </strong><br/>
+                  </span>
+                </td>
+              </tr>
+
+              <tr>
+                <td>
+                  <span class="style3">
+                      1. ชื่อหน่วยงาน(ภาษาไทย): &nbsp;&nbsp; ${this.companyForm.value.company_name}
+                  </span>
+                </td>
+              </tr>
+
+              <tr>
+                <td><span class="style3">&nbsp;</span></td>
+              </tr>
+              <tr>
+                <td>
+                  <span class="style3">
+                  2. ชื่อหรือตำแหน่งที่จะออกหนังสือราชการถึงหน่วยงาน (นิสิตจะต้องสอบถามหน่วยงานว่าให้ทำหนังสือถึงใคร)
+                  </span>
+                </td>
+              </tr>
+
+              <tr>
+                <td>
+                  <span class="style3">
+                      &nbsp;&nbsp;&nbsp;
+                      <strong> เรียน </strong> &nbsp;&nbsp; ${this.companyForm.value.send_name}
+                  </span>
+                </td>
+              </tr>
+
+              <tr>
+                <td>
+                  <span class="style3">
+                      &nbsp;&nbsp;&nbsp;
+                      ชื่อผู้ประสานงาน คือ บุคคลที่นิสิตติดต่อหรือโทรศัพท์สอบถามข้อมูลเบื้องต้น
+                  </span>
+                </td>
+              </tr>
+
+              <tr>
+                <td>
+                  <span class="style3">
+                      &nbsp;&nbsp;&nbsp;
+                      <strong> ชื่อผู้ประสานงาน: </strong> &nbsp;&nbsp; ${this.companyForm.value.send_coordinator}
+                      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <strong> ตำแหน่ง: </strong> &nbsp;&nbsp; ${this.companyForm.value.send_position}
+                  </span>
+                </td>
+              </tr>
+
+              <tr>
+                <td>
+                  <span class="style3">
+                      &nbsp;&nbsp;&nbsp;
+                      <strong> เบอร์โทรศัพท์หน่วยงาน: </strong> &nbsp;&nbsp; ${this.companyForm.value.send_tel}
+                      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <strong> หรือ E-mail: </strong> &nbsp;&nbsp; ${this.companyForm.value.send_email}
+                  </span>
+                </td>
+              </tr>
+
+              <tr>
+                <td>
+                  <span class="style3">
+                      &nbsp;&nbsp;&nbsp;
+                      <strong> เบอร์มือถือ: </strong>  &nbsp;&nbsp; ${this.companyForm.value.send_mobile}
+                  </span>
+                </td>
+              </tr>
+
+              <tr>
+                <td><span class="style3">&nbsp;</span></td>
+              </tr>
+              <tr>
+                <td>
+                  <span class="style3">
+                  3. ตำแหน่ง/หน้าที่/ลักษณะงานของนิสิตที่เข้าไปฝึกงาน: &nbsp;&nbsp; ${this.companyForm.value.type_position}
+                  </span>
+                </td>
+              </tr>
+
+              <tr>
+                <td><span class="style3">&nbsp;</span></td>
+              </tr>
+              <tr>
+                <td>
+                  <span class="style3">
+                  4. คุณสมบัติพิเศษ/ความสามารถ/ความรู้เพิ่มเติม ของนิสิตที่หน่วยงานต้องการ(ถ้ามี): &nbsp;&nbsp; ${this.companyForm.value.type_special}
+                  </span>
+                </td>
+              </tr>
+
+              <tr>
+                <td><span class="style3">&nbsp;</span></td>
+              </tr>
+              <tr>
+                <td><span class="style3">&nbsp;</span></td>
+              </tr>
+              <tr>
+                <td><span class="style3">&nbsp;</span></td>
+              </tr>
+              <tr>
+                <td><span class="style3">&nbsp;</span></td>
+              </tr>
+
+              <tr>
+                  <td>
+                      <table width="100%" border="0" align="center">
+                          <tr>
+                              <td width="250" align="center">
+                                  <p class="style3">นิสิต...................................................<br />
+                                  (${this.studentyForm.value.student_name} &nbsp; ${this.studentyForm.value.student_lastname})<br />
+                                  วันที่........ เดือน.................... พ.ศ..........</p>
+                              </td>
+
+                              <td width="250" align="center">
+                                  <p class="style3">อาจารย์ผู้รับรอง..............................................<br />
+                                  (.................................................)<br />
+                                  วันที่........ เดือน.................... พ.ศ..........</p>
+                              </td>
+                          </tr>
+                      </table>
+                  </td>
+              </tr>
+              
+              <tr>
+                <td><span class="style3">&nbsp;</span></td>
+              </tr>
+              <tr>
+                <td><span class="style3">&nbsp;</span></td>
+              </tr>
+              <tr>
+                <td><span class="style3">&nbsp;</span></td>
+              </tr>
+              <tr>
+                <td><span class="style3">&nbsp;</span></td>
+              </tr>
+              <tr>
+                <td><span class="style3">&nbsp;</span></td>
+              </tr>
+              <tr>
+                <td><span class="style3">&nbsp;</span></td>
+              </tr>
+              
+              <tr>
+                <td>
+                  <table cellpadding="0" cellspacing="0">
+                      <tr>
+                        <td width="80">
+                          <span class="style3">
+                            <strong> หมายเหตุ </strong>
+                          </span>
+                        </td>
+                        <td>
+                          <span class="style3">
+                            <strong> &nbsp;&nbsp;ก่อนส่งให้ภาควิชาเพื่อกรอกข้อมูลลงในระบบ นิสิตควรถ่ายสำเนาเก็บไว้ 1 ชุด </strong>
+                          </span>
+                        </td>
+                      </tr>
+                  </table>
+                  </td>
+              </tr>
+
+              <tr>
+                <td>
+                  <table cellpadding="0" cellspacing="0">
+                      <tr>
+                        <td width="80">
+                          <span class="style3">
+                            <strong> &nbsp; </strong>
+                          </span>
+                        </td>
+                        <td>
+                          <span class="style3">
+                            &nbsp;&nbsp;กรณีที่ไปฝึกงานสถานที่เดียวหลายคน ขอให้นิสิตรวบรวมส่งพร้อมกัน <br />
+                            &nbsp;&nbsp;ส่งงานกิจจการนิสิตและศิษย์เก่าสัมพันธ์ &nbsp;คณะวิศวกรรมศาสตร์ &nbsp;เพื่อขอออกหนังสือราชการส่งให้หน่วยงาน
+                          </span>
+                        </td>
+                      </tr>
+                  </table>
+                  </td>
+              </tr>
+
+            </table>
+          </body>
+        </html>
+      `);
+      newTab.document.close();
+    }
+  }
 
   areFormsValid(): boolean {
     return this.studentyForm.valid && this.companyForm.valid;

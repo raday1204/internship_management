@@ -88,7 +88,7 @@ export class CompanyFormStudentPrintComponent {
       this.router.navigateByUrl('/login-student', { replaceUrl: true });
       return;
     }
-
+  
     if (this.username) {
       this.http
         .get(`http://localhost/PJ/Backend/Student/Company-Form/get-company-form-student.php?username=${this.username}`)
@@ -97,12 +97,6 @@ export class CompanyFormStudentPrintComponent {
             if (response && response.success) {
               this.studentyForm.patchValue(response.data);
               this.companyForm.patchValue(response.data.company);
-              // Now, fetch is completed, trigger printing
-              const printSection = document.getElementById('print-section');
-              if (printSection) {
-                printSection.innerHTML = this.generatePrintableHtml(response.data);
-                this.printDocument();
-              }
             } else {
               this.errorMessage = response.error || 'An error occurred while fetching student data.';
               console.error('API Error:', this.errorMessage);
@@ -117,21 +111,7 @@ export class CompanyFormStudentPrintComponent {
       this.errorMessage = 'No username provided.';
     }
   }
-
-  printDocument() {
-    if (this.studentyForm.valid && this.companyForm.valid) {
-      const printContents = document.getElementById('print-section')?.innerHTML;
-      const originalContents = document.body.innerHTML;
-
-      if (printContents) {
-        document.body.innerHTML = printContents;
-        window.print();
-      }
-      document.body.innerHTML = originalContents;
-    } else {
-      this.router.navigate(['/company-form-student']);
-    }
-  }
+  
 
   generatePrintableHtml(data: any): string {
     const student = data || {};

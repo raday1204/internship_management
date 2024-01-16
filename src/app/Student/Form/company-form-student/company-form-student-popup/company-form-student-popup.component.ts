@@ -19,4 +19,20 @@ export class CompanyFormStudentPopupComponent {
   onSaveClick(): void {
     this.dialogRef.close({ saveData: true });
   }
+
+  formatDateThai(date: string | null): string {
+    if (date !== null) {
+      const formattedDate = new Date(date);
+      // Use Thai locale and Buddhist calendar
+      const options: Intl.DateTimeFormatOptions = {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+      };
+      const transformedDate = formattedDate.toLocaleDateString('th-TH-u-ca-buddhist', options);
+      return transformedDate || '';
+    } else {
+      return '';
+    }
+  }
 }

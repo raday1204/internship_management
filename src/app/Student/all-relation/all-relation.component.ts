@@ -20,6 +20,7 @@ export class AllRelationComponent implements OnInit {
   username: string = '';
   loggedInUsername: string = '';
   relations: Relation[] = [];
+  displayedFilePath: string = '';
 
   currentPage = 1;
   itemsPerPage = 10;
@@ -44,6 +45,106 @@ export class AllRelationComponent implements OnInit {
         console.error('HTTP Error:', error);
       }
     );
+  }
+
+  openInNewTab(relationItem: any): void {
+    if (relationItem) {
+      const relationId = relationItem.id; // Assuming id is the property holding relation_id
+      this.http.get(`http://localhost/PJ/Backend/Officer/Relation/get-relation-details.php?id=${relationId}`).subscribe(
+        (response: any) => {
+          console.log('Backend Response:', response);
+          this.displayedFilePath = `http://localhost${response.data.relation_pic}`;
+          const newTab = window.open('', '_blank');
+          if (newTab) {
+            newTab.document.write(`
+              <html>
+                <head>
+                  <title>Image Preview</title>
+                    <style type="text/css">
+                      <!--
+                      .style3 {
+                          font-family: "TH SarabunPSK";
+                          font-size: 24px;
+                      }
+
+                      .style8 {
+                          font-family: "TH SarabunPSK";
+                          font-size: 20px;
+                      }
+                      -->
+                  </style>
+                </head>
+
+                <body topmargin="top">
+                  <table width="620" border="0" align="center">
+                      <tr>
+                        <td align="center"><span class="style3">
+                          <strong> ข่าวประชาสัมพันธ์ </strong></span>
+                        </td>
+                      </tr>
+
+                      <tr>
+                        <td><span class="style3">&nbsp;</span></td>
+                      </tr>
+
+                      <tr>
+                        <td>
+                          <table cellpadding="0" cellspacing="0">
+                              <tr>
+                                <td width="70">
+                                  <span class="style8">
+                                      <strong> วันที่ : </strong>
+                                  </span>
+                                </td>
+                                <td>
+                                  <span class="style8">
+                                    ${response.data.relation_date}
+                                  </span>
+                                </td>
+                              </tr>
+                          </table>
+                        </td>
+                    </tr>
+
+                    <tr>
+                      <td>
+                        <table cellpadding="0" cellspacing="0">
+                          <tr>
+                            <td>
+                              <span class="style8" style="vertical-align: top;">
+                                <strong> เนื้อหา: </strong> 
+                                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                  ${response.data.relation_content}
+                              </span>
+                            </td>
+                          </tr>
+                      </table>
+                    </td>
+                  </tr>
+
+                  <tr>
+                    <td><span class="style3">&nbsp;</span></td>
+                  </tr>
+
+                  <tr>
+                    <td>
+                      <table width="100%" border="0" align="center">
+                          <img src ="${this.displayedFilePath}" style="max-width: 100%;">
+                      </table>
+                    </td>
+                  </tr>
+                </table>
+              </body>
+            </html>
+            `);
+            newTab.document.close();
+          }
+        },
+        (error) => {
+          console.error('Error fetching relation data:', error);
+        }
+      );
+    }
   }
 
   paginate(pageNumber: number): void {

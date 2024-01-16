@@ -17,8 +17,8 @@
             <p><strong>ชื่อหน่วยงานภายใน: </strong> {{ data.company.company_building }}</p><br>
             <p><strong>ลักษณะงาน: </strong> {{ data.company.company_job }}</p><br>
             <p><strong>จำนวนนิสิตที่รับเข้า: </strong> {{ data.need_student.number_student_train }}</p><br>
-            <p><strong>วันที่ออกฝึกงาน: </strong> {{ data.need_student.date_addtraining | date:'dd/MM/yyyy' }}</p>
-            <p><strong>วันสุดท้ายของการฝึกงาน: </strong> {{ data.need_student.date_endtraining | date:'dd/MM/yyyy' }}
+            <p><strong>วันที่ออกฝึกงาน: </strong> {{ formatDateThai(data.need_student.date_addtraining)}}</p>
+            <p><strong>วันสุดท้ายของการฝึกงาน: </strong> {{ formatDateThai(data.need_student.date_endtraining)}}
             </p>
         </div>
     </div>

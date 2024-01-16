@@ -5,7 +5,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { formatDate } from '@angular/common';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { EditRelationPopupComponent } from 'src/app/Officer/Relation/edit-relation/edit-relation-popup/edit-relation-popup.component';
-import { DataStorageService } from '../../General/search-company-officer/company-information/data-storage.service';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-edit-relation',
@@ -15,14 +15,10 @@ import { DataStorageService } from '../../General/search-company-officer/company
 export class EditRelationComponent implements OnInit {
   relationForm: FormGroup;
   relationId: any;
-  relation: any = {
-    relation_date: '',
-    relation_content: '',
-    relation_pic: ''
-  };
-  displayedFilePath: string | undefined;
+  displayedFilePath: string = '';
   username: string = '';
   loggedInUsername: string = '';
+  fileType: string = '';
 
   constructor(
     private route: ActivatedRoute,
@@ -30,7 +26,7 @@ export class EditRelationComponent implements OnInit {
     private http: HttpClient,
     private dialog: MatDialog,
     private fb: FormBuilder,
-    private dataStorageService: DataStorageService
+    private sanitizer: DomSanitizer,
   ) {
     this.relationForm = this.fb.group({
       relation_date: ['', Validators.required],
@@ -51,11 +47,44 @@ export class EditRelationComponent implements OnInit {
     }
   }
 
+  openDatePicker() { }
+
+  // edit-relation.component.ts
+
+  getSafeIframeUrl(filePath: string | SafeResourceUrl): SafeResourceUrl {
+    if (typeof filePath === 'string') {
+      // Check if it's a DOC file
+      if (this.isDoc(filePath)) {
+        // Generate a safe URL for the DOC file
+        return this.sanitizer.bypassSecurityTrustResourceUrl(filePath);
+      }
+
+      // Return the file URL as is for other formats
+      return this.sanitizer.bypassSecurityTrustResourceUrl(filePath);
+    }
+
+    // If the filePath is not a string, return an empty string
+    return '';
+  }
+
   loadRelationData() {
     this.fetchRelationDetails(this.relationId).subscribe(
       (response: any) => {
-        this.relationForm.patchValue(response.data);
-        this.displayedFilePath = `http://localhost${response.data.relation_pic}`;
+        if (response && response.success) {
+          this.relationForm.patchValue(response.data);
+          this.displayedFilePath = `http://localhost${response.data.relation_pic}`;
+          console.log('Displayed File Path:', this.displayedFilePath);
+          const fileType = this.getFileType(this.displayedFilePath);
+
+          if (fileType === 'doc') {
+            // Load the converted PDF instead
+            this.loadDocFile(response.data.relation_pic);
+          } else {
+            this.fileType = fileType;
+          }
+        } else {
+          console.error('Invalid response format: data property is missing.');
+        }
       },
       (error) => {
         console.error('Error fetching relation data:', error);
@@ -63,29 +92,106 @@ export class EditRelationComponent implements OnInit {
     );
   }
 
-  fetchRelationDetails(relationId: string) {
-    return this.http.get(`http://localhost/PJ/Backend/Officer/Relation/get-relation-details.php?id=${relationId}`);
+  getGoogleDocsViewerUrl(filePath: string) {
+    return `https://docs.google.com/viewer?url=${encodeURIComponent(filePath)}`;
   }
 
-  openDatePicker() {
-    // Additional logic if needed
+  loadDocFile(docFileUrl: string): void {
+    // Update the fileType to 'pdf' if needed
+    this.fileType = 'doc';
+
+    // Set the displayedFilePath to the URL of the converted PDF
+    this.displayedFilePath = docFileUrl;
+    console.log(' file URL:', docFileUrl);
+  }
+
+  getFileType(filePath: string): string {
+    const extension = filePath.split('.').pop()?.toLowerCase();
+
+    if (!extension) {
+      return 'unsupported';
+    }
+
+    if (['jpeg', 'jpg', 'gif', 'png'].includes(extension)) {
+      return 'image';
+    } else if (['doc', 'docx'].includes(extension)) {
+      return 'doc';
+    } else if (extension === 'pdf') {
+      return 'pdf';
+    } else {
+      return 'unsupported';
+    }
+  }
+
+  fetchRelationDetails(relationId: string) {
+    return this.http.get(`http://localhost/PJ/Backend/Officer/Relation/get-relation-details.php?id=${relationId}`);
   }
 
   onFileSelected(event: any) {
     if (event.target.files && event.target.files.length > 0) {
       const file = event.target.files[0];
+
+      if (file.type.match(/image.*/)) {
+        this.fileType = 'image';
+      } else if (file.type === 'application/pdf') {
+        this.fileType = 'pdf';
+      } else if (['application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'].includes(file.type)) {
+        this.fileType = 'doc';
+      } else {
+        console.error('Unsupported file type');
+        return;
+      }
+
       this.relationForm.patchValue({ relation_pic: file });
-      this.displayedFilePath = URL.createObjectURL(file);
+
+      try {
+        this.createLocalFileUrl(file);
+      } catch (error) {
+        console.error('Error creating local file URL:', error);
+      }
     }
   }
 
-  createLocalImageUrl(file: File): string {
-    return URL.createObjectURL(file);
+  isImage(filePath: string | SafeResourceUrl): boolean {
+    if (typeof filePath === 'string') {
+      // Assuming image files end with these extensions, adjust this based on your file naming conventions
+      return /\.(jpeg|jpg|gif|png)$/i.test(filePath);
+    }
+    return false;
+  }
+
+  isPdf(filePath: string | SafeResourceUrl): boolean {
+    if (typeof filePath === 'string') {
+      return /\.pdf$/i.test(filePath);
+    }
+    return false;
+  }
+
+  isDoc(filePath: string | SafeResourceUrl): boolean {
+    if (typeof filePath === 'string') {
+      return /\.(doc|docx)$/i.test(filePath);
+    }
+    return false;
+  }
+
+  createLocalFileUrl(file: File): void {
+    if (file) {
+      try {
+        const fileUrl = URL.createObjectURL(file);
+        console.log('Created file URL:', fileUrl);
+        this.displayedFilePath = (fileUrl);
+      } catch (error) {
+        console.error('Error creating file URL:', error);
+        throw error; // Rethrow the error for further handling
+      }
+    } else {
+      console.error('File is null');
+    }
   }
 
   openPopup(): void {
     const formattedDate = this.relationForm.value.relation_date ?
-      formatDate(this.relationForm.value.relation_date, 'yyyy-MM-dd', 'en-US') : '';
+      formatDate(this.relationForm.value.relation_date, 'yyyy-MM-dd', 'th-TH') : '';
 
     const dialogRef = this.dialog.open(EditRelationPopupComponent, {
       data: {
@@ -107,7 +213,7 @@ export class EditRelationComponent implements OnInit {
 
   editRelation() {
     const formattedDate = this.relationForm.value.relation_date ?
-      formatDate(this.relationForm.value.relation_date, 'yyyy-MM-dd', 'en-US') : '';
+      formatDate(this.relationForm.value.relation_date, 'yyyy-MM-dd', 'th-TH') : '';
     const formData = new FormData();
     formData.append('relation_date', formattedDate);
     formData.append('relation_content', this.relationForm.value.relation_content);

@@ -37,19 +37,44 @@
             </div>
 
             <div class="list p-3" style="justify-content: center; text-align: center;">
-                <img *ngIf="displayedFilePath" [src]="displayedFilePath" alt="Selected Photo"
-                    style="max-width: 100%; display: inline-block;">
+                <ng-container [ngSwitch]="fileType">
+                    <ng-container *ngSwitchCase="'image'">
+                        <!-- Display image -->
+                        <img [src]="displayedFilePath" alt="Selected File"
+                            style="max-width: 100%; display: inline-block;">
+                    </ng-container>
+                    <ng-container *ngSwitchCase="'pdf'">
+                        <!-- Display PDF -->
+                        <iframe [src]="displayedFilePath | safe" frameborder="0"
+                        style="width: 100%; height: 500px;"></iframe>
+                      </ng-container>
+                      
+                      
+                    <ng-container *ngSwitchCase="'doc'">
+                        <!-- Display document -->
+                        <iframe [src]="displayedFilePath | safe" frameborder="0"
+                            style="max-width: 100%; height: 500px;"></iframe>
+                    </ng-container>
+                    <ng-container *ngSwitchDefault>
+                        <!-- Handle unsupported file types -->
+                        <div>Unsupported file type</div>
+                    </ng-container>
+                </ng-container>
             </div>
-            
+
+
+
             <div class="list p-3" style="justify-content: center;">
-                <input type="file" (change)="onFileSelected($event)" #fileInput style="margin-bottom: 10px;">
+                <input type="file" (change)="onFileSelected($event)" #fileInput style="margin-bottom: 10px;"
+                    accept=".jpg, .jpeg, .png, .gif, .pdf, .doc, .docx">
                 <div *ngIf="fileInput.files && fileInput.files.length > 0" style="text-align: center;">
                 </div>
             </div>
 
+
             <div class="button-container">
-                <button class="button" style="background-color: #064469; color: #FDFDF6;" 
-                type="submit"> บันทึกข้อมูล</button>
+                <button class="button" style="background-color: #064469; color: #FDFDF6;" type="submit">
+                    บันทึกข้อมูล</button>
             </div>
         </form>
 

@@ -25,9 +25,8 @@ export class HomeStudentComponent implements OnInit {
   loggedInUsername: string = '';
   relations: Relation[] = [];
   hasSelectedCompany: boolean = false;
-
-  displayedFilePath: string = '';
   relationForm: FormGroup;
+  displayedFilePath: string = '';
   relationId: any;
   relation: any = {
     relation_date: '',
@@ -41,13 +40,15 @@ export class HomeStudentComponent implements OnInit {
     private snackBar: MatSnackBar,
     private fb: FormBuilder,
     private companyStudentService: CompanyStudentService
-  ) { 
+  ) {
     this.relationForm = this.fb.group({
       relation_date: ['', Validators.required],
       relation_content: ['', Validators.required],
       relation_pic: ['']
     });
+
   }
+
 
   ngOnInit() {
     this.dateTime = new Date();
@@ -67,25 +68,99 @@ export class HomeStudentComponent implements OnInit {
       }
     );
   }
-  
+
   openInNewTab(relationItem: any): void {
     if (relationItem) {
-      const relationId = relationItem.id; // Assuming id is the property holding relation_id
+      const relationId = relationItem.id;
       this.http.get(`http://localhost/PJ/Backend/Officer/Relation/get-relation-details.php?id=${relationId}`).subscribe(
         (response: any) => {
-          console.log('Backend Response:', response);
+          console.log('Backend Response:', response.data);
+
           this.displayedFilePath = `http://localhost${response.data.relation_pic}`;
+          console.log('PDF:', this.displayedFilePath);
+
           const newTab = window.open('', '_blank');
           if (newTab) {
             newTab.document.write(`
               <html>
                 <head>
                   <title>Image Preview</title>
+                    <style type="text/css">
+                      <!--
+                      .style3 {
+                          font-family: "TH SarabunPSK";
+                          font-size: 20px;
+                      }
+
+                      .style8 {
+                          font-family: "TH SarabunPSK";
+                          font-size: 16px;
+                      }
+                      -->
+                  </style>
                 </head>
-                <body>
-                  <img src ="${this.displayedFilePath}" style="max-width: 100%;">
-                </body>
-              </html>
+
+                <body topmargin="top">
+                  <table width="620" border="0" align="center">
+                    <tr>
+                      <td align="center"><span class="style3">
+                        <strong> ข่าวประชาสัมพันธ์ </strong></span>
+                      </td>
+                    </tr>
+
+                    <tr>
+                      <td><span class="style3">&nbsp;</span></td>
+                    </tr>
+
+                    <tr>
+                      <td>
+                        <table cellpadding="0" cellspacing="0">
+                            <tr>
+                              <td width="70">
+                                <span class="style8">
+                                    <strong> วันที่ : </strong>
+                                </span>
+                              </td>
+                              <td>
+                                <span class="style8">
+                                    ${this.formatDate(response.data.relation_date)}
+                                </span>
+                              </td>
+                            </tr>
+                        </table>
+                      </td>
+                  </tr>
+
+                  <tr>
+                    <td>
+                      <table cellpadding="0" cellspacing="0">
+                        <tr>
+                          <td>
+                            <span class="style8" style="vertical-align: top;">
+                                <strong> เนื้อหา: </strong> 
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                ${response.data.relation_content}
+                            </span>
+                          </td>
+                        </tr>
+                      </table>
+                    </td>
+                  </tr>
+
+                  <tr>
+                    <td><span class="style3">&nbsp;</span></td>
+                  </tr>
+
+                  <tr>
+                    <td>
+                    <table width="100%" border="0" align="center">
+                    ${this.displayMedia(response.data.relation_pic)}
+                  </table>
+                    </td>
+                  </tr>
+                </table>
+              </body>
+            </html>
             `);
             newTab.document.close();
           }
@@ -96,8 +171,37 @@ export class HomeStudentComponent implements OnInit {
       );
     }
   }
-  
-  
+
+  displayMedia(relationPic: string): string {
+    if (relationPic) {
+      if (this.isPdf(relationPic)) {
+        return `<tr><td><embed src="${this.displayedFilePath}" type="application/pdf" style="width: 100%; height: 800px;"></embed></td></tr>`;
+      } else {
+        return `<tr><td><img src="${this.displayedFilePath}" style="max-width: 100%;"></td></tr>`;
+      }
+    }
+    return '';
+  }
+
+  isPdf(filePath: string): boolean {
+    return filePath.toLowerCase().endsWith('.pdf');
+  }
+
+  formatDate(date: string | null): string {
+    if (date !== null) {
+      const formattedDate = new Date(date);
+      // Use Thai locale and Buddhist calendar
+      const options: Intl.DateTimeFormatOptions = {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+      };
+      const transformedDate = formattedDate.toLocaleDateString('th-TH-u-ca-buddhist', options);
+      return transformedDate || '';
+    } else {
+      return '';
+    }
+  }
 
   menuSidebar = [
     {

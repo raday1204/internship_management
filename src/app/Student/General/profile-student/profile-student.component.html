@@ -36,7 +36,8 @@
 
             <div class="list">
                 <label for="studentName">ชื่อ-นามสกุล :</label>
-                <span style="width: 245px;">{{ studentForm.get('student_name')?.value || '-' }} {{ studentForm.get('student_lastname')?.value
+                <span style="width: 245px;">{{ studentForm.get('student_name')?.value || '-' }} {{
+                    studentForm.get('student_lastname')?.value
                     }}</span>
             </div>
 
@@ -128,17 +129,19 @@
                 <span>{{studentForm.get('ct_tel')?.value || '-' }}</span>
             </div>
             <br><br>
+        </div>
 
-            <!-- <p>ข้อมูลสถานประกอบการ</p>
-            <div class="list">
-                <label for="company_name">ชื่อสถานประกอบการ :</label>
-                <span>{{ company.company_name }}</span>
+        <p>ข้อมูลหน่วยงาน</p>
+        <div [formGroup]="companyForm">
+            <div class="list-text">
+                <label for="company_name">ชื่อหน่วยงาน :</label>
+                <span>{{companyForm.get('company_name')?.value || '-' }}</span>
             </div>
-            <div class="list">
-                <label for="company_address">ที่ตั้งสถานประกอบการ :</label>
-                <span>{{ company.company_address}}</span>
+            <div class="list-text">
+                <label for="company_building">ชื่อหน่วยงานภายใน :</label>
+                <span>{{companyForm.get('company_building')?.value || '-' }}</span>
             </div>
-            <br><br><br> -->
+            <br><br><br>
 
             <div class="button-container">
                 <button class="button" [routerLink]="['/home-student']"

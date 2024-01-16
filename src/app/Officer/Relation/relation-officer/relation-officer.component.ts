@@ -3,7 +3,6 @@ import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { DeleteRelationPopupComponent } from './delete-relation-popup/delete-relation-popup.component';
-import { DataStorageService } from '../../General/search-company-officer/company-information/data-storage.service';
 
 interface Relation {
   id: number;
@@ -25,51 +24,66 @@ export class RelationOfficerComponent implements OnInit {
   loggedInUsername: string = '';
 
   constructor(
-    private http: HttpClient, 
+    private http: HttpClient,
     private router: Router,
-    private dialog: MatDialog,
-    private dataStorageService: DataStorageService
-    ) {}
+    private dialog: MatDialog
+  ) { }
 
-    ngOnInit(): void {
-      this.loggedInUsername = localStorage.getItem('loggedInUsername') || '';
-      this.username = this.loggedInUsername;
-      if (!this.username) {
-        this.router.navigateByUrl('/login-officer', { replaceUrl: true });
-        return;
+  ngOnInit(): void {
+    this.loggedInUsername = localStorage.getItem('loggedInUsername') || '';
+    this.username = this.loggedInUsername;
+    if (!this.username) {
+      this.router.navigateByUrl('/login-officer', { replaceUrl: true });
+      return;
+    }
+
+    this.fetchRelations(this.currentPage, this.itemsPerPage);
+  }
+
+  fetchRelations(page: number, limit: number): void {
+    const serverUrl = `http://localhost/PJ/Backend/Officer/Relation/get-relation.php?page=${page}&limit=${limit}`;
+
+    this.http.get<{ data: Relation[] }>(serverUrl).subscribe(
+      (response) => {
+        this.relations = response.data;
+      },
+      (error) => {
+        console.error('HTTP Error:', error);
       }
+    );
+  }
 
-      this.fetchRelations(this.currentPage, this.itemsPerPage);
+  formatDate(date: string | null): string {
+    if (date !== null) {
+      const formattedDate = new Date(date);
+      // Use Thai locale and Buddhist calendar
+      const options: Intl.DateTimeFormatOptions = {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+      };
+      const transformedDate = formattedDate.toLocaleDateString('th-TH-u-ca-buddhist', options);
+      return transformedDate || '';
+    } else {
+      return '';
     }
-  
-    fetchRelations(page: number, limit: number): void {
-      const serverUrl = `http://localhost/PJ/Backend/Officer/Relation/get-relation.php?page=${page}&limit=${limit}`;
-  
-      this.http.get<{ data: Relation[] }>(serverUrl).subscribe(
-        (response) => {
-          this.relations = response.data;
-        },
-        (error) => {
-          console.error('HTTP Error:', error);
-        }
-      );
-    }
-  
-    paginate(pageNumber: number): void {
-      this.currentPage = pageNumber;
-      this.fetchRelations(this.currentPage, this.itemsPerPage);
-    }
+  }
+
+  paginate(pageNumber: number): void {
+    this.currentPage = pageNumber;
+    this.fetchRelations(this.currentPage, this.itemsPerPage);
+  }
 
   deleteRelation(relationId: number) {
     const dialogRef = this.dialog.open(DeleteRelationPopupComponent);
-  
+
     dialogRef.afterClosed().subscribe((result: boolean) => {
       if (result) {
         this.confirmDelete(relationId);
       }
     });
   }
-  
+
   confirmDelete(relationId: number) {
     const serverUrl = `http://localhost/PJ/Backend/Officer/Relation/delete-relation.php?id=${relationId}`;
     this.http.delete(serverUrl).subscribe(

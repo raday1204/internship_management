@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, NavigationBehaviorOptions, NavigationExtras, Router } from '@angular/router';
+import { ActivatedRoute, NavigationExtras, Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { MatDialog } from '@angular/material/dialog';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-profile-student',
@@ -39,9 +39,13 @@ export class ProfileStudentComponent implements OnInit {
     ct_province: '',
     ct_zipcode: '',
     ct_tel: '',
+
+    company_name: '',
+    company_building: ''
   };
   errorMessage: string | undefined;
   studentForm: FormGroup;
+  companyForm: FormGroup;
   displayedFilePath: string | undefined;
 
   constructor(
@@ -78,8 +82,11 @@ export class ProfileStudentComponent implements OnInit {
       ct_zipcode: [''],
       ct_tel: [''],
     });
+    this.companyForm = this.fb.group({
+      company_name: [''],
+      company_building: [''],
+    });
   }
-
   ngOnInit(): void {
     this.route.params.subscribe(params => {
       this.username = params['username'];
@@ -136,6 +143,12 @@ export class ProfileStudentComponent implements OnInit {
               console.log('Image Path:', response.data.student_pic);
               this.displayedFilePath = `http://localhost/${response.student_pic}`;
 
+              if (studentData.company_data) {
+                this.companyForm.patchValue({
+                  company_name: studentData.company_data.company_name,
+                  company_building: studentData.company_data.company_building,
+                });
+              }
             } else {
               this.errorMessage = response.error;
             }
@@ -145,7 +158,7 @@ export class ProfileStudentComponent implements OnInit {
           }
         );
     } else {
-      this.errorMessage = 'No username provided.';
+      this.errorMessage = 'No student code provided.';
     }
   }
 

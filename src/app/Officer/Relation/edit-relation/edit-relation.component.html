@@ -36,8 +36,22 @@
             </div>
 
             <div class="list p-3" style="justify-content: center; text-align: center;">
-                <img *ngIf="displayedFilePath" [src]="displayedFilePath" alt="Selected Photo"
-                    style="max-width: 100%; display: inline-block;">
+                <ng-container [ngSwitch]="fileType">
+                    <ng-container *ngSwitchCase="'image'">
+                        <!-- Display image -->
+                        <img [src]="displayedFilePath" alt="Selected File"
+                            style="max-width: 100%; display: inline-block;">
+                    </ng-container>
+                    <ng-container *ngSwitchCase="'pdf'">
+                        <!-- Display PDF -->
+                        <iframe [src]="displayedFilePath | safe" frameborder="0"
+                            style="width: 100%; height: 500px;"></iframe>
+                    </ng-container>
+                    <ng-container *ngSwitchCase="'doc'">
+                        <!-- Display document using ngx-doc-viewer -->
+                        <!-- <ngx-doc-viewer *ngIf="fileType === 'doc'" [url]="displayedFilePath"></ngx-doc-viewer> -->
+                    </ng-container>
+                </ng-container>
             </div>
 
             <div class="list p-3" style="justify-content: center;">

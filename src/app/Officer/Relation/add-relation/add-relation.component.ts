@@ -7,11 +7,12 @@ import { formatDate } from '@angular/common';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { AddRelationPopupComponent } from './add-relation-popup/add-relation-popup.component';
 import { CompanyStudentService } from 'src/app/Student/General/search-company-student/company-student/company-student.service';
-
+import { SafePipe } from '../safe.pipe';
 @Component({
   selector: 'app-add-relation',
   templateUrl: './add-relation.component.html',
-  styleUrls: ['./add-relation.component.css']
+  styleUrls: ['./add-relation.component.css'],
+  providers: [SafePipe]
 })
 export class AddRelationComponent {
   relationForm: FormGroup;
@@ -20,9 +21,10 @@ export class AddRelationComponent {
     relation_content: '',
     relation_pic: null
   };
-  displayedFilePath: string | ArrayBuffer | null = null;
+  displayedFilePath: string = '';
   username: string = '';
-
+  fileType: string = ''; 
+  
   constructor(
     private router: Router,
     private http: HttpClient,
@@ -52,18 +54,44 @@ export class AddRelationComponent {
     // You can perform any additional logic here if needed
   }
 
-  onFileSelected(event: any) {
+  onFileSelected(event: any): void {
     if (event.target.files && event.target.files.length > 0) {
       const file = event.target.files[0];
+  
+      if (file.type.match(/image.*/)) {
+        this.fileType = 'image';
+      } else if (file.type === 'application/pdf') {
+        this.fileType = 'pdf';
+      } else if (file.type === 'application/msword' || file.type === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document') {
+        this.fileType = 'doc';
+      } else {
+        console.error('Unsupported file type');
+        return;
+      }
       this.relationForm.patchValue({ relation_pic: file });
-      this.displayedFilePath = URL.createObjectURL(file);
+      try {
+        this.createLocalFileUrl(file);
+      } catch (error) {
+        console.error('Error creating local file URL:', error);
+      }
     }
   }
-
-  createLocalImageUrl(file: File): string {
-    // Create a local URL for the selected image
-    return URL.createObjectURL(file);
+  
+  createLocalFileUrl(file: File): void {
+    if (file) {
+      try {
+        const fileUrl = URL.createObjectURL(file);
+        console.log('Created file URL:', fileUrl);
+        this.displayedFilePath = fileUrl;
+      } catch (error) {
+        console.error('Error creating file URL:', error);
+        throw error;
+      }
+    } else {
+      console.error('File is null');
+    }
   }
+  
 
   openPopup(): void {
     if (this.relationForm.valid) {
@@ -102,7 +130,6 @@ export class AddRelationComponent {
     formData.append('relation_content', this.relationForm.value.relation_content);
     formData.append('file', this.relationForm.value.relation_pic);
     formData.append('upload_path', '/PJ/Backend/Officer/uploads/' + this.relationForm.value.relation_pic.name);
-
     const serverUrl = 'http://localhost/PJ/Backend/Officer/Relation/add-relation.php';
 
     this.http.post(serverUrl, formData)
@@ -111,6 +138,8 @@ export class AddRelationComponent {
           console.log('Backend Response:', response);
           if (response.success) {
             console.log(response.message);
+            this.displayedFilePath = response.file_path; 
+            console.log(this.displayedFilePath);
             this.router.navigate(['/relation-officer']);
           } else {
             console.error('Backend Error:', response.message);
@@ -128,7 +157,7 @@ export class AddRelationComponent {
       );
   }
 
-    logout() {
+  logout() {
     this.http.post<any>('http://localhost/PJ/Backend/Student/logout.php', {})
       .subscribe(
         () => {
@@ -140,4 +169,5 @@ export class AddRelationComponent {
           console.error('Logout error:', error);
         }
       );
-  }}
+  }
+}

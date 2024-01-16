@@ -18,8 +18,8 @@
         <p><strong>เบอร์มือถือ: </strong> {{ data.company.send_mobile }}</p>
         <p><strong>3. ตำแหน่ง/หน้าที่/ลักษณะงานของนิสิตที่เข้าไปฝึกงาน: </strong> {{ data.company.type_position }}</p><br>
         <p><strong>4. คุณสมบัติ/ความสามารถ/ความรู้เพิ่มเติม: </strong> {{ data.company.type_special }}</p><br>
-        <p><strong>5. วันที่ออกฝึกงาน: </strong> {{ data.need_student.date_addtraining | date:'yyyy-MM-dd' }}</p>
-        <p><strong>6. วันสุดท้ายของการฝึกงาน: </strong> {{ data.need_student.date_endtraining | date:'yyyy-MM-dd' }}</p>
+        <p><strong>5. วันที่ออกฝึกงาน: </strong> {{ formatDateThai(data.need_student.date_addtraining)}}</p>
+        <p><strong>6. วันสุดท้ายของการฝึกงาน: </strong> {{ formatDateThai(data.need_student.date_endtraining)}}</p>
     </div>
 
     <div class="button-container">

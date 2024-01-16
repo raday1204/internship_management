@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CompanyStudentService } from 'src/app/Student/General/search-company-student/company-student/company-student.service';
+import { DatePipe } from '@angular/common';
 
 interface Relation {
   id: number;
@@ -26,7 +27,8 @@ export class HomeOfficerComponent implements OnInit {
     private http: HttpClient,
     private router: Router,
     private route: ActivatedRoute,
-    private companyStudentService: CompanyStudentService
+    private companyStudentService: CompanyStudentService,
+    private datePipe: DatePipe,
   ) { }
 
   ngOnInit() {
@@ -47,13 +49,14 @@ export class HomeOfficerComponent implements OnInit {
       }
     );
   }
-
+  // แถบข้อมูลทั่วไป 
   menuSidebar = [
     {
       link_name: "ข้อมูลนิสิตวิศวกรรมคอมพิวเตอร์",
       link: "/search-student-officer",
       icon: "fa-solid fa-users",
-      sub_menu: []
+      sub_menu: [],
+      openInNewTab: false
     },
 
     {
@@ -68,62 +71,89 @@ export class HomeOfficerComponent implements OnInit {
           link_name: "เพิ่มข้อมูลหน่วยงาน",
           link: "/add-company",
         }
-      ]
+      ],
+      openInNewTab: false
     },
 
     {
       link_name: "ยืนยันสถานะการฝึกงาน",
       link: "/status-officer",
       icon: "fa-solid fa-user-check",
-      sub_menu: []
+      sub_menu: [],
+      openInNewTab: false
     },
   ]
 
+// แถบหนังสือต่างๆ
   formSidebar = [
     {
       link_name: "หนังสือขอความอนุเคราะห์รับนิสิตเข้าฝึกงาน",
       link: "/search-permission-form-officer",
       icon: "fa-regular fa-file-pdf",
+      sub_menu: [],
+      openInNewTab: false
     },
 
     {
       link_name: "หนังสือแจ้งการยืนยันเข้าฝึกงาน",
       link: "/search-send-form-officer",
       icon: "fa-regular fa-file-pdf",
+      sub_menu: [],
+      openInNewTab: false
     },
     {
       link_name: "หนังสือขอส่งนิสิตเข้าฝึกงาน",
       link: "/search-report-form-officer",
       icon: "fa-regular fa-file-pdf",
+      sub_menu: [],
+      openInNewTab: false
     },
     {
       link_name: "หนังสือแจ้งผู้ปกครองเรื่องการฝึกงาน",
       link: "/search-notifying-form-officer",
       icon: "fa-regular fa-file-pdf",
+      sub_menu: [],
+      openInNewTab: false
     },
     {
       link_name: "หนังสือขอบคุณหน่วยงาน",
       link: "/search-thanks-form-officer",
       icon: "fa-regular fa-file-pdf",
+      sub_menu: [],
+      openInNewTab: false
     },
     {
-      link_name: "หนังสือแบบประเมินการฝึกงาน",
-      link: "/search-evaluation-form-officer",
+      link_name: "แบบฟอร์ม",
+      link: null,
       icon: "fa-regular fa-file-pdf",
+      sub_menu: [
+        {
+          link_name: "หนังสือแบบประเมินการฝึกงาน",
+          link: "//assets/pdfs/แบบประเมินผลนิสิตฝึกงาน.pdf",
+        }, {
+          link_name: "แบบสำรวจความต้องการรับนิสิตเข้าฝึกงาน",
+          link: "/assets/pdfs/แบบสำรวจความต้องการรับนิสิตเข้าฝึกงาน.pdf",
+        }
+      ],
+      openInNewTab: true
     },
   ]
 
+// แถบแจ้งข่าวประชาสัมพันธ์
   newsSidebar = [
     {
       link_name: "เพิ่ม-ลบ-แก้ไขข่าวประชาสัมพันธ์",
       link: "/relation-officer",
       icon: "fa-solid fa-bullhorn",
+      sub_menu: [],
+      openInNewTab: false
     },
   ]
   showSubmenu(itemEl: HTMLElement) {
     itemEl.classList.toggle("showMenu");
   }
 
+  //gif
   isNew(date: string): boolean {
     const newsDate = new Date(date);
     const today = new Date();
@@ -131,6 +161,7 @@ export class HomeOfficerComponent implements OnInit {
     return differenceInDays < 2;
   }
 
+  //ตรวจสอบusername
   checkLoginStatus() {
     this.http.post<any>('http://localhost/PJ/Backend/Student/home-student.php', { username: this.username })
       .subscribe(
@@ -155,6 +186,22 @@ export class HomeOfficerComponent implements OnInit {
       );
   }
 
+  formatDate(date: string | null): string {
+    if (date !== null) {
+      const formattedDate = new Date(date);
+      // Use Thai locale and Buddhist calendar
+      const options: Intl.DateTimeFormatOptions = {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+      };
+      const transformedDate = formattedDate.toLocaleDateString('th-TH-u-ca-buddhist', options);
+      return transformedDate || '';
+    } else {
+      return '';
+    }
+  }
+  
   logout() {
     this.http.post<any>('http://localhost/PJ/Backend/Student/logout.php', {})
       .subscribe(

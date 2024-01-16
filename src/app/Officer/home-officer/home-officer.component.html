@@ -12,15 +12,17 @@
 
     <div class="sidebar">
         <div class="nav-links" id="nav-links">
-
+            <!-- แถบข้อมูลทั่วไป -->
             <p>ข้อมูลทั่วไป</p>
             <li *ngFor="let item of menuSidebar" #itemEl routerLinkActive="active">
                 <div *ngIf="item.sub_menu.length == 0" class="dropdown-title">
-                    <a [routerLink]="[item.link]">
+                    <a [routerLink]="[item.link]" target="{{ item.openInNewTab ? '_blank' : '_self' }}"
+                        [title]="item.link_name">
                         <i [class]="item.icon"></i>
                         <span class="link_name">{{item.link_name}}</span>
                     </a>
                 </div>
+                <!-- showsubmenu -->
                 <div *ngIf="item.sub_menu.length > 0" class="dropdown-title" (click)="showSubmenu(itemEl)">
                     <a>
                         <i [class]="item.icon"></i>
@@ -30,37 +32,60 @@
                 </div>
                 <div class="sub-menu" [class.blank]="item.sub_menu.length == 0">
                     <!-- <li><a class="link_name">{{item.link_name}}</a></li> -->
-            <li *ngFor="let item_sub of item.sub_menu" routerLinkActive="active">
-                <a [routerLink]="[item_sub.link]">
-                    <i class="fa-regular fa-circle"></i>{{item_sub.link_name}}</a>
-            </li>
-        </div>
-        </li><br>
+                    <li *ngFor="let item_sub of item.sub_menu" routerLinkActive="active">
+                        <a [routerLink]="[item_sub.link]">
+                            <i class="fa-regular fa-circle"></i>{{item_sub.link_name}}</a>
+                    </li>
+                </div>
+            </li><br>
 
         <hr style="border-width: 3px; border-color: white;">
-
+        <!-- แถบหนังสือต่างๆ -->
         <p>หนังสือต่างๆ</p>
+
         <li *ngFor="let item of formSidebar" #itemEl routerLinkActive="active">
-            <a [routerLink]="[item.link]">
-                <i [class]="item.icon"></i>
-                <span class="link_name">{{item.link_name}}</span>
-            </a>
-        </li><br>
+            <div *ngIf="item.sub_menu.length === 0" class="dropdown-title">
+                <a [routerLink]="[item.link]" target="{{ item.openInNewTab ? '_blank' : '_self' }}"
+                    [title]="item.link_name">
+                    <i [class]="item.icon"></i>
+                    <span class="link_name">{{item.link_name}}</span>
+                </a>
+            </div>
 
-        <hr style="border-width: 3px; border-color: white;">
+            <!-- show submenu -->
+            <div *ngIf="item.sub_menu.length > 0" class="dropdown-title" (click)="showSubmenu(itemEl)">
+                <a>
+                    <i [class]="item.icon"></i>
+                    <span class="link_name"
+                        [attr.target]="item.openInNewTab ? '_blank' : '_self'">{{item.link_name}}</span>
+                </a>
+                <i class="fa-solid fa-chevron-down arrow"></i>
+            </div>
 
-        <p>แจ้งข่าวประชาสัมพันธ์</p>
-        <li *ngFor="let item of newsSidebar" #itemEl routerLinkActive="active">
-            <a [routerLink]="[item.link]">
-                <i [class]="item.icon"></i>
-                <span class="link_name">{{item.link_name}}</span>
+            <div class="sub-menu" [class.blank]="item.sub_menu.length === 0">
+        <li *ngFor="let item_sub of item.sub_menu" routerLinkActive="active">
+            <a [routerLink]="[item_sub.link]" target="{{ item.openInNewTab ? '_blank' : '_self' }}">
+                <i class="fa-regular fa-circle"></i>{{item_sub.link_name}}
             </a>
         </li>
+    </div>
+    </li>
+    <br>
+
+    <hr style="border-width: 3px; border-color: white;">
+    <!-- แถบแจ้งข่าวประชาสัมพันธ์ -->
+    <p>แจ้งข่าวประชาสัมพันธ์</p>
+    <li *ngFor="let item of newsSidebar" #itemEl routerLinkActive="active">
+        <a [routerLink]="[item.link]">
+            <i [class]="item.icon"></i>
+            <span class="link_name">{{item.link_name}}</span>
+        </a>
+    </li>
     </div>
     </div>
 
     <div class="content">
-        <table cellpadding="0" cellspacing="0" class="table-container">
+        <table class="table-container">
             <thead class="text-center" style="font-size: 15px;">
                 <tr style="color: #e6ecf0;">
                     <th><i class="fa-solid fa-satellite-dish"></i>ข่าวประชาสัมพันธ์<i
@@ -69,15 +94,14 @@
             </thead>
             <tbody style="font-size: 15px;">
                 <tr *ngFor="let relationItem of relations">
-                    <td width="550">
+                    <td>
                         <i class="fa-solid fa-square" style="color: #FF8A00;"></i>
-                        {{ relationItem.relation_content }} - [ {{ relationItem.relation_date }} ]
+                        {{ relationItem.relation_content }} - [ {{ formatDate(relationItem.relation_date) }} ]
                         <ng-container *ngIf="isNew(relationItem.relation_date)">
-                            <img src="https://media.tenor.com/h8wC3_J4yh8AAAAi/new-post.gif" /> 
+                            <img src="https://media.tenor.com/h8wC3_J4yh8AAAAi/new-post.gif" />
                         </ng-container>
                     </td>
-                </tr><br>
-
+                </tr>
                 <tr style="text-align: right;"><a [routerLink]="['/relation-officer']"
                         style="margin: 15px 15px 20px 15px; text-decoration: none; font-size: 17px;">แก้ไขข่าวประชาสัมพันธ์
                         >>></a></tr>

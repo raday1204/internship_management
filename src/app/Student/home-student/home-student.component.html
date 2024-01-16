@@ -49,7 +49,8 @@
             <thead class="text-center" style="font-size: 15px;">
                 <tr style="color: #e6ecf0;">
                     <th>
-                        <i class="fa-solid fa-satellite-dish"></i>ข่าวประชาสัมพันธ์<i class="fa-solid fa-satellite-dish"></i>
+                        <i class="fa-solid fa-satellite-dish"></i>ข่าวประชาสัมพันธ์<i
+                            class="fa-solid fa-satellite-dish"></i>
                     </th>
                 </tr>
             </thead>
@@ -58,7 +59,7 @@
                     <td>
                         <a href="javascript:void(0);" (click)="openInNewTab(relationItem)">
                             <i class="fa-solid fa-square" style="color: #FF8A00;"></i>
-                            {{ relationItem.relation_content }} - [ {{ relationItem.relation_date }} ]
+                            {{ relationItem.relation_content }} - [ {{ formatDate(relationItem.relation_date) }} ]
                             <ng-container *ngIf="isNew(relationItem.relation_date)">
                                 <img src="https://media.tenor.com/h8wC3_J4yh8AAAAi/new-post.gif" />
                             </ng-container>

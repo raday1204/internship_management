@@ -7,7 +7,7 @@
     </div>
 
     <div class="main-container">
-        <p class="text-center">{{ data.relation.relation_date | date:'yyyy-MM-dd' }}</p>
+        <p class="text-center">{{ formatDateThai(data.relation.relation_date) }}</p>
         <p class="text-center" style="word-break: break-all;">{{ data.relation.relation_content }}</p>
     </div>
 

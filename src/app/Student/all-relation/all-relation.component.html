@@ -24,11 +24,14 @@
             </thead>
             <tbody style="font-size: 16px;">
                 <tr *ngFor="let relationItem of relations">
-                    <td><i class="fa-solid fa-square" style="color: #FF8A00;"></i>
-                        {{ relationItem.relation_content }} - [ {{ relationItem.relation_date }} ]
-                        <ng-container *ngIf="isNew(relationItem.relation_date)">
-                            <img src="https://media.tenor.com/h8wC3_J4yh8AAAAi/new-post.gif" />
-                        </ng-container>
+                    <td>
+                        <a href="javascript:void(0);" (click)="openInNewTab(relationItem)">
+                            <i class="fa-solid fa-square" style="color: #FF8A00;"></i>
+                            {{ relationItem.relation_content }} - [ {{ relationItem.relation_date }} ]
+                            <ng-container *ngIf="isNew(relationItem.relation_date)">
+                                <img src="https://media.tenor.com/h8wC3_J4yh8AAAAi/new-post.gif" />
+                            </ng-container>
+                        </a>
                     </td>
                 </tr>
             </tbody>

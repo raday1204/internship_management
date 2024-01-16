@@ -20,9 +20,8 @@
         <p><strong>ชื่อหน่วยงานภายใน(ภาษาไทย):</strong> {{ data.company.company_building }}</p>
         <p><strong>ลักษณะงาน:</strong> {{ data.company.company_job }}</p>
         <p><strong>จำนวนนิสิตที่รับเข้า:</strong> {{ data.company.number_student_train }}</p>
-        <p><strong>วันที่ออกฝึกงาน:</strong> {{ data.company.date_addtraining }}</p>
-        <p><strong>วันสุดท้ายของการฝึกงาน:</strong> {{ data.company.date_endtraining }}</p>
-        <!-- Add more fields as needed -->
+        <p><strong>วันที่ออกฝึกงาน:</strong> {{ formatDateThai(data.company.date_addtraining)}}</p>
+        <p><strong>วันสุดท้ายของการฝึกงาน:</strong> {{ formatDateThai(data.company.date_endtraining) }}</p>
     </div>
 
     <div class="button-container">

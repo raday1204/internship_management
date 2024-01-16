@@ -33,7 +33,7 @@
         </thead>
         <tbody style="font-size: 13px;">
             <tr *ngFor="let relationItem of relations">
-                <td class="text-center">{{ relationItem.relation_date }}</td>
+                <td class="text-center">{{ formatDate(relationItem.relation_date) }}</td>
                 <td style="padding: 0px 15px; word-wrap: break-word;">{{ relationItem.relation_content }}</td>
                 <td class="text-center">
                     <button class="button" (click)="deleteRelation(relationItem.id)"
