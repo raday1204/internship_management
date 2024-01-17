@@ -49,7 +49,6 @@ export class HomeStudentComponent implements OnInit {
 
   }
 
-
   ngOnInit() {
     this.dateTime = new Date();
     this.loggedInUsername = localStorage.getItem('loggedInUsername') || '';
@@ -281,7 +280,7 @@ export class HomeStudentComponent implements OnInit {
 
     {
       link_name: "01-ข้อมูลหน่วยงาน",
-      link: "/company-form-student",
+      action: () => this.CompanyStatus(),
       icon: "fa-regular fa-file-pdf",
       sub_menu: [],
       openInNewTab: false
@@ -316,6 +315,7 @@ export class HomeStudentComponent implements OnInit {
             this.username = response.username;
             console.log(`Welcome, ${this.username}, to the home-student page!`);
             this.companyStudentService.setUsername(this.username);
+
             // Check if the user already has a company ID
             this.http.post<any>('http://localhost/PJ/Backend/Student/check-company-id.php', { username: this.username })
               .subscribe(
@@ -326,17 +326,22 @@ export class HomeStudentComponent implements OnInit {
 
                       // Store the company ID in localStorage
                       localStorage.setItem('companyID', companyResponse.companyID);
-                      this.hasSelectedCompany = !!localStorage.getItem('companyID');
                       this.hasSelectedCompany = true;
-                    } else {
-                      this.hasSelectedCompany = false;
 
-                      // Navigate to company-information with the username as a query parameter
-                      this.router.navigate([], {
-                        relativeTo: this.route,
-                        queryParams: { username: this.username },
-                        queryParamsHandling: 'merge'
-                      });
+                      if (companyResponse.companyID === 0) {
+                        // Redirect to company-form-student if company_id is 0
+                        this.hasSelectedCompany = true;
+                      } else {
+                        // Navigate to company-information with the username as a query parameter
+                        this.router.navigate([], {
+                          relativeTo: this.route,
+                          queryParams: { username: this.username },
+                          queryParamsHandling: 'merge'
+                        });
+                      }
+                    } else {
+                      // Allow selection of a company when company_id is 0
+                      this.hasSelectedCompany = false;
                     }
                   } else {
                     console.error('An error occurred while checking company ID:', companyResponse.error);
@@ -346,8 +351,8 @@ export class HomeStudentComponent implements OnInit {
                   console.error('An error occurred while checking company ID:', error);
                 }
               );
-
           } else {
+            // Redirect to login page if not logged in
             this.router.navigate(['/login-student']);
           }
         },
@@ -426,6 +431,70 @@ export class HomeStudentComponent implements OnInit {
         },
         (error) => {
           console.error('An error occurred while checking training status:', error);
+        }
+      );
+  }
+
+  CompanyStatus() {
+    console.log('Checking training status for username:', this.username);
+    const requestBody = { username: this.username };
+
+    this.http.post<any>('http://localhost/PJ/Backend/Student/check-company-id.php', { username: this.username })
+      .subscribe(
+        (companyResponse: any) => {
+          if (companyResponse.success) {
+            if (companyResponse.hasCompanyID) {
+              console.log('Welcome, Company ID:', companyResponse.companyID);
+
+              // Store the company ID in localStorage
+              localStorage.setItem('companyID', companyResponse.companyID);
+              this.hasSelectedCompany = true;
+
+              if (companyResponse.companyID === 0) {
+                this.router.navigate(['/company-form-student']);
+              } else {
+                this.http.post<any>('http://localhost/PJ/Backend/Student/Training/check-training-status.php', JSON.stringify(requestBody))
+                  .subscribe(
+                    (statusResponse: any) => {
+                      if (statusResponse && statusResponse.success) {
+                        const trainingData = statusResponse.data.trainingData;  // Match the key with PHP response
+                        console.log('Training Data:', trainingData);
+
+                        if (trainingData.length > 0) {
+                          const company_status = trainingData[0].company_status;
+
+                          if (company_status === '1' || company_status === '2') {
+                            this.snackBar.open('ไม่สามารถเปลี่ยนหน่วยงานได้', 'Close', {
+                              duration: 3000,
+                            });
+                          } else if (company_status === '3') {
+                            this.router.navigate(['/company-form-student']);
+                          }
+                        } else {
+                          // No training status found.
+                          this.snackBar.open('ยังไม่ได้เลือกหน่วยงาน', 'Close', {
+                            duration: 3000,
+                          });
+                        }
+                      } else {
+                        console.error('No training status found or an error occurred.');
+                      }
+                    },
+                    (error) => {
+                      console.error('An error occurred while checking training status:', error);
+                    }
+                  );
+              }
+            } else {
+              // Allow selection of a company when company_id is 0
+              this.hasSelectedCompany = false;
+            }
+          } else {
+            console.error('An error occurred while checking company ID:', companyResponse.error);
+          }
+        },
+        (error) => {
+          console.error('An error occurred while checking company ID:', error);
         }
       );
   }

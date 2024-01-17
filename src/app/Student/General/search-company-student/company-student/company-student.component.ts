@@ -25,6 +25,7 @@ interface Student {
   student_lastname: string;
 }
 
+
 interface CompanyInformation {
   selected: any;
   company: Company;
@@ -80,6 +81,23 @@ export class CompanyStudentComponent implements OnInit {
     this.hasSelectedCompany = !!companyID;
     const selectedCompanyID = localStorage.getItem('selectedCompanyID');
     this.hasSelectedCompany = !!selectedCompanyID;
+
+    this.http.post<any>('http://localhost/PJ/Backend/Student/check-company-id.php', { username: this.username })
+      .subscribe(
+        (companyResponse: any) => {
+          if (companyResponse.success) {
+            if (companyResponse.companyID === 0) {
+              // Allow selection of a company when company_id is 0
+              this.hasSelectedCompany = false;
+            }
+          } else {
+            console.error('An error occurred while checking company ID:', companyResponse.error);
+          }
+        },
+        (error) => {
+          console.error('An error occurred while checking company ID:', error);
+        }
+      );
   }
 
 
@@ -179,7 +197,7 @@ export class CompanyStudentComponent implements OnInit {
       .subscribe(
         () => {
           localStorage.removeItem('loggedInUsername');
-          localStorage.removeItem('selectedCompanyID');
+          localStorage.removeItem('companyID');
           // Disable browser back
           history.pushState('', '', window.location.href);
           window.onpopstate = function () {

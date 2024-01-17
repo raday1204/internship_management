@@ -112,6 +112,18 @@ select {
     margin-right: 30px;
 }
 
+span {
+    font-size: 16px;
+    font-weight: 400;
+    padding: 2px 12px;
+    border: 2px solid #000;
+    border-radius: 10px;
+    background-color: #fff;
+    margin-right: 40px;
+    min-width: 100px;
+    display: inline-block;
+}
+
 h6 {
     margin-left: 50px;
     padding-bottom: 30px;

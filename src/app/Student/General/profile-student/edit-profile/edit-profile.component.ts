@@ -5,6 +5,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router, NavigationExtras } from '@angular/router';
 import { CompanyStudentService } from '../../search-company-student/company-student/company-student.service';
 import { MatDialog } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { EditProfilePopupComponent } from './edit-profile-popup/edit-profile-popup.component';
 
 @Component({
@@ -55,12 +56,13 @@ export class EditProfileComponent implements OnInit {
     private router: Router,
     private fb: FormBuilder,
     public dialog: MatDialog,
+    private snackBar: MatSnackBar,
     private companyStudentService: CompanyStudentService
 
   ) {
     this.studentForm = this.fb.group({
       student_id: ['', Validators.required],
-      type_name: ['', Validators.required],
+      type_name: [''],
       student_name: ['', Validators.required],
       student_lastname: ['', Validators.required],
       student_nickname: ['', Validators.required],
@@ -202,6 +204,10 @@ export class EditProfileComponent implements OnInit {
         if (result && result.saveData) {
           this.updateStudent();
         }
+      });
+    } else {
+      this.snackBar.open('กรุณากรอกข้อมูลให้ครบถ้วน', 'Close', {
+        duration: 3000,
       });
     }
   }

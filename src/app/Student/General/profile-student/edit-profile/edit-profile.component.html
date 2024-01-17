@@ -34,10 +34,9 @@
 
             <p>รายละเอียดส่วนตัว</p>
             <div class="list">
-                <label for="type_name">ประเภทที่</label>
-                <input style="width: 305px;" type="text" id="type_name" formControlName="type_name">
+                <label for="type_name">ประเภท :</label>
+                <span style="width: 220px;">{{ studentForm.get('type_name')?.value || '-' }}</span>
             </div><br>
-
             <div class="list">
                 <label for="student_citizen">หมายเลขประจำวันประชาชน :</label>
                 <input type="text" id="student_citizen" formControlName="student_citizen">

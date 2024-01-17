@@ -114,8 +114,6 @@ export class CompanyFormStudentComponent implements OnInit {
             console.error('HTTP Error:', error);
           }
         );
-    } else {
-      this.errorMessage = 'No username provided.';
     }
     this.getOptions();
   }
@@ -195,8 +193,6 @@ export class CompanyFormStudentComponent implements OnInit {
                               const updatedStudentData = responseUpdateStudent.data;
                               console.log('Updated Student Data:', updatedStudentData);
 
-                              // Close the dialog and open a new tab to display data
-                              // this.dialogRef.close({ saveData: true });
                               this.openInNewTab(updatedStudentData, responseCompany);
                             } else {
                               console.error(responseUpdateStudent.message);

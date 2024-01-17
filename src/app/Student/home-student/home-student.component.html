@@ -34,13 +34,23 @@
             <hr style="border-width: 3px; border-color: white;">
 
             <p class="text-center">แบบฟอร์ม</p>
-            <li *ngFor="let item of formSidebar" #itemEl routerLinkActive="active">
+            <ng-container *ngFor="let item of formSidebar">
+            <li *ngIf="item.link; else actionTemplate" #itemEl routerLinkActive="active">
                 <a [routerLink]="[item.link]" [queryParams]="{ username: username }"
                     target="{{ item.openInNewTab ? '_blank' : '_self' }}" [title]="item.link_name">
                     <i [class]="item.icon"></i>
                     <span class="link_name">{{ item.link_name }}</span>
                 </a>
             </li>
+            <ng-template #actionTemplate>
+                <li #itemEl>
+                    <a *ngIf="item.action" (click)="item.action()">
+                        <i [class]="item.icon"></i>
+                        <span class="link_name">{{ item.link_name }}</span>
+                    </a>
+                </li>
+            </ng-template>
+        </ng-container><br>
         </div>
     </div>
 
@@ -49,8 +59,7 @@
             <thead class="text-center" style="font-size: 15px;">
                 <tr style="color: #e6ecf0;">
                     <th>
-                        <i class="fa-solid fa-satellite-dish"></i>ข่าวประชาสัมพันธ์<i
-                            class="fa-solid fa-satellite-dish"></i>
+                        <i class="fa-solid fa-satellite-dish"></i>ข่าวประชาสัมพันธ์<i class="fa-solid fa-satellite-dish"></i>
                     </th>
                 </tr>
             </thead>

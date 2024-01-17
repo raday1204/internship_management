@@ -201,7 +201,6 @@ export class HomeOfficerComponent implements OnInit {
       );
   }
 
-
   logout() {
     this.http.post<any>('http://localhost/PJ/Backend/Student/logout.php', {})
       .subscribe(
