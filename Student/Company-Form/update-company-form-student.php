@@ -1,25 +1,8 @@
 <?php
-session_start();
-header("Access-Control-Allow-Origin: *");
-header("Access-Control-Allow-Headers: *");
-header("Access-Control-Allow-Methods: POST");
-header("Content-Type: application/json");
+include('../../database.php');
 
 if (isset($_POST["username"])) {
     $username = $_POST["username"];
-
-    $hostAuth = "localhost";
-    $userAuth = "root";
-    $passAuth = "";
-    $dbname = "internship_management";
-
-    $conn = new mysqli($hostAuth, $userAuth, $passAuth, $dbname);
-
-    if ($conn->connect_error) {
-        die(json_encode(array("error" => "Connection failed: " . $conn->connect_error)));
-    }
-
-    $conn->set_charset("utf8mb4");
 
     // Get data from the POST request
     $student_code = $_POST['student_code'];
@@ -96,4 +79,3 @@ if (isset($_POST["username"])) {
 } else {
     echo json_encode(['error' => 'Username not provided']);
 }
-?>

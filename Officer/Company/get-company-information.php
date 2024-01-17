@@ -1,21 +1,5 @@
 <?php
-header("Access-Control-Allow-Origin: *");
-header("Access-Control-Allow-Headers: *");
-header("Access-Control-Allow-Methods: *");
-header("Content-Type: application/json");
-
-$hostAuth = "localhost";
-$userAuth = "root";
-$passAuth = "";
-$dbname = "internship_management";
-
-$conn = new mysqli($hostAuth, $userAuth, $passAuth, $dbname);
-
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
-
-$conn->set_charset("utf8mb4");
+include('../../database.php');
 
 if ($_SERVER["REQUEST_METHOD"] === "GET") {
     $year = mysqli_real_escape_string($conn, $_GET['year']);
@@ -44,8 +28,11 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
                 $needStudent = fetchRecords($resultNeedStudents);
 
                 // Retrieve information from the student table using prepared statement
-                $stmtStudents = $conn->prepare("SELECT student_code, student_name, student_lastname, student_mobile, student.depart_code, depart.depart_name FROM student 
+                $stmtStudents = $conn->prepare("SELECT student.*, company.company_id, company.year, 
+                depart.depart_name 
+                FROM student 
                 LEFT JOIN depart ON student.depart_code = depart.depart_code
+                LEFT JOIN company ON student.company_id = company.company_id
                 WHERE student.company_id = ?");
                 $stmtStudents->bind_param("s", $company_id);
                 $stmtStudents->execute();
@@ -72,6 +59,7 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
                             'student_lastname' => $rowStudent['student_lastname'],
                             'student_mobile' => $rowStudent['student_mobile'],
                             'depart_name' => $rowStudent['depart_name'],
+                            'year' => $rowStudent['year'],
                             'training' => $training,
                             'company_status' => isset($training[0]['company_status']) ? $training[0]['company_status'] : null,
                         ];

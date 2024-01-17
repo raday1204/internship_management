@@ -1,21 +1,5 @@
 <?php
-header("Access-Control-Allow-Origin: *");
-header("Access-Control-Allow-Headers: *");
-header("Access-Control-Allow-Methods: *");
-header("Content-Type: application/json");
-
-$hostAuth = "localhost";
-$userAuth = "root";
-$passAuth = "";
-$dbname = "internship_management";
-
-$conn = new mysqli($hostAuth, $userAuth, $passAuth, $dbname);
-
-if ($conn->connect_error) {
-    die(json_encode(array("success" => false, "error" => "Connection failed: " . $conn->connect_error)));
-}
-
-$conn->set_charset("utf8mb4");
+include('../../database.php');
 
 $sql = "SELECT company.company_id, company.company_name, company.company_building, 
 student.student_code, student.student_name, student.student_lastname, need_student.number_student_train
@@ -63,4 +47,3 @@ if ($result->num_rows > 0) {
 
 // Close the database connection
 $conn->close();
-?>

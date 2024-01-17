@@ -1,26 +1,9 @@
 <?php
-session_start();
-header("Access-Control-Allow-Origin: *");
-header("Access-Control-Allow-Headers: *");
-header("Access-Control-Allow-Methods: GET");
-header("Content-Type: application/json");
+include('../../database.php');
 
 if (isset($_SESSION["username"]) || isset($_GET["username"])) {
 
     $username = isset($_SESSION["username"]) ? $_SESSION["username"] : $_GET["username"];
-
-    $hostAuth = "localhost";
-    $userAuth = "root";
-    $passAuth = "";
-    $dbname = "internship_management";
-
-    $conn = new mysqli($hostAuth, $userAuth, $passAuth, $dbname);
-
-    if ($conn->connect_error) {
-        die(json_encode(array("error" => "Connection failed: " . $conn->connect_error)));
-    }
-
-    $conn->set_charset("utf8mb4");
 
     $username = $conn->real_escape_string($username);
 
@@ -63,8 +46,8 @@ if (isset($_SESSION["username"]) || isset($_GET["username"])) {
                     'type_position' => $row['type_position'],
                     'type_special' => $row['type_special'],
                     'need_student' => [
-                    'date_addtraining' => $row['date_addtraining'],
-                    'date_endtraining' => $row['date_endtraining']
+                        'date_addtraining' => $row['date_addtraining'],
+                        'date_endtraining' => $row['date_endtraining']
                     ]
                 ]
             ]
@@ -78,4 +61,3 @@ if (isset($_SESSION["username"]) || isset($_GET["username"])) {
 } else {
     echo json_encode(array("error" => "No username provided."));
 }
-?>

@@ -1,24 +1,8 @@
 <?php
-header("Access-Control-Allow-Origin: *");
-header("Access-Control-Allow-Headers: *");
-header("Access-Control-Allow-Methods: POST");
-header("Content-Type: application/json");
+include('../../database.php');
 
 if (isset($_POST["username"])) {
     $username = $_POST["username"];
-
-    $host = "localhost";
-    $user = "root";
-    $pass = "";
-    $dbname = "internship_management";
-
-    $conn = new mysqli($host, $user, $pass, $dbname);
-
-    if ($conn->connect_error) {
-        die(json_encode(array("success" => false, "message" => "Connection failed: " . $conn->connect_error)));
-    }
-
-    $conn->set_charset("utf8mb4");
 
     $updateFields = array();
 
@@ -52,12 +36,13 @@ if (isset($_POST["username"])) {
         }
     }
 
-    // Update the database
+    // Update the database if there are fields to update
     if (!empty($updateFields)) {
         $updateSql = "UPDATE student SET " . implode(', ', $updateFields) . " WHERE student_code = '$username'";
 
         if ($conn->query($updateSql) === TRUE) {
-            $response = array('success' => true, 'message' => 'Student profile updated successfully');
+            $response = ['success' => true, 'message' => 'Student profile updated successfully'];
+
             // Fetch the updated data and send it back if needed
             $selectSql = "SELECT users.username, student.* 
                 FROM users 
@@ -74,10 +59,10 @@ if (isset($_POST["username"])) {
                 $response['message'] = 'Error fetching updated student profile data';
             }
         } else {
-            $response = array('success' => false, 'message' => 'Error updating student profile: ' . $conn->error);
+            $response = ['success' => false, 'message' => 'Error updating student profile: ' . $conn->error];
         }
     } else {
-        $response = array('success' => false, 'message' => 'No fields to update');
+        $response = ['success' => false, 'message' => 'No fields to update'];
     }
 
     // Close the database connection
@@ -89,4 +74,3 @@ if (isset($_POST["username"])) {
 } else {
     echo json_encode(['error' => 'Username not provided']);
 }
-?>

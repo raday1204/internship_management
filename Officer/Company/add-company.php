@@ -1,32 +1,15 @@
 <?php
-header("Access-Control-Allow-Origin: *");
-header("Access-Control-Allow-Headers: *");
-header("Access-Control-Allow-Methods: POST, OPTIONS");
-header("Content-Type: application/json");
+include('../../database.php');
 
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     http_response_code(200);
     exit();
 }
 
-// Decode raw JSON data from the request
-$postdata = file_get_contents("php://input");
-$request = json_decode($postdata, true);
-
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $hostAuth = "localhost";
-    $userAuth = "root";
-    $passAuth = "";
-    $dbname = "internship_management";
-
-    $conn = new mysqli($hostAuth, $userAuth, $passAuth, $dbname);
-
-    if ($conn->connect_error) {
-        die("Connection failed: " . $conn->connect_error);
-    }
-
-    $conn->set_charset("utf8mb4");
-
+    // Decode raw JSON data from the request
+    $postdata = file_get_contents("php://input");
+    $request = json_decode($postdata, true);
     $year = $_POST['year'];
     $type_name = $_POST['type_name'];
     $term = $_POST['term'];
@@ -37,14 +20,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $send_tel = $_POST['send_tel'];
     $send_email = $_POST['send_email'];
     $send_mobile = $_POST['send_mobile'];
-    //แยกเอาไปของ student
-    // $type_position = $_POST['type_position'];
-    // $type_special = $_POST['type_special'];
 
-    // This is an insert operation
     $sql_insert_company = "INSERT INTO company (year, type_name, term, company_name, 
     send_name, send_coordinator, send_position, send_tel, send_email, send_mobile) 
     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
     $stmt_insert_company = $conn->prepare($sql_insert_company);
 
     if ($stmt_insert_company === false) {
@@ -66,7 +46,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     );
 
     if ($stmt_insert_company->execute()) {
-        $company_id = $conn->insert_id;
+        $company_id = $stmt_insert_company->insert_id;
 
         $response = array("success" => true, "company_id" => $company_id, "year" => $year, "type_name" => $type_name, "message" => "Company data inserted successfully");
     } else {
@@ -74,11 +54,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     $stmt_insert_company->close();
-
     $conn->close();
+    echo json_encode($response);
 } else {
     $response = array("success" => false, "message" => "Invalid request method");
+    echo json_encode($response);
 }
-
-echo json_encode($response);
-?>

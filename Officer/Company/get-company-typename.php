@@ -1,26 +1,5 @@
 <?php
-header("Access-Control-Allow-Origin: *");
-header("Access-Control-Allow-Headers: *");
-header("Access-Control-Allow-Methods: GET, OPTIONS");
-header("Content-Type: application/json");
-
-if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
-    http_response_code(200);
-    exit();
-}
-
-$hostAuth = "localhost";
-$userAuth = "root";
-$passAuth = "";
-$dbname = "internship_management";
-
-$conn = new mysqli($hostAuth, $userAuth, $passAuth, $dbname);
-
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
-
-$conn->set_charset("utf8mb4");
+include('../../database.php');
 
 // Check if type_name is provided in the query parameters
 if (isset($_GET['type_name'])) {
@@ -59,4 +38,3 @@ if (isset($_GET['type_name'])) {
 echo json_encode($response);
 
 $conn->close();
-?>

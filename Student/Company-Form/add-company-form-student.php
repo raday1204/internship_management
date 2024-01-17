@@ -1,8 +1,5 @@
 <?php
-header("Access-Control-Allow-Origin: *");
-header("Access-Control-Allow-Headers: *");
-header("Access-Control-Allow-Methods: POST, OPTIONS");
-header("Content-Type: application/json");
+include('../../database.php');
 
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     http_response_code(200);
@@ -18,19 +15,6 @@ $response_company = array("success" => false, "message" => "Unexpected error");
 $response_need_student = array("success" => false, "message" => "Unexpected error");
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $hostAuth = "localhost";
-    $userAuth = "root";
-    $passAuth = "";
-    $dbname = "internship_management";
-
-    $conn = new mysqli($hostAuth, $userAuth, $passAuth, $dbname);
-
-    if ($conn->connect_error) {
-        die(json_encode(array("success" => false, "message" => "Connection failed: " . $conn->connect_error)));
-    }
-
-    $conn->set_charset("utf8mb4");
-
     $year = $_POST['year'];
     $type_name = $_POST['type_name'];
     $term = $_POST['term'];
@@ -108,4 +92,3 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 $response = array_merge($response_company, $response_need_student);
 
 echo json_encode($response);
-?>

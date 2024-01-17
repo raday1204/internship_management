@@ -1,9 +1,5 @@
 <?php
-session_start();
-header("Access-Control-Allow-Origin: *");
-header("Access-Control-Allow-Headers: Content-Type");
-header("Access-Control-Allow-Methods: POST, OPTIONS");
-header("Content-Type: application/json");
+include('../../database.php');
 
 if ($_SERVER["REQUEST_METHOD"] === "OPTIONS") {
     // Handle preflight request (OPTIONS)
@@ -23,20 +19,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $username = $data->username;
     $newCompanyID = $data->company_id;
 
-    $hostAuth = "localhost";
-    $userAuth = "root";
-    $passAuth = "";
-    $dbname = "internship_management";
-
-    $conn = new mysqli($hostAuth, $userAuth, $passAuth, $dbname);
-
-    if ($conn->connect_error) {
-        http_response_code(500);
-        die(json_encode(array("success" => false, "error" => "Connection failed: " . $conn->connect_error)));
-    }
-
     $conn->set_charset("utf8mb4");
-    
     $username = $conn->real_escape_string($username);
 
     // Start a transaction
@@ -45,34 +28,53 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     try {
         // Check if the student already exists
         $checkSql = "SELECT users.username, student.student_code, student.company_id, training.*
-        FROM users 
-        LEFT JOIN student ON users.username = student.student_code 
-        LEFT JOIN training ON training.student_code = student.student_code
-        WHERE student.student_code = '$username' FOR UPDATE";  // Lock the selected rows for update
+                     FROM users 
+                     LEFT JOIN student ON users.username = student.student_code 
+                     LEFT JOIN training ON training.student_code = student.student_code
+                     WHERE student.student_code = ? FOR UPDATE";  // Lock the selected rows for update
 
-        $checkResult = $conn->query($checkSql);
+        $stmt_check = $conn->prepare($checkSql);
+        $stmt_check->bind_param("s", $username);
+        $stmt_check->execute();
+        $checkResult = $stmt_check->get_result();
+        $stmt_check->close();
 
         if ($checkResult && $checkResult->num_rows > 0) {
-
             // Check if the username already exists in the training table
-            $checkUsernameSql = "SELECT * FROM training WHERE student_code = '$username'";
-            $checkUsernameResult = $conn->query($checkUsernameSql);
+            $checkUsernameSql = "SELECT * FROM training WHERE student_code = ?";
+            $stmt_check_username = $conn->prepare($checkUsernameSql);
+            $stmt_check_username->bind_param("s", $username);
+            $stmt_check_username->execute();
+            $checkUsernameResult = $stmt_check_username->get_result();
+            $stmt_check_username->close();
 
             if ($checkUsernameResult && $checkUsernameResult->num_rows == 0) {
                 // If the student exists and username is not in the training table, insert the username
-                $insertUsernameSql = "INSERT INTO training (student_code) VALUES ('$username')";
-                $conn->query($insertUsernameSql);
+                $insertUsernameSql = "INSERT INTO training (student_code) VALUES (?)";
+                $stmt_insert_username = $conn->prepare($insertUsernameSql);
+                $stmt_insert_username->bind_param("s", $username);
+                $stmt_insert_username->execute();
+                $stmt_insert_username->close();
             }
 
             // Update the company_id and status
-            $updateSql = "UPDATE student SET company_id = '$newCompanyID' WHERE student_code = '$username'";
-            $conn->query($updateSql);
+            $updateSql = "UPDATE student SET company_id = ? WHERE student_code = ?";
+            $stmt_update = $conn->prepare($updateSql);
+            $stmt_update->bind_param("ss", $newCompanyID, $username);
+            $stmt_update->execute();
+            $stmt_update->close();
 
-            $updateStatusSql = "UPDATE training SET company_id = '$newCompanyID', company_status = '1' WHERE student_code = '$username'";
-            $conn->query($updateStatusSql);
+            $updateStatusSql = "UPDATE training SET company_id = ?, company_status = '1' WHERE student_code = ?";
+            $stmt_update_status = $conn->prepare($updateStatusSql);
+            $stmt_update_status->bind_param("ss", $newCompanyID, $username);
+            $stmt_update_status->execute();
+            $stmt_update_status->close();
 
-            $updateAssessmentStatusSql = "UPDATE training SET company_id = '$newCompanyID', assessment_status = '1' WHERE student_code = '$username'";
-            $conn->query($updateAssessmentStatusSql);
+            $updateAssessmentStatusSql = "UPDATE training SET company_id = ?, assessment_status = '1' WHERE student_code = ?";
+            $stmt_update_assessment_status = $conn->prepare($updateAssessmentStatusSql);
+            $stmt_update_assessment_status->bind_param("ss", $newCompanyID, $username);
+            $stmt_update_assessment_status->execute();
+            $stmt_update_assessment_status->close();
 
             // Commit the transaction if all queries are successful
             $conn->commit();
@@ -90,9 +92,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         echo json_encode(array("success" => false, "error" => "Transaction failed: " . $e->getMessage()));
     }
 
-    mysqli_close($conn);
+    $conn->close();
 } else {
     http_response_code(400);
     echo json_encode(array("success" => false, "error" => "Invalid request method."));
 }
-?>

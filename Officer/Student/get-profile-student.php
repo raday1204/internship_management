@@ -1,32 +1,13 @@
 <?php
-session_start();
-header("Access-Control-Allow-Origin: *");
-header("Access-Control-Allow-Headers: *");
-header("Access-Control-Allow-Methods: GET");
-header("Content-Type: application/json");
+include('../../database.php');
 
 if (isset($_GET["student_code"])) {
     $studentCode = $_GET["student_code"];
-    $hostAuth = "localhost";
-    $userAuth = "root";
-    $passAuth = "";
-    $dbname = "internship_management";
-
-    $conn = new mysqli($hostAuth, $userAuth, $passAuth, $dbname);
-
-    if ($conn->connect_error) {
-        die(json_encode(array("error" => "Connection failed: " . $conn->connect_error)));
-    }
-
-    $conn->set_charset("utf8mb4");
 
     $studentCode = $conn->real_escape_string($studentCode);
 
     // Use a prepared statement to avoid SQL injection
-    $stmt = $conn->prepare("SELECT student_id, type_name, student_name, student_lastname, student_nickname, student_pic, 
-    student_citizen, student_email, student_mobile, student_facebook, student_line, st_address, st_tambol, st_ampher, 
-    st_province, st_zipcode, st_tel, st_contact, st_mobile, ct_address, ct_tambol, ct_ampher, ct_province, 
-    ct_zipcode, ct_tel, company_id FROM student WHERE student_code = ?");
+    $stmt = $conn->prepare("SELECT student_id, type_name, student_name, student_lastname, student_nickname, student_pic, student_citizen, student_email, student_mobile, student_facebook, student_line, st_address, st_tambol, st_ampher, st_province, st_zipcode, st_tel, st_contact, st_mobile, ct_address, ct_tambol, ct_ampher, ct_province, ct_zipcode, ct_tel, company_id FROM student WHERE student_code = ?");
 
     $stmt->bind_param("s", $studentCode);
     $stmt->execute();

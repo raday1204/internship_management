@@ -1,22 +1,5 @@
 <?php
-
-header("Access-Control-Allow-Origin: *");
-header("Access-Control-Allow-Headers: *");
-header("Access-Control-Allow-Methods: *");
-header("Content-Type: application/json");
-
-$hostAuth = "localhost";
-$userAuth = "root";
-$passAuth = "";
-$dbname = "internship_management";
-
-$conn = new mysqli($hostAuth, $userAuth, $passAuth, $dbname);
-
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
-
-$conn->set_charset("utf8mb4");
+include('../../database.php');
 
 if ($_SERVER["REQUEST_METHOD"] === "GET") {
     // Check if the 'year' and 'term' parameters are set in the URL

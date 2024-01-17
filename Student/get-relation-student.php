@@ -1,25 +1,11 @@
 <?php
-header("Access-Control-Allow-Origin: *");
-header("Access-Control-Allow-Headers: *");
-header("Access-Control-Allow-Methods: *");
-header("Content-Type: application/json");
-
-$hostAuth = "localhost";
-$userAuth = "root";
-$passAuth = "";
-$dbname = "internship_management";
-
-$conn = new mysqli($hostAuth, $userAuth, $passAuth, $dbname);
-
-if ($conn->connect_error) {
-    die(json_encode(['success' => false, 'message' => 'Connection failed: ' . $conn->connect_error]));
-}
+include('../database.php');
 
 $conn->set_charset("utf8mb4");
 
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     $page = isset($_GET['page']) ? intval($_GET['page']) : 1;
-    $limit = isset($_GET['limit']) ? intval($_GET['limit']) : 5;
+    $limit = isset($_GET['limit']) ? intval($_GET['limit']) : 10;
 
     $offset = ($page - 1) * $limit;
 
@@ -50,4 +36,3 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
 }
 
 $conn->close();
-?>

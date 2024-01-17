@@ -1,8 +1,5 @@
 <?php
-header("Access-Control-Allow-Origin: *");
-header("Access-Control-Allow-Headers: *");
-header("Access-Control-Allow-Methods: POST, OPTIONS");
-header("Content-Type: application/json");
+include('../../database.php');
 
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     http_response_code(200);
@@ -14,19 +11,6 @@ $postdata = file_get_contents("php://input");
 $request = json_decode($postdata, true);
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $hostAuth = "localhost";
-    $userAuth = "root";
-    $passAuth = "";
-    $dbname = "internship_management";
-
-    $conn = new mysqli($hostAuth, $userAuth, $passAuth, $dbname);
-
-    if ($conn->connect_error) {
-        die(json_encode(array("success" => false, "message" => "Connection failed: " . $conn->connect_error)));
-    }
-
-    $conn->set_charset("utf8mb4");
-
     $company_id = $_POST['company_id'];
     $type_name = $_POST['type_name'];
     $username = $_POST['username'];
@@ -61,18 +45,38 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         $result = $stmt_select_student->get_result();
 
-        if ($result->num_rows > 0) {
+        if ($result && $result->num_rows > 0) {
             $data = $result->fetch_assoc();
             $response_update_student["data"] = $data;
 
-            // Update the training table
-            $newCompanyID = $data['company_id'];
+            // Check if the username already exists in the training table
+            $checkUsernameSql = "SELECT * FROM training WHERE student_code = ?";
+            $stmt_check_username = $conn->prepare($checkUsernameSql);
+            $stmt_check_username->bind_param("s", $username);
+            $stmt_check_username->execute();
+            $checkUsernameResult = $stmt_check_username->get_result();
 
-            $updateStatusSql = "UPDATE training SET company_id = '$newCompanyID', company_status = '1' WHERE student_code = '$username'";
-            $conn->query($updateStatusSql);
+            if ($checkUsernameResult && $checkUsernameResult->num_rows == 0) {
+                // If the student exists and username is not in the training table, insert the username
+                $insertUsernameSql = "INSERT INTO training (student_code) VALUES (?)";
+                $stmt_insert_username = $conn->prepare($insertUsernameSql);
+                $stmt_insert_username->bind_param("s", $username);
+                $stmt_insert_username->execute();
+                $stmt_insert_username->close();
+            }
 
-            $updateAssessmentStatusSql = "UPDATE training SET company_id = '$newCompanyID', assessment_status = '1' WHERE student_code = '$username'";
-            $conn->query($updateAssessmentStatusSql);
+            // Update the training table with secure parameterized queries
+            $updateStatusSql = "UPDATE training SET company_id = ?, company_status = '1' WHERE student_code = ?";
+            $stmt_update_status = $conn->prepare($updateStatusSql);
+            $stmt_update_status->bind_param("is", $company_id, $username);
+            $stmt_update_status->execute();
+            $stmt_update_status->close();
+
+            $updateAssessmentStatusSql = "UPDATE training SET company_id = ?, assessment_status = '1' WHERE student_code = ?";
+            $stmt_update_assessment_status = $conn->prepare($updateAssessmentStatusSql);
+            $stmt_update_assessment_status->bind_param("is", $company_id, $username);
+            $stmt_update_assessment_status->execute();
+            $stmt_update_assessment_status->close();
         } else {
             $response_update_student["data"] = null;
         }
@@ -90,4 +94,3 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $response_update_student = array("success" => false, "message" => "Invalid request method");
     echo json_encode($response_update_student);
 }
-?>

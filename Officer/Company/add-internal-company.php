@@ -1,8 +1,5 @@
 <?php
-header("Access-Control-Allow-Origin: http://localhost:4200");
-header("Access-Control-Allow-Headers: *");
-header("Access-Control-Allow-Methods: POST, PUT, OPTIONS");
-header("Content-Type: application/json");
+include('../../database.php');
 
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     http_response_code(200);
@@ -16,25 +13,12 @@ $request = json_decode($postdata, true);
 // ... (existing code)
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $hostAuth = "localhost";
-    $userAuth = "root";
-    $passAuth = "";
-    $dbname = "internship_management";
-
-    $conn = new mysqli($hostAuth, $userAuth, $passAuth, $dbname);
-
-    if ($conn->connect_error) {
-        die(json_encode(array("success" => false, "message" => "Connection failed: " . $conn->connect_error)));
-    }
-
-    $conn->set_charset("utf8mb4");
-
     // Validate and sanitize inputs
     $company_id = isset($_POST['company_id']) ? $conn->real_escape_string($_POST['company_id']) : "";
     $number_student_train = isset($_POST['number_student_train']) ? $conn->real_escape_string($_POST['number_student_train']) : "";
     $date_addtraining = isset($_POST['date_addtraining']) ? $conn->real_escape_string($_POST['date_addtraining']) : "";
     $date_endtraining = isset($_POST['date_endtraining']) ? $conn->real_escape_string($_POST['date_endtraining']) : "";
-    
+
 
     // Insert data into the need_student table
     $sql_insert_need_student = "INSERT INTO need_student (company_id, number_student_train, date_addtraining, date_endtraining ) VALUES (?, ?, ?, ?)";
@@ -43,7 +27,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if ($stmt_insert_need_student === false) {
         die(json_encode(array("success" => false, "message" => "Prepare failed: " . $conn->error)));
     } else {
-        $stmt_insert_need_student->bind_param("isss", $company_id, $number_student_train, $date_addtraining, $date_endtraining );
+        $stmt_insert_need_student->bind_param("isss", $company_id, $number_student_train, $date_addtraining, $date_endtraining);
 
         if ($stmt_insert_need_student->execute()) {
             $response = array("success" => true, "message" => "Data inserted into need_student table successfully");
@@ -61,4 +45,3 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 
 echo json_encode($response);
-?>

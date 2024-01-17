@@ -1,21 +1,5 @@
 <?php
-header("Access-Control-Allow-Origin: *");
-header("Access-Control-Allow-Headers: *");
-header("Access-Control-Allow-Methods: POST");
-header("Content-Type: application/json");
-
-$hostAuth = "localhost";
-$userAuth = "root";
-$passAuth = "";
-$dbname = "internship_management";
-
-$conn = new mysqli($hostAuth, $userAuth, $passAuth, $dbname);
-
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
-
-$conn->set_charset("utf8mb4");
+include('../../database.php');
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     // Assuming you're sending the company ID in the request
@@ -30,7 +14,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $send_mobile = isset($_POST['send_mobile']) ? mysqli_real_escape_string($conn, $_POST['send_mobile']) : null;
     $company_job = isset($_POST['company_job']) ? mysqli_real_escape_string($conn, $_POST['company_job']) : null;
     $number_student_train = isset($_POST['number_student_train']) ? (int)$_POST['number_student_train'] : null;
-    
+
 
     // Convert date strings to timestamps
     $date_addtraining = isset($_POST['date_addtraining']) ? $conn->real_escape_string($_POST['date_addtraining']) : "";
@@ -70,4 +54,3 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 }
 
 $conn->close();
-?>

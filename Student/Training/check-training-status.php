@@ -1,26 +1,5 @@
 <?php
-session_start();
-
-$allowedOrigin = 'http://localhost:4200';
-header("Access-Control-Allow-Origin: $allowedOrigin");
-header("Access-Control-Allow-Headers: *");
-header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
-header("Access-Control-Allow-Credentials: true");
-header("Content-Type: application/json");
-
-$hostAuth = "localhost";
-$userAuth = "root";
-$passAuth = "";
-$dbname = "internship_management";
-
-$conn = new mysqli($hostAuth, $userAuth, $passAuth, $dbname);
-
-$conn->set_charset("utf8mb4");
-
-if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
-    header("HTTP/1.1 200 OK");
-    exit;
-}
+include('../../database.php');
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $data = json_decode(file_get_contents("php://input"), true);
@@ -83,4 +62,3 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 if ($conn) {
     $conn->close();
 }
-?>

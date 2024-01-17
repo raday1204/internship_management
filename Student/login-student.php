@@ -1,28 +1,10 @@
 <?php
-session_start();
-header("Access-Control-Allow-Origin: *");
-header("Access-Control-Allow-Headers: *");
-header("Access-Control-Allow-Methods: POST");
-header("Content-Type: application/json");
-
+include('../database.php');
 $response = array();
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $postdata = file_get_contents("php://input");
     $request = json_decode($postdata, true);
-
-    $hostAuth = "localhost";
-    $userAuth = "root";
-    $passAuth = "";
-    $dbname = "internship_management";
-
-    $conn = new mysqli($hostAuth, $userAuth, $passAuth, $dbname);
-
-    if ($conn->connect_error) {
-        die("Connection failed: " . $conn->connect_error);
-    }
-
-    $conn->set_charset("utf8mb4");
 
     $username = $request['username'];
     $username = mysqli_real_escape_string($conn, $username);

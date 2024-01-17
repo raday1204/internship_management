@@ -1,31 +1,7 @@
 <?php
-header("Access-Control-Allow-Origin: *");
-header("Access-Control-Allow-Headers: *");
-header("Access-Control-Allow-Methods: POST, OPTIONS");
-header("Content-Type: application/json");
-
-if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
-    http_response_code(200);
-    exit();
-}
+include('../../database.php');
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $hostAuth = "localhost";
-    $userAuth = "root";
-    $passAuth = "";
-    $dbname = "internship_management";
-
-    $conn = new mysqli($hostAuth, $userAuth, $passAuth, $dbname);
-
-    if ($conn->connect_error) {
-        $response = array("success" => false, "message" => "Connection failed: " . $conn->connect_error);
-        http_response_code(500);
-        echo json_encode($response);
-        exit();
-    }
-
-    $conn->set_charset("utf8mb4");
-
     $company_id = $_POST['company_id'];
     $company_building = $_POST['company_building'];
     $company_job = $_POST['company_job'];
@@ -47,7 +23,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $response = array("success" => true, "message" => "Company data updated successfully");
         echo json_encode($response);
     } else {
-        $response = array("success" => false, "message" => "Error updating data in company table: " . $stmt_update_company->error);
+        $response = array("success" => false, "message" => "Error updating data in the company table: " . $stmt_update_company->error);
         http_response_code(500);
         echo json_encode($response);
     }
@@ -59,4 +35,3 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     http_response_code(400);
     echo json_encode($response);
 }
-?>

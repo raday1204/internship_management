@@ -1,10 +1,5 @@
 <?php
-session_start();
-header("Access-Control-Allow-Origin: *");
-header("Access-Control-Allow-Headers: *");
-header("Access-Control-Allow-Methods: POST");
-header("Content-Type: application/json");
-
+include('../database.php');
 // $_SESSION = array();
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -16,4 +11,3 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         echo json_encode(['success' => false, 'message' => 'No active session']);
     }
 }
-?>

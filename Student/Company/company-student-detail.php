@@ -1,21 +1,5 @@
 <?php
-header("Access-Control-Allow-Origin: http://localhost:4200");
-header("Access-Control-Allow-Headers: *");
-header("Access-Control-Allow-Methods: *");
-header("Content-Type: application/json");
-
-$hostAuth = "localhost";
-$userAuth = "root";
-$passAuth = "";
-$dbname = "internship_management";
-
-$conn = new mysqli($hostAuth, $userAuth, $passAuth, $dbname);
-
-if ($conn->connect_error) {
-    die(json_encode(array("success" => false, "error" => "Connection failed: " . $conn->connect_error)));
-}
-
-$conn->set_charset("utf8mb4");
+include('../../database.php');
 
 if (isset($_GET['username'])) {
     $username = $_GET['username'];
@@ -49,7 +33,7 @@ if (isset($_GET['username'])) {
 
         foreach ($rows as $row) {
             $companyId = $row['company_id'];
-            
+
             if (!isset($response['need_student'][$companyId])) {
                 $response['need_student'][$companyId] = array();
             }
@@ -75,4 +59,3 @@ if (isset($_GET['username'])) {
 }
 
 $conn->close();
-?>
