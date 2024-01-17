@@ -293,7 +293,7 @@ export class PermissionFormComponent {
         </td>
       </tr>
 
-      <!--
+      
       <tr>
           <td>
             <table cellpadding="0" cellspacing="0">
@@ -301,7 +301,7 @@ export class PermissionFormComponent {
                 <tr>
                   <td width="300">
                     <span class="style8">
-                      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                       ${student.student_name} ${student.student_lastname}
                     </span>
                   </td>
@@ -319,7 +319,7 @@ export class PermissionFormComponent {
         <tr>
           <td><span class="style8">&nbsp; </span></td>
         </tr> 
-        -->
+        
         
       <tr>
         <td>
@@ -389,7 +389,6 @@ export class PermissionFormComponent {
 </html>
   `;
   }
-
 
   logout() {
     this.http.post<any>('http://localhost/PJ/Backend/Student/logout.php', {})

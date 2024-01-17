@@ -2,7 +2,6 @@ import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CompanyStudentService } from 'src/app/Student/General/search-company-student/company-student/company-student.service';
-import { DatePipe } from '@angular/common';
 
 interface Relation {
   id: number;
@@ -27,8 +26,7 @@ export class HomeOfficerComponent implements OnInit {
     private http: HttpClient,
     private router: Router,
     private route: ActivatedRoute,
-    private companyStudentService: CompanyStudentService,
-    private datePipe: DatePipe,
+    private companyStudentService: CompanyStudentService
   ) { }
 
   ngOnInit() {
@@ -84,7 +82,7 @@ export class HomeOfficerComponent implements OnInit {
     },
   ]
 
-// แถบหนังสือต่างๆ
+  // แถบหนังสือต่างๆ
   formSidebar = [
     {
       link_name: "หนังสือขอความอนุเคราะห์รับนิสิตเข้าฝึกงาน",
@@ -95,14 +93,14 @@ export class HomeOfficerComponent implements OnInit {
     },
 
     {
-      link_name: "หนังสือแจ้งการยืนยันเข้าฝึกงาน",
+      link_name: "หนังสือแจ้งรายชื่อนิสิตเข้าฝึกงาน",
       link: "/search-send-form-officer",
       icon: "fa-regular fa-file-pdf",
       sub_menu: [],
       openInNewTab: false
     },
     {
-      link_name: "หนังสือขอส่งนิสิตเข้าฝึกงาน",
+      link_name: "หนังสือรายงานตัวเข้าฝึกงาน",
       link: "/search-report-form-officer",
       icon: "fa-regular fa-file-pdf",
       sub_menu: [],
@@ -124,22 +122,23 @@ export class HomeOfficerComponent implements OnInit {
     },
     {
       link_name: "แบบฟอร์ม",
-      link: null,
+      link: '',
       icon: "fa-regular fa-file-pdf",
       sub_menu: [
         {
           link_name: "หนังสือแบบประเมินการฝึกงาน",
-          link: "//assets/pdfs/แบบประเมินผลนิสิตฝึกงาน.pdf",
+          link: "/assets/pdfs/แบบประเมินผลนิสิตฝึกงาน.pdf",
+          openInNewTab: true
         }, {
           link_name: "แบบสำรวจความต้องการรับนิสิตเข้าฝึกงาน",
-          link: "/assets/pdfs/แบบสำรวจความต้องการรับนิสิตเข้าฝึกงาน.pdf",
+          link: "/search-evaluation-form-officer",
+          openInNewTab: false
         }
       ],
-      openInNewTab: true
     },
   ]
 
-// แถบแจ้งข่าวประชาสัมพันธ์
+  // แถบแจ้งข่าวประชาสัมพันธ์
   newsSidebar = [
     {
       link_name: "เพิ่ม-ลบ-แก้ไขข่าวประชาสัมพันธ์",
@@ -151,39 +150,6 @@ export class HomeOfficerComponent implements OnInit {
   ]
   showSubmenu(itemEl: HTMLElement) {
     itemEl.classList.toggle("showMenu");
-  }
-
-  //gif
-  isNew(date: string): boolean {
-    const newsDate = new Date(date);
-    const today = new Date();
-    const differenceInDays = Math.floor((today.getTime() - newsDate.getTime()) / (1000 * 3600 * 24));
-    return differenceInDays < 2;
-  }
-
-  //ตรวจสอบusername
-  checkLoginStatus() {
-    this.http.post<any>('http://localhost/PJ/Backend/Student/home-student.php', { username: this.username })
-      .subscribe(
-        (response: any) => {
-          if (response.loggedIn) {
-            this.username = response.username;
-            console.log(`Welcome, ${this.username}, to the home-officer page!`);
-            this.companyStudentService.setUsername(this.username);
-            // Navigate to company-information with the username as a query parameter
-            this.router.navigate([], {
-              relativeTo: this.route,
-              queryParams: { username: this.username },
-              queryParamsHandling: 'merge'
-            });
-          } else {
-            this.router.navigate(['/login-officer']);
-          }
-        },
-        (error) => {
-          console.error('An error occurred:', error);
-        }
-      );
   }
 
   formatDate(date: string | null): string {
@@ -201,7 +167,41 @@ export class HomeOfficerComponent implements OnInit {
       return '';
     }
   }
-  
+
+  //ข่าวประชาสัมพันธ์
+  isNew(date: string): boolean {
+    const newsDate = new Date(date);
+    const today = new Date();
+    const differenceInDays = Math.floor((today.getTime() - newsDate.getTime()) / (1000 * 3600 * 24));
+    return differenceInDays < 2;
+  }
+
+  //ตรวจสอบusername
+  checkLoginStatus() {
+    this.http.post<any>('http://localhost/PJ/Backend/Student/home-student.php', { username: this.username })
+      .subscribe(
+        (response: any) => {
+          if (response.loggedIn) {
+            this.username = response.username;
+            console.log(`Welcome, ${this.username}, to the home-student page!`);
+            this.companyStudentService.setUsername(this.username);
+            // Navigate to company-information with the username as a query parameter
+            this.router.navigate([], {
+              relativeTo: this.route,
+              queryParams: { username: this.username },
+              queryParamsHandling: 'merge'
+            });
+          } else {
+            this.router.navigate(['/login-officer']);
+          }
+        },
+        (error) => {
+          console.error('An error occurred:', error);
+        }
+      );
+  }
+
+
   logout() {
     this.http.post<any>('http://localhost/PJ/Backend/Student/logout.php', {})
       .subscribe(
@@ -215,5 +215,4 @@ export class HomeOfficerComponent implements OnInit {
         }
       );
   }
-
 }

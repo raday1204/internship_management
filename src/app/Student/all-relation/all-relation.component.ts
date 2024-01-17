@@ -64,12 +64,12 @@ export class AllRelationComponent implements OnInit {
                       <!--
                       .style3 {
                           font-family: "TH SarabunPSK";
-                          font-size: 24px;
+                          font-size: 20px;
                       }
 
                       .style8 {
                           font-family: "TH SarabunPSK";
-                          font-size: 20px;
+                          font-size: 16px;
                       }
                       -->
                   </style>
@@ -77,47 +77,47 @@ export class AllRelationComponent implements OnInit {
 
                 <body topmargin="top">
                   <table width="620" border="0" align="center">
-                      <tr>
-                        <td align="center"><span class="style3">
-                          <strong> ข่าวประชาสัมพันธ์ </strong></span>
-                        </td>
-                      </tr>
+                    <tr>
+                      <td align="center"><span class="style3">
+                        <strong> ข่าวประชาสัมพันธ์ </strong></span>
+                      </td>
+                    </tr>
 
-                      <tr>
-                        <td><span class="style3">&nbsp;</span></td>
-                      </tr>
-
-                      <tr>
-                        <td>
-                          <table cellpadding="0" cellspacing="0">
-                              <tr>
-                                <td width="70">
-                                  <span class="style8">
-                                      <strong> วันที่ : </strong>
-                                  </span>
-                                </td>
-                                <td>
-                                  <span class="style8">
-                                    ${response.data.relation_date}
-                                  </span>
-                                </td>
-                              </tr>
-                          </table>
-                        </td>
+                    <tr>
+                      <td><span class="style3">&nbsp;</span></td>
                     </tr>
 
                     <tr>
                       <td>
                         <table cellpadding="0" cellspacing="0">
-                          <tr>
-                            <td>
-                              <span class="style8" style="vertical-align: top;">
+                            <tr>
+                              <td width="70">
+                                <span class="style8">
+                                    <strong> วันที่ : </strong>
+                                </span>
+                              </td>
+                              <td>
+                                <span class="style8">
+                                    ${this.formatDate(response.data.relation_date)}
+                                </span>
+                              </td>
+                            </tr>
+                        </table>
+                      </td>
+                  </tr>
+
+                  <tr>
+                    <td>
+                      <table cellpadding="0" cellspacing="0">
+                        <tr>
+                          <td>
+                            <span class="style8" style="vertical-align: top;">
                                 <strong> เนื้อหา: </strong> 
-                                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                  ${response.data.relation_content}
-                              </span>
-                            </td>
-                          </tr>
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                ${response.data.relation_content}
+                            </span>
+                          </td>
+                        </tr>
                       </table>
                     </td>
                   </tr>
@@ -129,7 +129,7 @@ export class AllRelationComponent implements OnInit {
                   <tr>
                     <td>
                       <table width="100%" border="0" align="center">
-                          <img src ="${this.displayedFilePath}" style="max-width: 100%;">
+                      ${this.displayMedia(response.data.relation_pic)}
                       </table>
                     </td>
                   </tr>
@@ -147,6 +147,37 @@ export class AllRelationComponent implements OnInit {
     }
   }
 
+  displayMedia(relationPic: string): string {
+    if (relationPic) {
+      if (this.isPdf(relationPic)) {
+        return `<tr><td><embed src="${this.displayedFilePath}" type="application/pdf" style="width: 100%; height: 800px;"></embed></td></tr>`;
+      } else {
+        return `<tr><td><img src="${this.displayedFilePath}" style="max-width: 100%;"></td></tr>`;
+      }
+    }
+    return '';
+  }
+  
+  isPdf(filePath: string): boolean {
+    return filePath.toLowerCase().endsWith('.pdf');
+  }
+
+  formatDate(date: string | null): string {
+    if (date !== null) {
+      const formattedDate = new Date(date);
+      // Use Thai locale and Buddhist calendar
+      const options: Intl.DateTimeFormatOptions = {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+      };
+      const transformedDate = formattedDate.toLocaleDateString('th-TH-u-ca-buddhist', options);
+      return transformedDate || '';
+    } else {
+      return '';
+    }
+  }
+  
   paginate(pageNumber: number): void {
     this.currentPage = pageNumber;
     this.fetchRelations(this.currentPage, this.itemsPerPage);
@@ -164,7 +195,7 @@ export class AllRelationComponent implements OnInit {
       .subscribe(
         () => {
           localStorage.removeItem('loggedInUsername');
-          localStorage.removeItem('selectedCompanyID');
+          localStorage.removeItem('companyID');
           // Replace the current navigation history with the login page
           this.router.navigateByUrl('/login-student', { replaceUrl: true });
         },

@@ -32,12 +32,12 @@
                 </div>
                 <div class="sub-menu" [class.blank]="item.sub_menu.length == 0">
                     <!-- <li><a class="link_name">{{item.link_name}}</a></li> -->
-                    <li *ngFor="let item_sub of item.sub_menu" routerLinkActive="active">
-                        <a [routerLink]="[item_sub.link]">
-                            <i class="fa-regular fa-circle"></i>{{item_sub.link_name}}</a>
-                    </li>
-                </div>
-            </li><br>
+            <li *ngFor="let item_sub of item.sub_menu" routerLinkActive="active">
+                <a [routerLink]="[item_sub.link]">
+                    <i class="fa-regular fa-circle"></i>{{item_sub.link_name}}</a>
+            </li>
+        </div>
+        </li><br>
 
         <hr style="border-width: 3px; border-color: white;">
         <!-- แถบหนังสือต่างๆ -->
@@ -64,7 +64,7 @@
 
             <div class="sub-menu" [class.blank]="item.sub_menu.length === 0">
         <li *ngFor="let item_sub of item.sub_menu" routerLinkActive="active">
-            <a [routerLink]="[item_sub.link]" target="{{ item.openInNewTab ? '_blank' : '_self' }}">
+            <a [routerLink]="[item_sub.link]" target="{{ item_sub.openInNewTab ? '_blank' : '_self' }}">
                 <i class="fa-regular fa-circle"></i>{{item_sub.link_name}}
             </a>
         </li>

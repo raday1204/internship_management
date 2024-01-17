@@ -19,12 +19,6 @@
 
         <form (ngSubmit)="submitForm()" [formGroup]="searchForm">
             <div class="form-group">
-                <label for="year">ปีการศึกษา</label><br>
-                <select formControlName="selectedOption1" required>
-                    <option value="">-- เลือกปีการศึกษา --</option>
-                    <option *ngFor="let option of selectedOption1" [value]="option">{{ option }}</option>
-                </select><br>
-
                 <label for="type_name">ประเภท</label><br>
                 <select formControlName="selectedOption2" required>
                     <option value="">-- เลือกประเภท --</option>

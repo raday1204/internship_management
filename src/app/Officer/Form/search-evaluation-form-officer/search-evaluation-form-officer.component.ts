@@ -11,7 +11,6 @@ import { MatSnackBar } from '@angular/material/snack-bar';
   styleUrls: ['./search-evaluation-form-officer.component.css']
 })
 export class SearchEvaluationFormOfficerComponent {
-  selectedOption1: any;
   selectedOption2: any;
   searchForm: FormGroup;
   username: string = '';
@@ -26,7 +25,6 @@ export class SearchEvaluationFormOfficerComponent {
     private dataStorageService: DataStorageService
   ) {
     this.searchForm = this.formBuilder.group({
-      selectedOption1: ['', Validators.required],
       selectedOption2: ['', Validators.required],
     });
   }
@@ -42,15 +40,13 @@ export class SearchEvaluationFormOfficerComponent {
   }
 
   getOptions() {
-    this.http.get('http://localhost/PJ/Backend/Officer/Company/get-company-officer.php').subscribe(
+    this.http.get('http://localhost/PJ/Backend/Officer/Company/get-company.php').subscribe(
       (data: any) => {
         if (data.success) {
           if (Array.isArray(data.data)) {
             // Create a Set to store unique values for selectedOption1 and selectedOption2
-            const uniqueYears = new Set(data.data.map((item: any) => item.year));
             const uniqueTypeNames = new Set(data.data.map((item: any) => item.type_name));
 
-            this.selectedOption1 = Array.from(uniqueYears);
             this.selectedOption2 = Array.from(uniqueTypeNames);
           } else {
             console.error('Invalid data structure in the API response.');
@@ -68,53 +64,43 @@ export class SearchEvaluationFormOfficerComponent {
   submitForm() {
     // Check if the form is valid
     if (this.searchForm.invalid) {
-      this.snackBar.open('กรุณาเลือกปีการศึกษาและประเภท', 'Close', {
+      this.snackBar.open('กรุณาเลือกประเภท', 'Close', {
         duration: 3000,
       });
       return;
     }
-    const formData = new FormData();
-    formData.append('year', this.searchForm.value.selectedOption1);
-    formData.append('type_name', this.searchForm.value.selectedOption2);
-
-    this.http.post('http://localhost/PJ/Backend/Officer/Company/company-officer.php', formData)
-      .subscribe((response: any) => {
-        console.log('Backend Response:', response);
-
-        if (response.success && response.data) {
-          const companies = response.data.company;
-          const students = response.data.students;
-
-          if (companies && companies.length > 0 && students && students.length > 0) {
+  
+    const selectedTypeName = this.searchForm.value.selectedOption2;
+  
+    this.http.post('http://localhost/PJ/Backend/Officer/Company/post-company.php', { type_name: selectedTypeName })
+      .subscribe(
+        (response: any) => {
+          console.log('Backend Response:', response);
+  
+          if (response.success && response.data && response.data.company.length > 0) {
             // Assuming you only need the company data, not student and need_student
-            this.dataStorageService.setYearTypecode(
-              this.searchForm.value.selectedOption1,
-              this.searchForm.value.selectedOption2
-            );
-
+            this.dataStorageService.setTypecode(selectedTypeName);
+  
             this.router.navigate(['/evaluation-form'], {
               relativeTo: this.route,
               queryParams: {
-                year: this.searchForm.value.selectedOption1,
-                type_name: this.searchForm.value.selectedOption2
+                type_name: selectedTypeName
               },
               queryParamsHandling: 'merge'
             });
           } else {
-            // Display Snackbar if there are no students
-            this.snackBar.open('ไม่มีรายชื่อในปีการศึกษาและประเภทที่เลือก', 'Close', {
+            // Display Snackbar if there are no companies for the selected type_name
+            this.snackBar.open(`ไม่มีรายชื่อหน่วยงานประเภท ${selectedTypeName}`, 'Close', {
               duration: 3000,
             });
           }
-        } else {
-          console.error('Invalid response from server.');
-        }
-      },
+        },
         (error) => {
           console.error('HTTP Error:', error);
-        });
+        }
+      );
   }
-
+  
   logout() {
     this.http.post<any>('http://localhost/PJ/Backend/Student/logout.php', {})
       .subscribe(

@@ -55,14 +55,10 @@
                         <iframe [src]="displayedFilePath | safe" frameborder="0"
                             style="max-width: 100%; height: 500px;"></iframe>
                     </ng-container>
-                    <ng-container *ngSwitchDefault>
-                        <!-- Handle unsupported file types -->
-                        <div>Unsupported file type</div>
-                    </ng-container>
                 </ng-container>
             </div>
 
-
+            <div class="text-center">เลือกไฟล์PDF. หรือรูปภาพ </div>
 
             <div class="list p-3" style="justify-content: center;">
                 <input type="file" (change)="onFileSelected($event)" #fileInput style="margin-bottom: 10px;"

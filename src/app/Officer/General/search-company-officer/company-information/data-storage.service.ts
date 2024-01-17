@@ -8,7 +8,7 @@ export class DataStorageService {
     private companyInformationSubject: BehaviorSubject<any> = new BehaviorSubject<any>(null);
     private studentInformationSubject: BehaviorSubject<any> = new BehaviorSubject<any>(null);
     private yearTypeNameSubject: BehaviorSubject<any> = new BehaviorSubject<any>(null);
-
+    private TypeNameSubject: BehaviorSubject<any> = new BehaviorSubject<any>(null);
     constructor() { }
 
     updateCompanyInformation(updatedData: any): void {
@@ -38,6 +38,11 @@ export class DataStorageService {
     setYearTypecode(year: string, typeName: string): void {
         const data = { year, typeName };
         this.yearTypeNameSubject.next(data);
+    }
+
+    setTypecode( typeName: string): void {
+        const data = { typeName };
+        this.TypeNameSubject.next(data);
     }
 
     getYearTypecode(): Observable<any> {
