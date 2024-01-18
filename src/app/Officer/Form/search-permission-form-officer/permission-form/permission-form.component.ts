@@ -68,12 +68,13 @@ export class PermissionFormComponent {
     console.log('Username from service:', this.username);
     this.fetchData();
 
-    // if (!this.username) {
-    //   this.router.navigateByUrl('/login-officer', { replaceUrl: true });
-    //   return;
-    // }
+    if (!this.username) {
+      this.router.navigateByUrl('/login-officer', { replaceUrl: true });
+      return;
+    }
   }
 
+  //ดึงข้อมูลนิสิตในปีการศึกษาและประเภทที่เลือก
   fetchData() {
     if (this.selectedOption1 && this.selectedOption2) {
       this.http.get<CompanyResponse>(`http://localhost/PJ/Backend/Officer/Company/get-company-information.php?year=${this.selectedOption1}&type_name=${this.selectedOption2}`)
@@ -107,7 +108,7 @@ export class PermissionFormComponent {
     }
   }
 
-
+  //พิมพ์เอกสาร
   selectForm(company: Company) {
     if (company && company.company_id) {
       const students = this.student[company.company_id];
@@ -136,6 +137,7 @@ export class PermissionFormComponent {
     }
   }
 
+  //สร้างหน้า html เอกสาร
   generateFileUrl(company: Company, students: Student[], need_students: NeedStudent[]): string {
     const currentDate = new Date();
     const formattedDate = currentDate.toLocaleDateString('th-TH', {

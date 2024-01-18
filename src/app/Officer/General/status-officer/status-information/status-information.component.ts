@@ -82,12 +82,9 @@ export class StatusInformationComponent implements OnInit {
     console.log('Username from service:', this.username);
     this.fetchData();
 
-    // if (!this.username) {
-    //   this.router.navigateByUrl('/login-officer', { replaceUrl: true });
-    //   return;
-    // }
   }
 
+  //get year and typename for display นิสิตที่เลือกหน่วยงาน
   fetchData() {
     this.http
       .get<CompanyResponse>(
@@ -119,6 +116,7 @@ export class StatusInformationComponent implements OnInit {
       );
   }
 
+  //cilck button for update company_status and assessment_status of student
   updateLocalData() {
     this.companyInformation.forEach((company) => {
       this.student[company.company.company_id] = company.students;
@@ -132,7 +130,6 @@ export class StatusInformationComponent implements OnInit {
       });
     });
   }
-
 
   openDialog(studentCode: string, action: string) {
     const dialogRef = this.dialog.open(StatusInformationPopupComponent);

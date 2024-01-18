@@ -74,6 +74,7 @@ export class ThanksFormComponent {
     }
   }
 
+  //แสดงข้อมูลนิสิตที่มีปีการศึกษาและประเภทที่เลือก
   fetchData() {
     if (this.selectedOption1 && this.selectedOption2) {
       this.http.get<CompanyResponse>(`http://localhost/PJ/Backend/Officer/Company/get-company-information.php?year=${this.selectedOption1}&type_name=${this.selectedOption2}`)
@@ -107,14 +108,12 @@ export class ThanksFormComponent {
     }
   }
 
-
+  //เลือกฟอร์มเพื่อพิมพ์เอกสาร
   selectForm(company: Company) {
     if (company && company.company_id) {
       const students = this.student[company.company_id];
       const need_students = this.need_student[company.company_id];
-      // console.log('Students:', students);
-      // console.log('company:', company);
-      // console.log('Need Students:', need_students);
+
       if (students && need_students && students.length > 0 && need_students.length > 0) {
         const fileContent = this.generateFileUrl(company, students, need_students);
 
@@ -136,6 +135,7 @@ export class ThanksFormComponent {
     }
   }
 
+  //สร้างหน้าhtml เพื่อพิมพ์หนังสาือขอบคุณหน่วยงาน
   generateFileUrl(company: Company, students: Student[], need_students: NeedStudent[]): string {
     const currentDate = new Date();
     const formattedDate = currentDate.toLocaleDateString('th-TH', {
@@ -277,7 +277,7 @@ export class ThanksFormComponent {
       ${datesInfo && datesInfo.length > 0 ? `
         <span class="style8">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
           ด้วยหลักสูตรวิศวกรรมศาสตรบัณฑิต ได้กำหนดให้นิสิตชั้นปีที่ 3 คณะวิศวกรรมศาสตร์ มหาวิทยาลัยนเรศวร   จำนวน 8 หลักสูตร ออกฝึกงานในภาคเรียนฤดูร้อน ประจำปีการศึกษา ${year} 
-          โดยเริ่มฝึกงานตั้งแต่วันที่ ${datesInfo} และ ทางคณะฯ ได้รับความอนุเคราะห์จากหน่วยงานของท่านรับนิสิตสาขา${students[0].depart_name} จำนวน  ${ students.length }  ราย คือ  
+          โดยเริ่มฝึกงานตั้งแต่วันที่ ${datesInfo} และ ทางคณะฯ ได้รับความอนุเคราะห์จากหน่วยงานของท่านรับนิสิตสาขา${students[0].depart_name} จำนวน  ${students.length}  ราย คือ  
         </span>
         ` : ''} 
       </td>
@@ -391,4 +391,3 @@ export class ThanksFormComponent {
       );
   }
 }
-

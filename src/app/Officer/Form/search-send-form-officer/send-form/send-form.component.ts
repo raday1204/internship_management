@@ -75,6 +75,7 @@ export class SendFormComponent {
     }
   }
 
+  //ดึงข้อมูลนิสิตในปีการศึกษาและประเภทที่เลือก
   fetchData() {
     if (this.selectedOption1 && this.selectedOption2) {
       this.http.get<CompanyResponse>(`http://localhost/PJ/Backend/Officer/Company/get-company-information.php?year=${this.selectedOption1}&type_name=${this.selectedOption2}`)
@@ -108,13 +109,11 @@ export class SendFormComponent {
     }
   }
 
+  //เลือกพิมพ์หนังสือ
   selectForm(company: Company) {
     if (company && company.company_id) {
       const students = this.student[company.company_id];
       const need_students = this.need_student[company.company_id];
-      // console.log('Students:', students);
-      // console.log('company:', company);
-      // console.log('Need Students:', need_students);
       if (students && need_students && students.length > 0 && need_students.length > 0) {
         const fileContent = this.generateFileUrl(company, students, need_students);
 
@@ -136,6 +135,7 @@ export class SendFormComponent {
     }
   }
 
+  //สร้าง html เพื่อพิมพ์เอกสาร
   generateFileUrl(company: Company, students: Student[], need_students: NeedStudent[]): string {
     const currentDate = new Date();
     const formattedDate = currentDate.toLocaleDateString('th-TH', {
@@ -170,15 +170,15 @@ export class SendFormComponent {
       }).join(', ')
       : '';
 
-      const firstStartDate = need_students && need_students.length > 0
+    const firstStartDate = need_students && need_students.length > 0
       ? new Date(need_students[0].date_addtraining).toLocaleDateString('th-TH', {
-          year: 'numeric',
-          month: 'long',
-          day: 'numeric',
-        })
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+      })
       : '';
 
-      const number_student_train = need_students && need_students.length > 0
+    const number_student_train = need_students && need_students.length > 0
       ? need_students[0].number_student_train
       : '';
 
@@ -276,8 +276,8 @@ export class SendFormComponent {
           <td>
             <span class="style8">
               &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-              ทางหน่วยงานของท่าน ได้ให้ความอนุเคราะห์รับนิสิตเข้าฝึกงาน จำนวน ${ number_student_train } คน  เพื่อให้นิสิตได้รับความรู้ประสบการณ์ในการปฎิบัติงานจริงและสามารถนำมาประยุกต์ใช้กับสาขาวิชาชีพที่ได้ศึกษา  
-              งานกิจการนิสิตและศิษย์เก่าสัมพันธ์ จึงใคร่ขอส่งรายชื่อนิสิตที่เข้าฝึกงาน จำนวน ${ students.length } คน ดังนี้  
+              ทางหน่วยงานของท่าน ได้ให้ความอนุเคราะห์รับนิสิตเข้าฝึกงาน จำนวน ${number_student_train} คน  เพื่อให้นิสิตได้รับความรู้ประสบการณ์ในการปฎิบัติงานจริงและสามารถนำมาประยุกต์ใช้กับสาขาวิชาชีพที่ได้ศึกษา  
+              งานกิจการนิสิตและศิษย์เก่าสัมพันธ์ จึงใคร่ขอส่งรายชื่อนิสิตที่เข้าฝึกงาน จำนวน ${students.length} คน ดังนี้  
             </span> 
           </td>
         </tr>

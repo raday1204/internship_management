@@ -57,7 +57,7 @@ export class CompanyInformationComponent implements OnInit {
     private http: HttpClient,
     private router: Router,
     private companyStudentService: CompanyStudentService
-  ) {  }
+  ) { }
 
 
   ngOnInit(): void {
@@ -75,13 +75,14 @@ export class CompanyInformationComponent implements OnInit {
     }
   }
 
+  //ดึงข้อมูลนิสิตจากปีการศึกษาและประเภท
   fetchData() {
     if (this.selectedOption1 && this.selectedOption2) {
       this.http.get<CompanyResponse>(`http://localhost/PJ/Backend/Officer/Company/get-company-information.php?year=${this.selectedOption1}&type_name=${this.selectedOption2}`)
         .subscribe(
           (response: CompanyResponse) => {
             console.log('Backend Response:', response);
-  
+
             if (response && response.success) {
               if (Array.isArray(response.data)) {
                 this.CompanyInformation = response.data;
@@ -92,10 +93,10 @@ export class CompanyInformationComponent implements OnInit {
                 });
 
                 // Sort the data alphabetically by company name (Thai)
-              this.CompanyInformation.sort((a, b) => a.company.company_name.localeCompare(b.company.company_name, 'th'));
+                this.CompanyInformation.sort((a, b) => a.company.company_name.localeCompare(b.company.company_name, 'th'));
 
-              this.loadCompanyInformation();
-              this.totalItems = this.CompanyInformation.length;
+                this.loadCompanyInformation();
+                this.totalItems = this.CompanyInformation.length;
 
               } else {
                 console.error('Invalid data structure in the server response.');
@@ -111,6 +112,7 @@ export class CompanyInformationComponent implements OnInit {
     }
   }
 
+  //เลือกแก้ไขcompany
   editCompany(companyId: string) {
     if (companyId) {
       console.log('Invalid company ID.', companyId);
@@ -120,6 +122,7 @@ export class CompanyInformationComponent implements OnInit {
     }
   }
 
+  //กำหนดเพจ
   loadCompanyInformation(): void {
     const startIndex = (this.currentPage - 1) * this.itemsPerPage;
     const endIndex = startIndex + this.itemsPerPage;

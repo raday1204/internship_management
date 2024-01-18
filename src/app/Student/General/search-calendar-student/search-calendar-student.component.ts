@@ -1,10 +1,8 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
-import { DataStorageService } from 'src/app/Officer/General/search-company-officer/company-information/data-storage.service';
 import { CompanyStudentService } from '../search-company-student/company-student/company-student.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { Location } from '@angular/common';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Component({
@@ -26,7 +24,6 @@ export class SearchCalendarStudentComponent {
     private http: HttpClient,
     private snackBar: MatSnackBar,
     private formBuilder: FormBuilder,
-    private dataStorageService: DataStorageService,
     private companyStudentService: CompanyStudentService
   ) {
     this.searchForm = this.formBuilder.group({
@@ -45,6 +42,7 @@ export class SearchCalendarStudentComponent {
     }
   }
 
+  //get year and term for select options
   getOptions() {
     this.http.get('http://localhost/PJ/Backend/Officer/Company/get-company-officer.php').subscribe(
       (data: any) => {
@@ -68,6 +66,8 @@ export class SearchCalendarStudentComponent {
       }
     );
   }
+
+  //post data from select options
   submitForm() {
     // Check if the form is valid
     if (this.searchForm.invalid) {
@@ -104,7 +104,9 @@ export class SearchCalendarStudentComponent {
             duration: 3000,
           });
         } else {
-          console.error('Invalid response from server.');
+          this.snackBar.open('ไม่มีปฏิทินในปีการศึกษาและภาคเรียนที่เลือก', 'Close', {
+            duration: 3000,
+          });
         }
       },
         (error) => {

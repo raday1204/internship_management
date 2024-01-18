@@ -41,6 +41,7 @@ export class StatusOfficerComponent {
     this.getOptions();
   }
 
+  //get year and typename for select options 
   getOptions() {
     this.http.get('http://localhost/PJ/Backend/Officer/Company/get-company-officer.php').subscribe(
       (data: any) => {
@@ -65,6 +66,7 @@ export class StatusOfficerComponent {
     );
   }
 
+  //post ข้อมูลนิสิตที่เลือกหน่วยงาน
   submitForm() {
     // Check if the form is valid
     if (this.searchForm.invalid) {
@@ -108,14 +110,15 @@ export class StatusOfficerComponent {
             });
           }
         } else {
-          console.error('Invalid response from server.');
+          this.snackBar.open('ไม่มีรายชื่อในปีการศึกษาและประเภทที่เลือก', 'Close', {
+            duration: 3000,
+          });
         }
       },
         (error) => {
           console.error('HTTP Error:', error);
         });
   }
-
 
   logout() {
     this.http.post<any>('http://localhost/PJ/Backend/Student/logout.php', {})

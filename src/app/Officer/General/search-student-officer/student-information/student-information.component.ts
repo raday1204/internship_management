@@ -34,7 +34,6 @@ export class StudentInformationComponent implements OnInit {
       this.StudentInformation = studentInformation.student; // Access the 'student' property
       this.selectedOption3 = studentInformation.year;
       this.selectedOption4 = studentInformation.type_name;
-      // Handle accordingly, e.g., redirect to another page or show an error message
     }
 
     this.username = this.companyStudentService.getUsername();
@@ -49,6 +48,7 @@ export class StudentInformationComponent implements OnInit {
     this.totalItems = this.StudentInformation.length;
   }
 
+  //button for display student detail
   handleStudentClick(student: any) {
     // Navigate to the student details page, passing the student_code as a query parameter
     this.router.navigate(['/student-detail'], { queryParams: { student_code: student.student_code } });

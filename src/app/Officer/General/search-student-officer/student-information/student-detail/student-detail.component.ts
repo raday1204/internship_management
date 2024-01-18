@@ -100,6 +100,7 @@ export class StudentDetailComponent implements OnInit {
     });
   }
 
+  //display student detail
   private fetchStudentData(): void {
     if (this.studentCode) {
       this.http.get(`http://localhost/PJ/Backend/Officer/Student/get-profile-student.php?student_code=${this.studentCode}`)
@@ -107,7 +108,7 @@ export class StudentDetailComponent implements OnInit {
           (response: any) => {
             if (!response.error) {
               const studentData = response.data;
-  
+
               // Log the entire studentData for debugging
               console.log('Student Data:', studentData);
               console.log('Before Patching:', this.studentForm.value);
@@ -146,22 +147,22 @@ export class StudentDetailComponent implements OnInit {
                   company_name: studentData.company_data.company_name,
                   company_building: studentData.company_data.company_building,
                 });
+              }
+            } else {
+              this.errorMessage = response.error;
             }
-          } else {
-            this.errorMessage = response.error;
+          },
+          (error) => {
+            this.errorMessage = 'An error occurred while fetching student data.';
           }
-        },
-        (error) => {
-          this.errorMessage = 'An error occurred while fetching student data.';
-        }
-      );
-  } else {
-    this.errorMessage = 'No student code provided.';
+        );
+    } else {
+      this.errorMessage = 'No student code provided.';
+    }
   }
-}
 
-goback(){
-  this.location.back();
+  goback() {
+    this.location.back();
   }
 
   logout() {

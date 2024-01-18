@@ -16,7 +16,7 @@ interface Company {
   company_name: string;
   company_building: string;
   company_job: string;
-  students: Student[]; // Add this line
+  students: Student[];
 }
 
 interface Student {
@@ -24,7 +24,6 @@ interface Student {
   student_name: string;
   student_lastname: string;
 }
-
 
 interface CompanyInformation {
   selected: any;
@@ -77,6 +76,7 @@ export class CompanyStudentComponent implements OnInit {
       this.router.navigateByUrl('/login-student', { replaceUrl: true });
       return;
     }
+    //setItem company_id 
     const companyID = localStorage.getItem('companyID');
     this.hasSelectedCompany = !!companyID;
     const selectedCompanyID = localStorage.getItem('selectedCompanyID');
@@ -100,7 +100,7 @@ export class CompanyStudentComponent implements OnInit {
       );
   }
 
-
+  //display company detail for select company
   fetchData() {
     if (this.selectedOption5 && this.selectedOption6) {
       this.http.get<CompanyResponse>(`http://localhost/PJ/Backend/Officer/Company/get-company-information.php?year=${this.selectedOption5}&type_name=${this.selectedOption6}`)
@@ -129,13 +129,13 @@ export class CompanyStudentComponent implements OnInit {
     }
   }
 
+  //เลือกหน่วยงานที่นิสิตต้องการไปฝึกงาน
   selectCompany(selectedCompany: CompanyInformation) {
     if (this.username) {
       if (selectedCompany && selectedCompany.company && selectedCompany.company.company_id) {
         if (this.hasSelectedCompany) {
           this.snackBar.open('ไม่สามารถเปลี่ยนแปลงหน่วยงานได้', 'Close', {
             duration: 3000,
-            // verticalPosition: 'center' as MatSnackBarVerticalPosition,
           });
           this.router.navigate(['/select-company']);
           return;
@@ -167,6 +167,7 @@ export class CompanyStudentComponent implements OnInit {
     }
   }
 
+  //save company_id to student table
   private setSelectedCompany(selectedCompany: Company) {
 
     const insertUrl = 'http://localhost/PJ/Backend/Student/Company/select-company.php';

@@ -48,6 +48,7 @@ export class SelectCompanyComponent implements OnInit {
     private companyStudentService: CompanyStudentService
   ) { }
 
+  //display ชื่อนิสิตและหน่วยงานที่นิสิตเลือกไปฝึกงาน
   ngOnInit(): void {
     this.username = this.companyStudentService.getUsername();
     console.log('Username from service:', this.username);

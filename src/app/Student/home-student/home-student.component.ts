@@ -49,6 +49,7 @@ export class HomeStudentComponent implements OnInit {
 
   }
 
+
   ngOnInit() {
     this.dateTime = new Date();
     this.loggedInUsername = localStorage.getItem('loggedInUsername') || '';
@@ -68,6 +69,7 @@ export class HomeStudentComponent implements OnInit {
     );
   }
 
+  //open new tab for display relations detail
   openInNewTab(relationItem: any): void {
     if (relationItem) {
       const relationId = relationItem.id;

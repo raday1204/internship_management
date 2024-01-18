@@ -104,15 +104,16 @@ export class AddInternalCompanyComponent implements OnInit {
       return;
     }
   }
-  
+
+  //get ข้อมูลหน่วยงานโดยดึงข้อมูลหน่วยงานจาก add-company โดยดึง company_id เดียวกัน
   getCompanyData(companyId: string): void {
     this.http.get<CompanyResponse>(`http://localhost/PJ/Backend/Officer/Company/company-detail.php?company_id=${companyId}`)
       .subscribe((response: CompanyResponse) => {
         if (response.success) {
           console.log(response.data);
-  
+
           this.companyData = response.data.company;
-  
+
           // Set initial form values
           this.companyForm.patchValue({
             company_id: this.companyData.company_id,
@@ -131,9 +132,7 @@ export class AddInternalCompanyComponent implements OnInit {
         console.error('HTTP Error:', error);
       });
   }
-  
 
-  
   populateFormWithData() {
     // Populate the form fields with existing company data
     this.internalCompanyForm.patchValue({
@@ -143,19 +142,21 @@ export class AddInternalCompanyComponent implements OnInit {
     });
   }
 
+  //get ข้อมูลหน่วยงานจาก add-company
   fetchCompanyData(companyId: string) {
     console.log('Fetching data for company ID:', companyId);
     // Fetch existing company data using companyId
     return this.http.get(`http://localhost/PJ/Backend/Officer/Company/get-company-officer.php?company_id=${companyId}`);
   }
 
+  //open popup when cilck button
   openAddInternalPopup(): void {
     this.DataStorageService.getCompanyInformation().subscribe((companyData: any) => {
       if (this.internalCompanyForm.valid && companyData) {
         const formattedDateAddTraining = this.internalCompanyForm.value.date_addtraining ?
           formatDate(this.internalCompanyForm.value.date_addtraining, 'yyyy-MM-dd', 'en-US') : '';
 
-          const formattedDateEndTraining = this.internalCompanyForm.value.date_endtraining ?
+        const formattedDateEndTraining = this.internalCompanyForm.value.date_endtraining ?
           formatDate(this.internalCompanyForm.value.date_endtraining, 'yyyy-MM-dd', 'en-US') : '';
 
         const dialogRef = this.dialog.open(DialogComponent, {
@@ -194,6 +195,7 @@ export class AddInternalCompanyComponent implements OnInit {
     });
   }
 
+  //บันทึกข้อมูลทั้งหมด
   saveInternal(): void {
     // Step 1: Update company data
     const formDataCompany = new FormData();
@@ -208,10 +210,10 @@ export class AddInternalCompanyComponent implements OnInit {
 
           // Step 2: Insert need_student data
           const formattedDateAddTraining = this.internalCompanyForm.value.date_addtraining ?
-          formatDate(this.internalCompanyForm.value.date_addtraining, 'yyyy-MM-dd', 'en-US') : '';
+            formatDate(this.internalCompanyForm.value.date_addtraining, 'yyyy-MM-dd', 'en-US') : '';
 
           const formattedDateEndTraining = this.internalCompanyForm.value.date_endtraining ?
-          formatDate(this.internalCompanyForm.value.date_endtraining, 'yyyy-MM-dd', 'en-US') : '';
+            formatDate(this.internalCompanyForm.value.date_endtraining, 'yyyy-MM-dd', 'en-US') : '';
 
           const formDataNeedStudent = new FormData();
           formDataNeedStudent.append('company_id', this.companyData.company_id);
@@ -238,8 +240,8 @@ export class AddInternalCompanyComponent implements OnInit {
       });
   }
 
+  //ปฏิทิน
   openDatePicker() {
-    // You can perform any additional logic here if needed
   }
 
   logout() {

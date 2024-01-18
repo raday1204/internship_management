@@ -44,6 +44,7 @@ export class SearchCompanyStudentComponent {
     }
   }
 
+  //get yaer and typename for select options
   getOptions() {
     this.http.get('http://localhost/PJ/Backend/Officer/Company/get-company-officer.php').subscribe(
       (data: any) => {
@@ -68,6 +69,7 @@ export class SearchCompanyStudentComponent {
     );
   }
 
+  //post company for select options
   submitForm() {
     // Check if the form is valid
     if (this.searchForm.invalid) {
@@ -101,7 +103,9 @@ export class SearchCompanyStudentComponent {
             queryParamsHandling: 'merge'
           });
         } else {
-          console.error('Invalid response from server.');
+          this.snackBar.open('ไม่มีรายชื่อหน่วยงานในปีการศึกษาและประเภทที่เลือก', 'Close', {
+            duration: 3000,
+          });
         }
       },
         (error) => {

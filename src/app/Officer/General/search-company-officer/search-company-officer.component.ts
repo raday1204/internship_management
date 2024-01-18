@@ -30,6 +30,7 @@ export class SearchCompanyOfficerComponent {
       selectedOption2: ['', Validators.required],
     });
   }
+
   ngOnInit() {
     this.loggedInUsername = localStorage.getItem('loggedInUsername') || '';
     this.username = this.loggedInUsername;
@@ -40,6 +41,7 @@ export class SearchCompanyOfficerComponent {
     this.getOptions();
   }
 
+  //get select options 
   getOptions() {
     this.http.get('http://localhost/PJ/Backend/Officer/Company/get-company-officer.php').subscribe(
       (data: any) => {
@@ -48,7 +50,7 @@ export class SearchCompanyOfficerComponent {
             // Create a Set to store unique values for selectedOption1 and selectedOption2
             const uniqueYears = new Set(data.data.map((item: any) => item.year));
             const uniqueTypeNames = new Set(data.data.map((item: any) => item.type_name));
-  
+
             this.selectedOption1 = Array.from(uniqueYears);
             this.selectedOption2 = Array.from(uniqueTypeNames);
           } else {
@@ -63,8 +65,8 @@ export class SearchCompanyOfficerComponent {
       }
     );
   }
-  
 
+  //submit select options
   submitForm() {
     // Check if the form is valid
     if (this.searchForm.invalid) {
@@ -76,15 +78,15 @@ export class SearchCompanyOfficerComponent {
     const formData = new FormData();
     formData.append('year', this.searchForm.value.selectedOption1);
     formData.append('type_name', this.searchForm.value.selectedOption2);
-  
+
     this.http.post('http://localhost/PJ/Backend/Officer/Company/company-officer.php', formData)
       .subscribe((response: any) => {
         console.log('Backend Response:', response);
-  
+
         if (response.success && response.data && response.data.company && response.data.company.length > 0) {
           // Assuming you only need the company data, not student and need_student
           this.dataStorageService.setYearTypecode(this.searchForm.value.selectedOption1, this.searchForm.value.selectedOption2);
-  
+
           this.router.navigate(['/company-information'], {
             relativeTo: this.route,
             queryParams: {
@@ -94,12 +96,14 @@ export class SearchCompanyOfficerComponent {
             queryParamsHandling: 'merge'
           });
         } else {
-          console.error('Invalid response from server.');
+          this.snackBar.open('ไม่มีรายชื่อในปีการศึกษาและประเภทที่เลือก', 'Close', {
+            duration: 3000,
+          });
         }
       },
-      (error) => {
-        console.error('HTTP Error:', error);
-      });
+        (error) => {
+          console.error('HTTP Error:', error);
+        });
   }
 
   logout() {

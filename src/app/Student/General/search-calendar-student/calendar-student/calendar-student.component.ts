@@ -22,11 +22,10 @@ export class CalendarStudentComponent implements OnInit {
     private http: HttpClient,
     public dialog: MatDialog,
     private route: ActivatedRoute,
-    private snackBar: MatSnackBar,
-    private companyStudentService: CompanyStudentService,
-    private pdfService: NgxExtendedPdfViewerService
+    private companyStudentService: CompanyStudentService
   ) { }
 
+  //display calendar from select options on new tab
   ngOnInit(): void {
     this.route.queryParams.subscribe(params => {
       this.selectedOption5 = params['year'];
@@ -42,34 +41,11 @@ export class CalendarStudentComponent implements OnInit {
       this.router.navigateByUrl('/login-student', { replaceUrl: true });
       return;
     }
-  
-  if (this.pdfSrc) {
-    window.open(this.pdfSrc, '_blank');
+
+    if (this.pdfSrc) {
+      window.open(this.pdfSrc, '_blank');
+    }
   }
-}
-
-  // fetchData() {
-  //   if (this.selectedOption5 && this.selectedOption6) {
-  //     this.http.get(`http://localhost/PJ/Backend/Officer/Calendar/get-calendar.php?year=${this.selectedOption5}&term=${this.selectedOption6}`)
-  //       .subscribe(
-  //         (response: any) => {
-  //           console.log('Backend Response:', response);
-
-  //           if (response && response.success && response.data && response.data.pdfPath) {
-  //             console.log('Backend Response:', response.data.pdfPath);
-  //             // Set the PDF URL
-  //             this.pdfSrc = response.data.pdfPath;
-  //         } else {
-  //             console.error('Invalid response from the server.');
-  //             this.router.navigate(['/search-calendar-student']);
-  //           }
-  //         },
-  //         (error) => {
-  //           console.error('HTTP Error:', error);
-  //         }
-  //       );
-  //   }
-  // }
 
   logout() {
     this.http.post<any>('http://localhost/PJ/Backend/Student/logout.php', {})

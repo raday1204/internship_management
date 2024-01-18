@@ -80,12 +80,13 @@ export class NotifyingFormComponent {
     console.log('Username from service:', this.username);
     this.fetchData();
 
-    // if (!this.username) {
-    //   this.router.navigateByUrl('/login-officer', { replaceUrl: true });
-    //   return;
-    // }
+    if (!this.username) {
+      this.router.navigateByUrl('/login-officer', { replaceUrl: true });
+      return;
+    }
   }
 
+  //ดึงข้อมูลนิสิตในปีการศึกษาและประเภทหน่วยงานที่เลือก
   fetchData() {
     if (this.selectedOption1 && this.selectedOption2) {
       this.http.get<CompanyResponse>(`http://localhost/PJ/Backend/Officer/Company/get-company-information.php?year=${this.selectedOption1}&type_name=${this.selectedOption2}`)
@@ -123,6 +124,7 @@ export class NotifyingFormComponent {
     }
   }
 
+  //เลือกพิมพ์หนังสือ
   selectForm(studentCode: string) {
     // Assuming that you have fetched the data and stored it in the 'companyInformation' array
     const studentCompanyIds = Object.keys(this.student);
@@ -151,12 +153,7 @@ export class NotifyingFormComponent {
               newTab.document.write(fileContent);
               newTab.document.close();
 
-              // Log the 'year' property in the console
               console.log('Student Year:', selectedStudent.year);
-
-              // Alternatively, you can display the 'year' in the student table as needed
-              // For example, assuming you have a variable to store the 'year' in your component
-              // this.displayedYear = selectedStudent.year;
             } else {
               console.error('Unable to open new tab. Please check your popup settings.');
             }
@@ -175,6 +172,7 @@ export class NotifyingFormComponent {
     console.error('Student with student_code not found. studentCode:', studentCode);
   }
 
+  //สร้างหน้า html เพื่อพิมพ์เอกสาร
   generateFileUrl(student: Student, company: Company, needStudents: NeedStudent[]): string {
     const currentDate = new Date();
     const formattedDate = currentDate.toLocaleDateString('th-TH', {
@@ -209,7 +207,7 @@ export class NotifyingFormComponent {
       }).join(', ')
       : '';
 
-const htmlContent = `
+    const htmlContent = `
 
 <!DOCTYPE html
 PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -439,7 +437,7 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD
 </html>
 `;
 
-const htmlsubmit = `
+    const htmlsubmit = `
 <!DOCTYPE html
 PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -605,8 +603,8 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD
 
 </html>
 `;
-return htmlContent + htmlsubmit;
-}
+    return htmlContent + htmlsubmit;
+  }
 
   logout() {
     this.http.post<any>('http://localhost/PJ/Backend/Student/logout.php', {})

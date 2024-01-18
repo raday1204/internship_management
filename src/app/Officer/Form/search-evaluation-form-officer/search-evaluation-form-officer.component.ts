@@ -38,7 +38,7 @@ export class SearchEvaluationFormOfficerComponent {
     }
     this.getOptions();
   }
-
+  //get option select
   getOptions() {
     this.http.get('http://localhost/PJ/Backend/Officer/Company/get-company.php').subscribe(
       (data: any) => {
@@ -61,6 +61,7 @@ export class SearchEvaluationFormOfficerComponent {
     );
   }
 
+  //submit form option select
   submitForm() {
     // Check if the form is valid
     if (this.searchForm.invalid) {
@@ -69,18 +70,18 @@ export class SearchEvaluationFormOfficerComponent {
       });
       return;
     }
-  
+
     const selectedTypeName = this.searchForm.value.selectedOption2;
-  
+
     this.http.post('http://localhost/PJ/Backend/Officer/Company/post-company.php', { type_name: selectedTypeName })
       .subscribe(
         (response: any) => {
           console.log('Backend Response:', response);
-  
+
           if (response.success && response.data && response.data.company.length > 0) {
             // Assuming you only need the company data, not student and need_student
             this.dataStorageService.setTypecode(selectedTypeName);
-  
+
             this.router.navigate(['/evaluation-form'], {
               relativeTo: this.route,
               queryParams: {
@@ -100,7 +101,7 @@ export class SearchEvaluationFormOfficerComponent {
         }
       );
   }
-  
+
   logout() {
     this.http.post<any>('http://localhost/PJ/Backend/Student/logout.php', {})
       .subscribe(

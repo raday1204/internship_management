@@ -41,6 +41,7 @@ export class SearchThanksFormOfficerComponent {
     this.getOptions();
   }
 
+  //get select option
   getOptions() {
     this.http.get('http://localhost/PJ/Backend/Officer/Company/get-company-officer.php').subscribe(
       (data: any) => {
@@ -65,6 +66,7 @@ export class SearchThanksFormOfficerComponent {
     );
   }
 
+  //submit select option
   submitForm() {
     // Check if the form is valid
     if (this.searchForm.invalid) {
@@ -101,6 +103,7 @@ export class SearchThanksFormOfficerComponent {
               },
               queryParamsHandling: 'merge'
             });
+
           } else {
             // Display Snackbar if there are no students
             this.snackBar.open('ไม่มีรายชื่อในปีการศึกษาและประเภทที่เลือก', 'Close', {
@@ -108,7 +111,9 @@ export class SearchThanksFormOfficerComponent {
             });
           }
         } else {
-          console.error('Invalid response from server.');
+          this.snackBar.open('ไม่มีรายชื่อในปีการศึกษาและประเภทที่เลือก', 'Close', {
+            duration: 3000,
+          });
         }
       },
         (error) => {

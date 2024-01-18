@@ -43,6 +43,7 @@ export class SearchStudentOfficerComponent {
     this.getOptions();
   }
 
+  //get year and typename for select options 
   getOptions() {
     this.http.get('http://localhost/PJ/Backend/Officer/Student/get-student-officer.php').subscribe(
       (data: any) => {
@@ -67,6 +68,7 @@ export class SearchStudentOfficerComponent {
     );
   }
 
+  //post when seclect options succseeful
   submitForm() {
     // Check if the form is valid
     if (this.searchForm.invalid) {
@@ -107,7 +109,9 @@ export class SearchStudentOfficerComponent {
             };
             this.router.navigate(['/student-information'], { queryParams: queryParams });
           } else {
-            console.error('Invalid response from server.');
+            this.snackBar.open('ไม่มีรายชื่อในปีการศึกษาและประเภทที่เลือก', 'Close', {
+              duration: 3000,
+            });
           }
         },
         (error) => {

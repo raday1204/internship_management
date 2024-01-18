@@ -34,6 +34,7 @@ export class AllRelationComponent implements OnInit {
     this.fetchRelations(this.currentPage, this.itemsPerPage);
   }
 
+  //แสดงข้อมูลข่าวโดยจากกการเลือก page and limit
   fetchRelations(page: number, limit: number): void {
     const serverUrl = `http://localhost/PJ/Backend/Officer/Relation/get-relation.php?page=${page}&limit=${limit}`;
 
@@ -47,6 +48,7 @@ export class AllRelationComponent implements OnInit {
     );
   }
 
+  //open new tab for display relations detail
   openInNewTab(relationItem: any): void {
     if (relationItem) {
       const relationId = relationItem.id; // Assuming id is the property holding relation_id
@@ -147,6 +149,7 @@ export class AllRelationComponent implements OnInit {
     }
   }
 
+  //display image and pdf
   displayMedia(relationPic: string): string {
     if (relationPic) {
       if (this.isPdf(relationPic)) {
@@ -157,11 +160,12 @@ export class AllRelationComponent implements OnInit {
     }
     return '';
   }
-  
+
   isPdf(filePath: string): boolean {
     return filePath.toLowerCase().endsWith('.pdf');
   }
 
+  //แสดงวันที่เป็นภาษาไทย
   formatDate(date: string | null): string {
     if (date !== null) {
       const formattedDate = new Date(date);
@@ -177,7 +181,7 @@ export class AllRelationComponent implements OnInit {
       return '';
     }
   }
-  
+
   paginate(pageNumber: number): void {
     this.currentPage = pageNumber;
     this.fetchRelations(this.currentPage, this.itemsPerPage);

@@ -55,13 +55,13 @@ export class EvaluationFormComponent {
     console.log('Username from service:', this.username);
     this.fetchCompanyData();
 
-    // if (!this.username) {
-    //   this.router.navigateByUrl('/login-officer', { replaceUrl: true });
-    //   return;
-    // }
+    if (!this.username) {
+      this.router.navigateByUrl('/login-officer', { replaceUrl: true });
+      return;
+    }
   }
 
-  // Add a method to fetch and display company data based on the selected type_name
+  // display company data based on the selected type_name
   fetchCompanyData() {
     if (this.selectedOption2) {
       this.http.get<CompanyResponse>(`http://localhost/PJ/Backend/Officer/Company/get-company-typename.php?type_name=${this.selectedOption2}`)
@@ -90,6 +90,7 @@ export class EvaluationFormComponent {
     }
   }
 
+  //กำหนด perpage
   loadCompanyInformation(): void {
     const startIndex = (this.currentPage - 1) * this.itemsPerPage;
     const endIndex = startIndex + this.itemsPerPage;
@@ -102,6 +103,7 @@ export class EvaluationFormComponent {
     this.loadCompanyInformation();
   }
 
+  //เลือกพิมพ์เอกสารทุกหน่วยงาน
   onPrintButtonClick(): void {
     if (this.selectedCompanyNames) {
       this.selectForm(this.selectedCompanyNames);
@@ -110,7 +112,7 @@ export class EvaluationFormComponent {
     }
   }
 
-  //ปรับ
+  //เลือกพิมพ์เอกสารเฉพาะหน่วยงาน
   selectForm(selectedCompanyNames: string[] | undefined): void {
     if (selectedCompanyNames && selectedCompanyNames.length > 0) {
       const newTab = window.open('', '_blank');

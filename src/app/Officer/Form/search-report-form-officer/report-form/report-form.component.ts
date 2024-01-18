@@ -70,12 +70,13 @@ export class ReportFormComponent {
     console.log('Username from service:', this.username);
     this.fetchData();
 
-    // if (!this.username) {
-    //   this.router.navigateByUrl('/login-officer', { replaceUrl: true });
-    //   return;
-    // }
+    if (!this.username) {
+      this.router.navigateByUrl('/login-officer', { replaceUrl: true });
+      return;
+    }
   }
 
+  //ดึงข้อมูลนิสิตในปีการศึกษาและประเภทที่เลือก
   fetchData() {
     if (this.selectedOption1 && this.selectedOption2) {
       this.http.get<CompanyResponse>(`http://localhost/PJ/Backend/Officer/Company/get-company-information.php?year=${this.selectedOption1}&type_name=${this.selectedOption2}`)
@@ -113,6 +114,7 @@ export class ReportFormComponent {
     }
   }
 
+  //เลือกพิมพ์หนังสือ
   selectForm(studentCode: string) {
     // Assuming that you have fetched the data and stored it in the 'companyInformation' array
     const studentCompanyIds = Object.keys(this.student);
@@ -199,21 +201,21 @@ export class ReportFormComponent {
       }).join(', ')
       : '';
 
-      const firstStartDate = needStudents && needStudents.length > 0
-    ? new Date(needStudents[0].date_addtraining).toLocaleDateString('th-TH', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
-    })
-    : '';
+    const firstStartDate = needStudents && needStudents.length > 0
+      ? new Date(needStudents[0].date_addtraining).toLocaleDateString('th-TH', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+      })
+      : '';
 
     const lastDate = needStudents && needStudents.length > 0
-    ? new Date(needStudents[0].date_endtraining).toLocaleDateString('th-TH', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
-    })
-    : '';
+      ? new Date(needStudents[0].date_endtraining).toLocaleDateString('th-TH', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+      })
+      : '';
     return `
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -346,9 +348,9 @@ export class ReportFormComponent {
       ${datesInfo && datesInfo.length > 0 ? `
         <span class="style8">
           &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-          นิสิตจะเข้ารายงานตัวในวันที่  ${ firstStartDate }  อนึ่ง คณะวิศวกรรมศาสตร์ ใคร่ขอความอนุเคราะห์จากท่านประเมินการฝึกงานของนิสิต 
+          นิสิตจะเข้ารายงานตัวในวันที่  ${firstStartDate}  อนึ่ง คณะวิศวกรรมศาสตร์ ใคร่ขอความอนุเคราะห์จากท่านประเมินการฝึกงานของนิสิต 
           ภายหลังจากนิสิตฝึกงานสิ้นสุดลงแล้ว  และกรุณาส่งแบบประเมินผลกลับคืนมายัง งานกิจการนิสิตและศิษย์เก่าสัมพันธ์ คณะวิศวกรรมศาสตร์ มหาวิทยาลัยนเรศวร 
-          ภายในวันที่ ${ lastDate } จักเป็นพระคุณยิ่ง</span></td>
+          ภายในวันที่ ${lastDate} จักเป็นพระคุณยิ่ง</span></td>
       ` : ''}     
     </tr>
 

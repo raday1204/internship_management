@@ -63,6 +63,7 @@ export class AddCompanyComponent {
     this.getOptions();
   }
 
+  //บันทึกข้อมูลหน่วยงวาน
   saveCompany() {
     if (this.companyForm.valid) {
       const formData = new FormData();
@@ -109,7 +110,7 @@ export class AddCompanyComponent {
     }
   }
 
-
+  //get type_name, company_name for select options
   getOptions() {
     this.http.get('http://localhost/PJ/Backend/Officer/Company/get-company-officer.php').subscribe(
       (data: any) => {

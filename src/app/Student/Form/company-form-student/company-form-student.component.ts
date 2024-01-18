@@ -118,6 +118,7 @@ export class CompanyFormStudentComponent implements OnInit {
     this.getOptions();
   }
 
+  //update ข้อมูลนิสิต
   updateData() {
     if (this.username) {
       // Update student data
@@ -281,6 +282,7 @@ export class CompanyFormStudentComponent implements OnInit {
     }
   }
 
+  //open new tab for print 
   openInNewTab(updatedStudentData: any, responseCompany: any): void {
     const newTab = window.open('', '_blank');
     if (newTab) {

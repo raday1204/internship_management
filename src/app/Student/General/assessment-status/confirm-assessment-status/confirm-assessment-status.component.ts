@@ -13,7 +13,7 @@ import { CompanyStudentService } from '../../search-company-student/company-stud
 export class ConfirmAssessmentStatusComponent {
   username: string | undefined;
   company = {
-    company_id: '',  // Fix the typo here
+    company_id: '',
     company_name: '',
     company_building: ''
   };
@@ -21,7 +21,6 @@ export class ConfirmAssessmentStatusComponent {
   companyForm: FormGroup;
 
   constructor(
-    private route: ActivatedRoute,
     private router: Router,
     private http: HttpClient,
     private fb: FormBuilder,
@@ -29,12 +28,13 @@ export class ConfirmAssessmentStatusComponent {
     private companyStudentService: CompanyStudentService
   ) {
     this.companyForm = this.fb.group({
-      company_id: [''], 
+      company_id: [''],
       company_name: [''],
       company_building: [''],
     });
   }
 
+  //แสดงชื่อนิสิต หน่วยงาน และหน่วยงานภายในที่นิสิตเลือก
   ngOnInit(): void {
     this.username = this.companyStudentService.getUsername();
     console.log('Username from service:', this.username);
@@ -44,7 +44,7 @@ export class ConfirmAssessmentStatusComponent {
         .get(`http://localhost/PJ/Backend/Student/Training/get-training.php?username=${this.username}`)
         .subscribe(
           (response: any) => {
-            if (response && response.success) { 
+            if (response && response.success) {
               const company = response.data;
               this.companyForm.patchValue({
                 company_id: company.company_id,

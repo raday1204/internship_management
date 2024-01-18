@@ -34,6 +34,8 @@ export class WaitAssessmentStatusComponent {
       company_building: [''],
     });
   }
+
+  //แสดงชื่อนิสิต หน่วยงาน และหน่วยงานภายในที่นิสิตเลือก
   ngOnInit(): void {
     this.username = this.companyStudentService.getUsername();
     console.log('Username from service:', this.username);
