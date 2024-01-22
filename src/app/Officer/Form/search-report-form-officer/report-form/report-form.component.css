@@ -61,7 +61,7 @@ p {
 
 table {
     border: 2px solid #064469;
-    margin: 20px 40px 40px 40px ;
+    margin: 20px 40px 50px 40px ;
 }
 
 .table-container {
@@ -84,4 +84,29 @@ table button {
     border-radius: 5px;
     padding: 5px 10px;
     border: none;
+}
+
+th:nth-child(1),
+td:nth-child(1) {
+    width: 8%;
+}
+
+th:nth-child(2),
+td:nth-child(2) {
+    width: 20%;
+}
+
+th:nth-child(3),
+td:nth-child(3) {
+    width: 20%;
+}
+
+th:nth-child(4),
+td:nth-child(4) {
+    width: 9%;
+}
+
+th:nth-child(5),
+td:nth-child(5) {
+    width: 30%;
 }

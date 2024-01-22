@@ -50,7 +50,7 @@
 
             <div class="list">
                 <label for="student_mobile">เบอร์โทรศัพท์ที่สามารถติดต่อได้</label>
-                <input type="text" id="student_mobile" formControlName="student_mobile">
+                <input type="number" id="student_mobile" formControlName="student_mobile">
             </div>
 
             <div class="list">
@@ -61,7 +61,7 @@
             <form [formGroup]="companyForm" (ngSubmit)="openPopup()">
                 <div class="list">
                     <label for="year">ปีการศึกษา</label>
-                    <input type="text" id="	year" formControlName="year">
+                    <input type="number" id="	year" formControlName="year">
                 </div>
 
                 <div class="list">
@@ -115,17 +115,17 @@
 
                 <div class="list">
                     <label for="send_tel">เบอร์โทรศัพท์หน่วยงาน</label>
-                    <input type="text" id="send_tel" formControlName="send_tel">
+                    <input type="number" id="send_tel" formControlName="send_tel">
                 </div>
 
                 <div class="list-text">
                     <label for="send_email">Email</label>
-                    <input type="text" id="send_email" formControlName="send_email">
+                    <input type="email" id="send_email" formControlName="send_email">
                 </div>
 
                 <div class="list">
                     <label for="send_mobile">โทรศัพท์มือถือ</label>
-                    <input type="text" id="send_mobile" formControlName="send_mobile">
+                    <input type="number" id="send_mobile" formControlName="send_mobile">
                 </div>
 
                 <div class="list">

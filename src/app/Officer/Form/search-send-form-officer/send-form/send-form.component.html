@@ -5,7 +5,7 @@
             <ul>
                 <div class="header-list">
                     <li class="list-item"><a routerLink="/home-officer">หนังสือต่างๆ </a> > </li>
-                    <li class="list-item">หนังสือแจ้งการยืนยันเข้าฝึกงาน</li>
+                    <li class="list-item">หนังสือแจ้งรายชื่อนิสิตเข้าฝึกงาน</li>
                 </div>
                 <button (click)="logout()">
                     ออกจากระบบ <i class="fa-solid fa-arrow-right-from-bracket p-1"></i>
@@ -32,13 +32,13 @@
                 <td class="text-center">{{ i + 1 }}</td>
                 <td style="word-break: break-all;">{{ company.company.company_name }}</td>
                 <td style="word-break: break-all;">{{ company.company.company_building }}</td>
-                <td *ngIf="student[company.company.company_id] && student[company.company.company_id].length > 0">
+                <td class="text-center" *ngIf="student[company.company.company_id] && student[company.company.company_id].length > 0">
                     <ng-container *ngFor="let studentItem of student[company.company.company_id]">
-            <tr>
-                {{ studentItem.student_code }}
-            </tr>
-            </ng-container>
-            </td>
+                        <tr>
+                            {{ studentItem.student_code }}
+                        </tr>
+                    </ng-container>
+                </td>
 
             <td *ngIf="student[company.company.company_id] && student[company.company.company_id].length > 0">
                 <ng-container *ngFor="let studentItem of student[company.company.company_id]">
