@@ -122,7 +122,7 @@ p {
     margin-right: 15px;
 }
 
-.list input[type="text"] {
+.list input {
     width: 200px;
     padding: 5px;
     border-radius: 4px;
@@ -148,7 +148,7 @@ p {
     margin-right: 15px;
 }
 
-.list-text input[type="text"] {
+.list-text input {
     width: 200px;
     padding: 5px;
     border-radius: 4px;

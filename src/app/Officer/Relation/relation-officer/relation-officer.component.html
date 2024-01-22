@@ -24,14 +24,14 @@
     </div>
 
     <table class="table-container" style="width: 900px;">
-        <thead style="font-size: 13px;">
+        <thead style="font-size: 15px;">
             <tr>
                 <th>วัน-เดือน-ปี</th>
                 <th>เนื้อหา</th>
                 <th>ลบ-แก้ไข</th>
             </tr>
         </thead>
-        <tbody style="font-size: 13px;">
+        <tbody style="font-size: 15px;">
             <tr *ngFor="let relationItem of relations">
                 <td class="text-center">{{ formatDate(relationItem.relation_date) }}</td>
                 <td style="padding: 0px 15px; word-wrap: break-word;">{{ relationItem.relation_content }}</td>

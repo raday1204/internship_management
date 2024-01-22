@@ -19,9 +19,9 @@
     <div class="main-container">
         <p>ข้อมูลหน่วยงานภายใน</p>
         <form [formGroup]="internalCompanyForm" (ngSubmit)="openAddInternalPopup()">
-            <div>
+            <div class="list">
                 <label for="company_building">1. ชื่อหน่วยงานภายใน(ภาษาไทย)</label>
-                <input type="text" id="company_building" formControlName="company_building">
+                <input style="width: 430px;" type="text" id="company_building" formControlName="company_building">
             </div>
 
             <div class="list-content">

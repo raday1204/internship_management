@@ -99,10 +99,10 @@ export class AddInternalCompanyComponent implements OnInit {
     this.getCompanyData(companyId);
     this.username = this.companyStudentService.getUsername();
     console.log('Username from service:', this.username);
-    if (!this.username) {
-      this.router.navigateByUrl('/login-officer', { replaceUrl: true });
-      return;
-    }
+    // if (!this.username) {
+    //   this.router.navigateByUrl('/login-officer', { replaceUrl: true });
+    //   return;
+    // }
   }
 
   //get ข้อมูลหน่วยงานโดยดึงข้อมูลหน่วยงานจาก add-company โดยดึง company_id เดียวกัน

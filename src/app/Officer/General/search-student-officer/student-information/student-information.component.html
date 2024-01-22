@@ -16,7 +16,7 @@
 
     <p>ปีการศึกษา {{ selectedOption3 }} ประเภทที่ {{ selectedOption4 }}</p>
     <table class="table-container" style="width: 900px;">
-        <thead style="font-size: 13px;">
+        <thead style="font-size: 15px;">
             <tr>
                 <th>ลำดับ</th>
                 <th>หมายเลขประจำตัว</th>
@@ -26,7 +26,7 @@
                 <th>ข้อมูลเพิ่มเติม</th>
             </tr>
         </thead>
-        <tbody style="font-size: 13px;">
+        <tbody style="font-size: 15px;">
             <tr *ngFor="let student of displayedStudentInformation; let i = index">
                 <td class="text-center">{{ i + 1 + (currentPage*10) - 10 }}</td>
                 <td class="text-center">{{ student.student_citizen }}</td>

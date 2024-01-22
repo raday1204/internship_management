@@ -17,7 +17,7 @@
     <p>ปีการศึกษา {{ selectedOption1 }} ประเภทที่ {{ selectedOption2 }}</p>
 
     <table class="table-container" style="width: 900px;">
-        <thead style="font-size: 13px;">
+        <thead style="font-size: 14px;">
             <tr>
                 <th>ลำดับ</th>
                 <th>ชื่อหน่วยงาน</th>
@@ -30,7 +30,7 @@
             </tr>
         </thead>
 
-        <tbody style="font-size: 13px;">
+        <tbody style="font-size: 14px;">
             <ng-container *ngFor="let company of displayedCompanyInformation; let i = index">
                 <!-- Loop through students of each company -->
                 <ng-container *ngFor="let studentItem of company.students; let j = index">

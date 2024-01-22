@@ -17,7 +17,7 @@
     <p *ngIf="companyInformation.length === 0" style="color: red;">ไม่มีหน่วยงานที่นิสิตเลือก</p>
     <p *ngIf="companyInformation.length > 0">ปีการศึกษา {{ selectedOption1 }} ประเภทที่ {{ selectedOption2 }}</p>
     <table class="table-container" style="width: 900px;">
-        <thead style="font-size: 13px;">
+        <thead style="font-size: 15px;">
             <tr>
                 <th>ลำดับ</th>
                 <th>ชื่อหน่วยงาน</th>
@@ -27,7 +27,7 @@
                 <th>พิมพ์หนังสือ</th>
             </tr>
         </thead>
-        <tbody style="font-size: 13px;">
+        <tbody style="font-size: 15px;">
             <tr *ngFor="let company of companyInformation; let i = index">
                 <td class="text-center">{{ i + 1 }}</td>
                 <td style="word-break: break-all;">{{ company.company.company_name }}</td>

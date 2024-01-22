@@ -37,7 +37,7 @@
             <ng-container *ngFor="let item of formSidebar">
             <li *ngIf="item.link; else actionTemplate" #itemEl routerLinkActive="active">
                 <a [routerLink]="[item.link]" [queryParams]="{ username: username }"
-                    target="{{ item.openInNewTab ? '_blank' : '_self' }}" [title]="item.link_name">
+                    target= "{{ item.openInNewTab ? '_blank' : '_self' }}" [title]="item.link_name">
                     <i [class]="item.icon"></i>
                     <span class="link_name">{{ item.link_name }}</span>
                 </a>

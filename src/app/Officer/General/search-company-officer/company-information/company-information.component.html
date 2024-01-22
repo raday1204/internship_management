@@ -18,8 +18,8 @@
   
     <table class="table-container" style="width: 900px;"
       *ngIf="CompanyInformation && CompanyInformation">
-      <thead style="font-size: 13px;">
-        <tr style="font-size: 13px;">
+      <thead style="font-size: 14px;">
+        <tr>
           <th>ลำดับ</th>
           <th>ชื่อหน่วยงาน</th>
           <th>หน่วยงานภายใน</th>
@@ -30,7 +30,7 @@
         </tr>
       </thead>
   
-      <tbody style="font-size: 13px;">
+      <tbody style="font-size: 14px;">
         <tr *ngFor="let company of displayedCompanyInformation; let i = index">
           <td class="text-center">{{ i + 1 + (currentPage*10) - 10 }}</td>
           <td style="word-wrap: break-word;">{{ company.company.company_name }}</td>
