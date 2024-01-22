@@ -230,9 +230,9 @@ export class PermissionFormComponent {
         </tr>
         <tr>
           <td><span class="style8">
-          <strong> เรื่อง </strong><span style="border-bottom: 1px dotted #000;"> &nbsp; &nbsp; ขอความอนุเคราะห์รับนิสิตเข้าฝึกงาน  
+          <strong> เรื่อง </strong><span style="border-bottom: 1px dotted #000;"> &nbsp; &nbsp; ขอความอนุเคราะห์รับนิสิตเข้าฝึกงาน (เพิ่มเติม) 
               &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 
-              &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</span> 
+              &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</span> 
         </tr>
 
       <tr>
@@ -241,7 +241,7 @@ export class PermissionFormComponent {
       <tr>
         <td>
           <span class="style8">
-              <strong> เรียน &nbsp;&nbsp; ${send_name} </strong><br/>
+              <strong> เรียน &nbsp;&nbsp; ${send_name} มหาวิทยาลัยนเรศวร</strong><br/>
           </span>
         </td>
       </tr>
@@ -278,7 +278,8 @@ export class PermissionFormComponent {
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
             ด้วย สาขาวิชาวิศวกรรมคอมพิวเตอร์ ภาควิชาวิศวกรรมไฟฟ้าและคอมพิวเตอร์ คณะวิศวกรรมศาสตร์ มหาวิทยาลัยนเรศวร ได้เปิดการเรียนการสอนในรายวิชา 305191 ประสบการณ์ภาคสนาม 1 
             และ รายวิชา 305291 ประสบการณ์ภาคสนาม 2  สำหรับนิสิตสาขาวิชาวิศวกรรมคอมพิวเตอร์ ชั้นปีที่ 2 (รหัส 65) ประจำปีการศึกษา ${year} โดยมี ดร.สุรเดช จิตประไพกุลศาล 
-            เป็นอาจารย์ประจำรายวิชา รายวิชาดังกล่าวจะเน้นให้นิสิตได้รับประสบการณ์นอกเหนือจากการเรียนการสอนซึ่งได้กำหนดระหว่างเวลาปฏิบัติงานจริง เริ่มฝึกงานในวันที่ ${datesInfo}   
+            เป็นอาจารย์ประจำรายวิชา รายวิชาดังกล่าวจะเน้นให้นิสิตได้รับประสบการณ์นอกเหนือจากการเรียนการสอนเพื่อให้นิสิตพัฒนาความรู้ทางวิชาการและทักษะที่เกี่ยวข้องทางด้านวิศวกรรมคอมพิวเตอร์  ซึ่งกำหนดระหว่างเวลาปฏิบัติงาน ณ สถานประกอบการจริง
+            เริ่มฝึกงานในวันที่ ${datesInfo}   
           </span>
         ` : ''}
         </td>
@@ -288,28 +289,26 @@ export class PermissionFormComponent {
         <td>
           <span class="style8">
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            คณะวิศวกรรมศาสตร์ มหาวิทยาลัยนเรศวร เห็นว่าหน่วยงานของท่านมีความเหมาะสมที่จะให้ความรู้และประสบการณ์ตรงกับนิสิตได้เป็นอย่างดี จึงขอความอนุเคราะห์รับนิสิตสาขาวิชาวิศวกรรมคอมพิวเตอร์ชั้นปีที่ 2 (รหัส 65) 
-            เข้าฝึกงาน โดยระบุจำนวนความต้องการของหน่วยงาน  และลักษณะงานที่มอบหมายให้กับนิสิต เช่น ปฏิบัติงานหน่วยงานธุรการ ระบบงานด้านเอกสาร, ปฏิบัติงานกับภาควิชาฯ ตามแต่ที่ภาควิชามอบหมาย, 
-            งานระบบคอมพิวเตอร์เบื้องต้น  เป็นต้น  เพื่อเป็นการเรียนรู้กระบวนการทำงานขององค์กร   
+            คณะวิศวกรรมศาสตร์ มหาวิทยาลัยนเรศวร เห็นว่าหน่วยงานของท่านมีความเหมาะสมที่จะให้ความรู้และประสบการณ์ตรงกับนิสิตได้เป็นอย่างดี จึงขอความอนุเคราะห์รับนิสิตสาขาวิชาวิศวกรรมคอมพิวเตอร์ 
+            จำนวน ${students.length} ราย ตามรายชื่อข้างท้ายนี้ เข้าฝึกงานในหน่วยงาน ของท่าน
           </span>
         </td>
       </tr>
-
       
       <tr>
           <td>
             <table cellpadding="0" cellspacing="0">
-              ${students.map(student => `
+            ${students.map((student, index) => `
                 <tr>
-                  <td width="300">
+                  <td width="180">
                     <span class="style8">
                       &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                      ${student.student_name} ${student.student_lastname}
+                      ${index + 1}. ${student.student_code}
                     </span>
                   </td>
                   <td>
                     <span class="style8">
-                      รหัสประจำตัวนิสิต &nbsp; ${student.student_code}
+                      ${student.student_name} ${student.student_lastname}
                     </span>
                   </td>
                 </tr>
@@ -322,16 +321,15 @@ export class PermissionFormComponent {
           <td><span class="style8">&nbsp; </span></td>
         </tr> 
         
-        
-      <tr>
-        <td>
-          <span class="style8">
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            ทั้งนี้ คณะวิศวกรรมศาสตร์  จึงใคร่ขอความอนุเคราะห์ท่านแจ้งผลการตอบรับในแบบฟอร์มตอบรับนิสิตเข้าฝึกงานให้คณะฯ ทราบด้วยโดยทางโทรสารฯ 
-            จดหมายอีเมล์ : training.eng.nu@gmail.com ภายในวันที่ 1 กันยายน 2566
-          </span>
-        </td>
-      </tr>
+        <tr>
+          <td>
+            <span class="style8">
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+              ทั้งนี้ คณะวิศวกรรมศาสตร์  จึงใคร่ขอความอนุเคราะห์ท่านแจ้งผลการตอบรับในแบบฟอร์มตอบรับนิสิตเข้าฝึกงานให้คณะฯ ทราบด้วยโดยทางโทรสารฯ 
+              จดหมายอีเมล์ : training.eng.nu@gmail.com ภายในวันที่ 1 กันยายน 2566
+            </span>
+          </td>
+        </tr>
 
         <tr>
           <td><span class="style3">&nbsp;</span></td>
@@ -341,7 +339,7 @@ export class PermissionFormComponent {
           <td>
             <span class="style8">
               &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-              จึงเรียนมาเพื่อโปรดพิจารณาให้ความอนุเคราะห์   คณะวิศวกรรมศาสตร์  หวังเป็นอย่างยิ่งว่าคงได้รับความอนุเคราะห์จากท่านด้วยดี
+              จึงเรียนมาเพื่อโปรดพิจารณาให้ความอนุเคราะห์   คณะวิศวกรรมศาสตร์  มหาวิทยาลัยนเรศวร หวังเป็นอย่างยิ่งว่าคงได้รับความอนุเคราะห์จากท่านด้วยดี
             </span>
           </td>
         </tr>

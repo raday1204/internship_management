@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Renderer2, ElementRef } from '@angular/core';
 import { Router, ActivatedRoute, NavigationExtras } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { CompanyStudentService } from 'src/app/Student/General/search-company-student/company-student/company-student.service';
@@ -44,7 +44,9 @@ export class EvaluationFormComponent {
     private route: ActivatedRoute,
     private router: Router,
     private http: HttpClient,
-    private companyStudentService: CompanyStudentService
+    private companyStudentService: CompanyStudentService,
+    private renderer: Renderer2,
+    private el: ElementRef
   ) { }
 
   ngOnInit(): void {
@@ -141,6 +143,30 @@ export class EvaluationFormComponent {
         // Loop through each company name and add its specific content
         selectedCompanyNames.forEach(companyName => {
           const htmlContent = `
+          <!DOCTYPE html
+PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+          <head>
+          <meta http-equiv="Content-Type" content="text/html; charset=windows-874" />
+          <title>หนังสือแจ้งผู้ปกครองเรื่องการฝึกงาน</title>
+          <style type="text/css">
+              .style3 {
+                  font-family: "TH SarabunPSK";
+                  font-size: 14px;
+              }
+      
+              .style6 {
+                font-family: "TH SarabunPSK";
+                font-size: 16px;
+            }
+      
+              .style8 {
+                  font-family: "TH SarabunPSK";
+                  font-size: 18px;
+              }
+          </style>
+      </head>
+
           <body topmargin="top">
               <table width="620" border="0" align="center">
                 <tr>
@@ -187,7 +213,7 @@ export class EvaluationFormComponent {
                 <tr>
                   <td>
                     <span class="style8">
-                        <strong> เรียน &nbsp;&nbsp; ${companyName} </strong><br/>
+                        <strong> เรียน &nbsp;&nbsp; ${companyName} มหาวิทยาลัยนเรศวร</strong><br/>
                     </span>
                   </td>
                 </tr>
@@ -351,7 +377,16 @@ export class EvaluationFormComponent {
           </html>
           `;
 
-          newTab.document.write(htmlContent);
+          const doc = newTab.document;
+          const body = doc.body;
+          const div = this.renderer.createElement('div');
+          this.renderer.setProperty(div, 'innerHTML', htmlContent);
+
+          // Set font-family style for the created div
+          this.renderer.setStyle(div, 'font-family', '"TH SarabunPSK"');
+
+          // Append the div to the body
+          this.renderer.appendChild(body, div);
         });
         selectedCompanyNames.forEach(companyName => {
           const htmlSubmit = `
@@ -553,7 +588,7 @@ export class EvaluationFormComponent {
 
         </html>
         `;
-        
+
           newTab.document.write(htmlSubmit);
         });
 
