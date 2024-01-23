@@ -75,7 +75,7 @@ td {
 
 .table-container td p {
     text-align: center;
-    font-size: 14px;
+    font-size: 13px;
     font-weight: 500;
 }
 
@@ -129,6 +129,7 @@ table td {
 .button {
     border: none;
     text-decoration: underline;
+    padding: 4px 1px;
 }
 
 /* pagin part */
