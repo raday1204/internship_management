@@ -85,7 +85,7 @@ export class HomeStudentComponent implements OnInit {
             newTab.document.write(`
               <html>
                 <head>
-                  <title>Image Preview</title>
+                  <title>รายละเอียดข่าวประชาสัมพันธ์</title>
                     <style type="text/css">
                       <!--
                       .style3 {
@@ -153,10 +153,10 @@ export class HomeStudentComponent implements OnInit {
                   </tr>
 
                   <tr>
-                    <td>
+                    <td align="center">
                     <table width="100%" border="0" align="center">
-                    ${this.displayMedia(response.data.relation_pic)}
-                  </table>
+                      ${this.displayMedia(response.data.relation_pic)}
+                    </table>
                     </td>
                   </tr>
                 </table>
@@ -178,7 +178,7 @@ export class HomeStudentComponent implements OnInit {
       if (this.isPdf(relationPic)) {
         return `<tr><td><embed src="${this.displayedFilePath}" type="application/pdf" style="width: 100%; height: 800px;"></embed></td></tr>`;
       } else {
-        return `<tr><td><img src="${this.displayedFilePath}" style="max-width: 100%;"></td></tr>`;
+        return `<tr><td class="text-center" style="text-align: center;"><img src="${this.displayedFilePath}" style="max-width: 100%;"></td></tr>`;
       }
     }
     return '';
