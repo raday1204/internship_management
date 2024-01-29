@@ -47,9 +47,9 @@ export class AddCompanyComponent {
       send_name: ['', Validators.required],
       send_coordinator: ['', Validators.required],
       send_position: ['', Validators.required],
-      send_tel: ['', Validators.required],
-      send_email: ['', Validators.required],
-      send_mobile: ['', Validators.required]
+      send_tel: [''],
+      send_email: [''],
+      send_mobile: ['']
     });
   }
 
