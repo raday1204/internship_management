@@ -155,7 +155,7 @@ export class AllRelationComponent implements OnInit {
       if (this.isPdf(relationPic)) {
         return `<tr><td><embed src="${this.displayedFilePath}" type="application/pdf" style="width: 100%; height: 800px;"></embed></td></tr>`;
       } else {
-        return `<tr><td><img src="${this.displayedFilePath}" style="max-width: 100%;"></td></tr>`;
+        return `<tr><td class="text-center" style="text-align: center;"><img src="${this.displayedFilePath}" style="max-width: 100%;"></td></tr>`;
       }
     }
     return '';
