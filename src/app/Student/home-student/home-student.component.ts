@@ -239,7 +239,7 @@ export class HomeStudentComponent implements OnInit {
     },
 
     {
-      link_name: "ข้อมูลหน่วยงาน",
+      link_name: "ข้อมูลหน่วยงาน(ประเภทที่ 1)",
       link: "/search-company-student",
       icon: "fa-solid fa-list",
       sub_menu: [],
@@ -281,7 +281,7 @@ export class HomeStudentComponent implements OnInit {
     },
 
     {
-      link_name: "01-ข้อมูลหน่วยงาน",
+      link_name: "01-ข้อมูลหน่วยงาน(ประเภทที่ 2)",
       action: () => this.CompanyStatus(),
       icon: "fa-regular fa-file-pdf",
       sub_menu: [],
