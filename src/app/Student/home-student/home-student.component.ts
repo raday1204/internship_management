@@ -305,6 +305,16 @@ export class HomeStudentComponent implements OnInit {
     },
   ]
 
+  aboutUs = [
+    {
+      link_name: "About Us",
+      link: "/about-us",
+      icon: "fa-solid fa-users",
+      sub_menu: [],
+      openInNewTab: false
+    },
+  ]
+
   showSubmenu(itemEl: HTMLElement) {
     itemEl.classList.toggle("showMenu");
   }

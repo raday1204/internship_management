@@ -14,18 +14,57 @@
         </nav>
     </header>
 
-    <div class="check-container">
-        <div [formGroup]="companyForm">
-            <i class="fa-regular fa-circle-check" style="color: #59AB62;"></i>
-            <li class="head-check" style="color: white;">ตรวจสอบสถานะการลงทะเบียนฝึกงาน</li>
-            <p style="word-wrap: break-word;"><strong>ชื่อหน่วยงาน :</strong> {{ companyForm.get('company_name')?.value }}</p>
-            <p style="word-wrap: break-word;"><strong>ชื่อหน่วยงานภายใน : </strong>{{ companyForm.get('company_building')?.value }}</p>
-            <li class="status" style="color: white;">ตอบรับเข้าฝึกงาน</li>
+    <section style="background-color: #cadee8;" class="pt-3 pb-5">
+        <div class="container p-5 h-100">
+            <div class="row d-flex justify-content-center align-items-center h-100">
+                <div class="col-12">
+                    <div class="card card-stepper text-black" style="border-radius: 16px;">
+
+                        <div class="card-body p-5">
+
+                            <div class="d-flex justify-content-between align-items-center mb-5">
+                                <div>
+                                    <h5 class="mb-0">ตรวจสอบสถานะ <span class="text-primary font-weight-bold">#การลงทะเบียนฝึกงาน</span>
+                                    </h5>
+                                </div>
+                                <div class="text-end">
+                                    <h5 class="mb-0">สถานะ : <span class="font-weight-bold" style="color: #59AB62;">ตอบรับนิสิตเข้าฝึกงาน</span></h5>
+                                </div>
+                            </div>
+
+                            <ul id="progressbar-2" class="d-flex justify-content-between mx-0 mt-0 mb-3 px-5 pt-0 pb-4">
+                                <li class="step0 active text-center" id="step1"></li>
+                                <li class="step0 active text-center" id="step2"></li>
+                                <li class="step0 active text-center" id="step3"></li>
+                            </ul>
+
+                            <div class="d-flex justify-content-between">
+                                <div class="d-lg-flex align-items-center">
+                                    <i class="fas fa-clipboard-list fa-2x me-lg-3 mb-1 mb-lg-0" style="color: #064469;"></i>
+                                    <div>
+                                        <p class="fw-bold mb-1">ยื่นขอเข้าฝึกงาน</p>
+                                        <p class="fw-bold mb-0">เรียบร้อย</p>
+                                    </div>
+                                </div>
+                                <div class="d-lg-flex align-items-center">
+                                    <i class="fa-solid fa-hourglass-half fa-2x me-lg-2 mb-1 mb-lg-0" style="color: #FF8A00;"></i>
+                                    <div>
+                                        <p class="fw-bold mb-1">รอการยืนยัน</p>
+                                        <!-- <p class="fw-bold mb-0">จากหน่วยงาน</p> -->
+                                    </div>
+                                </div>
+                                <div class="d-lg-flex align-items-center">
+                                    <i class="fa-regular fa-circle-check fa-2x me-lg-3 mb-1 mb-lg-0" style="color: #59AB62;"></i>
+                                    <div>
+                                        <p class="fw-bold mb-1">ตอบรับ</p>
+                                        <p class="fw-bold mb-0">นิสิตเข้าฝึกงาน</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-    </div>
-    <div class="text-box">
-        <li class="text-list">หน่วยกิจการนิสิต สาขาวิศวกรรมคอมพิวเตอร์ คณะวิศวกรรมศาสตร์ มหาวิทยาลัยนเรศวร</li>
-        <li class="text-list">99 หมู่ 9 ถ.พิษณุโลก-นครสวรรค์ ต.ท่าโพธิ์ อ.เมือง จ.พิษณุโลก 65000</li>
-        <li class="text-list">โทรศัพท์ 0-5596-4015 โทรสาร 0-5596-4000</li>
-    </div>
+    </section>
 </body>

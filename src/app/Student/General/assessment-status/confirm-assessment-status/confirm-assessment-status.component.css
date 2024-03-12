@@ -1,11 +1,11 @@
 body {
     background-color: white;
     background-position: top;
-    height: auto; 
+    height: auto;
     overflow: auto;
- }
+}
 
- .header {
+.header {
     background-color: #44779F;
     border-radius: 8px;
 }
@@ -51,59 +51,89 @@ body {
 }
 
 /* content part */
+.card-stepper {
+    z-index: 0
+}
 
-.check-container {
-    background-color: #DFEBF6;
-    margin: 50px  150px 100px 150px;
-    border-radius: 8px;
-    padding: 40px;
+#progressbar-2 {
+    color: #455A64;
+}
+
+#progressbar-2 li {
+    list-style-type: none;
+    font-size: 13px;
+    width: 50%;
+    float: left;
+    position: relative;
+}
+
+#progressbar-2 #step1:before {
+    content: '\f058';
+    font-family: "Font Awesome 5 Free";
+    color: #fff;
+    width: 50px;
+    margin-left: 0px;
+    padding-left: 0px;
+}
+
+#progressbar-2 #step2:before {
+    content: '\f058';
+    font-family: "Font Awesome 5 Free";
+    color: #fff;
+    width: 50px;
+}
+
+#progressbar-2 #step3:before {
+    content: '\f058';
+    font-family: "Font Awesome 5 Free";
+    color: #fff;
+    /* background: #c5cae9; */
+    width: 50px;
+    margin-right: 0;
     text-align: center;
 }
 
-.check-container i {
-    font-size: 80px;
-}
-
-.head-check {
-    list-style: none;
+#progressbar-2 li:before {
+    line-height: 50px;
+    display: block;
     font-size: 18px;
-    font-weight: 500;
-    border: 2px solid #064469;
-    background-color: #064469;
-    margin: 30px;
-    padding: 10px;
-    border-radius: 10px;
+    background: #c5cae9;
+    border-radius: 50%;
 }
 
-p {
-    font-size: 18px;
-    font-weight: 600px;
-    padding: 10px 30px;
+#progressbar-2 li:after {
+    content: '';
+    width: 100%;
+    height: 10px;
+    background: #c5cae9;
+    position: absolute;
+    left: 0%;
+    right: 0%;
+    top: 22px;
+    z-index: -1;
 }
 
-.status {
-    list-style: none;
-    font-size: 20px;
-    font-weight: 600;
-    background-color: #59AB62;
-    margin: 30px 120px 0px 120px;
-    padding: 10px;
-    border-radius: 10px;
+#progressbar-2 li:nth-child(1):after {
+    left: 1%;
+    width: 100%
 }
 
-/* text-box part */
-
-.text-box {
-    border: 4px solid #064469; 
-    padding: 15px 50px 15px 50px; 
-    width: 880px;
-    margin: 0px 50px 30px 50px;
-    border-radius: 8px;
-    text-align: center;
+#progressbar-2 li:nth-child(2):after {
+    left: 1%;
+    width: 100%;
 }
 
-.text-list {
-    list-style: none;
-    font-size: 16px;
-    font-weight: 600;
+#progressbar-2 li:nth-child(3) {
+    left: 0;
+    width: 50px;
+}
+
+#progressbar-2 li:nth-child(3):after {
+    left: 0;
+    width: 0;
+}
+
+#progressbar-2 li.active:before,
+#progressbar-2 li.active:after {
+    background: #6520ff;
 }

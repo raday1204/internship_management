@@ -20,12 +20,12 @@
 
         <div class="list">
             <label for="company_name">1. ชื่อหน่วยงาน(ภาษาไทย)</label>
-            <span>{{ companyForm.get('company_name')?.value || '-'}}</span>
+            <span style="background-color: #e4e4e4;">{{ companyForm.get('company_name')?.value || '-'}}</span>
         </div>
 
         <div class="list">
             <label for="company_building">2. ชื่อหน่วยงานภายใน(ภาษาไทย)</label>
-            <span>{{ companyForm.get('company_building')?.value || '-' }}</span>
+            <span style="background-color: #e4e4e4;">{{ companyForm.get('company_building')?.value || '-' }}</span>
         </div>
 
         <form [formGroup]="companyForm" (ngSubmit)="openUpdatePopup()">

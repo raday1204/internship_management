@@ -5,6 +5,7 @@ import { AppComponent } from './app.component';
 //Student
 import { HomeStudentComponent } from './Student/home-student/home-student.component';
 import { LoginStudentComponent } from './Student/login-student/login-student.component';
+import { AboutUsComponent } from './Student/about-us/about-us.component';
 //calendar
 import { SearchCalendarStudentComponent } from './Student/General/search-calendar-student/search-calendar-student.component';
 import { CalendarStudentComponent } from './Student/General/search-calendar-student/calendar-student/calendar-student.component';
@@ -30,6 +31,7 @@ import { CompanyFormStudentPopupComponent } from './Student/Form/company-form-st
 //Officer
 import { LoginOfficerComponent } from './Officer/login-officer/login-officer.component';
 import { HomeOfficerComponent } from './Officer/home-officer/home-officer.component';
+import { AboutUsOfComponent } from './Officer/about-us-of/about-us-of.component';
 //Student-officer
 import { SearchStudentOfficerComponent } from './Officer/General/search-student-officer/search-student-officer.component';
 import { StudentInformationComponent } from './Officer/General/search-student-officer/student-information/student-information.component';
@@ -68,13 +70,13 @@ import { AddRelationPopupComponent } from './Officer/Relation/add-relation/add-r
 import { EditRelationPopupComponent } from './Officer/Relation/edit-relation/edit-relation-popup/edit-relation-popup.component';
 import { DeleteRelationPopupComponent } from './Officer/Relation/relation-officer/delete-relation-popup/delete-relation-popup.component';
 
-
 const routes: Routes = [
   { path: 'app', component: AppComponent },
   //Student
   { path: '', redirectTo: '/login-student', pathMatch: 'full' },
   { path: 'home-student', component: HomeStudentComponent },
   { path: 'login-student', component: LoginStudentComponent },
+  { path: 'about-us', component: AboutUsComponent },
   //Calendar
   { path: 'search-calendar-student', component: SearchCalendarStudentComponent },
   { path: 'calendar-student', component: CalendarStudentComponent },
@@ -100,6 +102,7 @@ const routes: Routes = [
   //Officer
   { path: 'login-officer', component: LoginOfficerComponent },
   { path: 'home-officer', component: HomeOfficerComponent },
+  { path: 'about-us-of', component: AboutUsOfComponent },
   //Student-officer
   { path: 'search-student-officer', component: SearchStudentOfficerComponent },
   { path: 'student-information', component: StudentInformationComponent },

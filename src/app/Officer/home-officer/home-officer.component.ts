@@ -138,6 +138,16 @@ export class HomeOfficerComponent implements OnInit {
     },
   ]
 
+  aboutUs = [
+    {
+      link_name: "About Us",
+      link: "/about-us-of",
+      icon: "fa-solid fa-users",
+      sub_menu: [],
+      openInNewTab: false
+    },
+  ]
+
   // แถบแจ้งข่าวประชาสัมพันธ์
   newsSidebar = [
     {

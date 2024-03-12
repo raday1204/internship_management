@@ -40,7 +40,7 @@ export class WaitStatusComponent implements OnInit {
     console.log('Username from service:', this.username);
 
     if (!this.username) {
-      this.router.navigate(['/login-student']);
+      this.router.navigate(['/home-student']);
     }
 
     if (this.username) {

@@ -67,8 +67,8 @@ export class CompanyFormStudentComponent implements OnInit {
       student_lastname: ['', Validators.required],
       depart_name: ['', Validators.required],
       student_pak: ['', Validators.required],
-      student_mobile: ['', Validators.required],
-      student_facebook: ['', Validators.required],
+      student_mobile: [''],
+      student_facebook: [''],
     });
     this.companyForm = this.fb.group({
       year: ['', Validators.required],
@@ -76,13 +76,13 @@ export class CompanyFormStudentComponent implements OnInit {
       term: ['', Validators.required],
       company_name: ['', Validators.required],
       send_name: ['', Validators.required],
-      send_coordinator: ['', Validators.required],
-      send_position: ['', Validators.required],
-      send_tel: ['', Validators.required],
-      send_email: ['', Validators.required],
-      send_mobile: ['', Validators.required],
-      type_position: ['', Validators.required],
-      type_special: ['', Validators.required],
+      send_coordinator: [''],
+      send_position: [''],
+      send_tel: [''],
+      send_email: [''],
+      send_mobile: [''],
+      type_position: [''],
+      type_special: [''],
       date_addtraining: ['', Validators.required],
       date_endtraining: ['', Validators.required]
     });

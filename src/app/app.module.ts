@@ -22,6 +22,7 @@ import { AppComponent } from './app.component';
 //Student
 import { HomeStudentComponent } from './Student/home-student/home-student.component';
 import { LoginStudentComponent } from './Student/login-student/login-student.component';
+import { AboutUsComponent } from './Student/about-us/about-us.component';
 //calendar
 import { SearchCalendarStudentComponent } from './Student/General/search-calendar-student/search-calendar-student.component';
 import { CalendarStudentComponent } from './Student/General/search-calendar-student/calendar-student/calendar-student.component';
@@ -49,6 +50,7 @@ import { CompanyStudentService } from './Student/General/search-company-student/
 //Officer
 import { LoginOfficerComponent } from './Officer/login-officer/login-officer.component';
 import { HomeOfficerComponent } from './Officer/home-officer/home-officer.component';
+import { AboutUsOfComponent } from './Officer/about-us-of/about-us-of.component';
 //Student-officer
 import { SearchStudentOfficerComponent } from './Officer/General/search-student-officer/search-student-officer.component';
 import { StudentInformationComponent } from './Officer/General/search-student-officer/student-information/student-information.component';
@@ -94,6 +96,7 @@ import { DataStorageService } from './Officer/General/search-company-officer/com
     //Student
     HomeStudentComponent,
     LoginStudentComponent,
+    AboutUsComponent,
     //Calendar
     SearchCalendarStudentComponent,
     CalendarStudentComponent,
@@ -120,6 +123,7 @@ import { DataStorageService } from './Officer/General/search-company-officer/com
     //Officer
     LoginOfficerComponent,
     HomeOfficerComponent,
+    AboutUsOfComponent,
     //Student-officer
     SearchStudentOfficerComponent,
     StudentInformationComponent,
