@@ -10,7 +10,7 @@ if ($_SERVER["REQUEST_METHOD"] === "OPTIONS") {
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $data = json_decode(file_get_contents("php://input"));
 
-    if (!isset($data->username) || !isset($data->company_id)) {
+    if (!isset($data->username) || !isset($data->company_id) || !isset($data->type_name)) {
         http_response_code(400);
         echo json_encode(array("success" => false, "error" => "Invalid request data.", "requestData" => $data));
         exit();
@@ -18,6 +18,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
     $username = $data->username;
     $newCompanyID = $data->company_id;
+    $typeName = $data->type_name;
 
     $conn->set_charset("utf8mb4");
     $username = $conn->real_escape_string($username);
@@ -27,7 +28,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
     try {
         // Check if the student already exists
-        $checkSql = "SELECT users.username, student.student_code, student.company_id, training.*
+        $checkSql = "SELECT users.username, student.student_code, student.company_id, student.type_name, training.*
                      FROM users 
                      LEFT JOIN student ON users.username = student.student_code 
                      LEFT JOIN training ON training.student_code = student.student_code
@@ -58,9 +59,9 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             }
 
             // Update the company_id and status
-            $updateSql = "UPDATE student SET company_id = ? WHERE student_code = ?";
+            $updateSql = "UPDATE student SET company_id = ?, type_name = ? WHERE student_code = ?";
             $stmt_update = $conn->prepare($updateSql);
-            $stmt_update->bind_param("ss", $newCompanyID, $username);
+            $stmt_update->bind_param("sss", $newCompanyID, $typeName, $username);
             $stmt_update->execute();
             $stmt_update->close();
 

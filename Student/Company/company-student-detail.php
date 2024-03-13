@@ -4,7 +4,7 @@ include('../../database.php');
 if (isset($_GET['username'])) {
     $username = $_GET['username'];
 
-    $sql = "SELECT company.company_id, company.company_name, company.company_building, 
+    $sql = "SELECT company.company_id, company.type_name, company.company_name, company.company_building, 
             student.student_code, student.student_name, student.student_lastname, need_student.number_student_train
             FROM company
             LEFT JOIN student ON company.company_id = student.company_id
@@ -15,7 +15,6 @@ if (isset($_GET['username'])) {
                 WHERE student_code = '$username'
                 LIMIT 1
             )";
-
 
     $result = $conn->query($sql);
 

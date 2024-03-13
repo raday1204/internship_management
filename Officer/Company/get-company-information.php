@@ -9,7 +9,7 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
     $response = [];
 
     // Retrieve company information using prepared statement
-    $sqlCompany = "SELECT company_id, company_name, company_building, company_job, send_name, year FROM company WHERE year = ? AND type_name = ?";
+    $sqlCompany = "SELECT company_id, type_name, company_name, company_building, company_job, send_name, year FROM company WHERE year = ? AND type_name = ?";
     $stmtCompany = $conn->prepare($sqlCompany);
     $stmtCompany->bind_param("ss", $year, $type_name);
 
@@ -19,6 +19,7 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
         if ($resultCompany->num_rows > 0) {
             while ($rowCompany = $resultCompany->fetch_assoc()) {
                 $company_id = $rowCompany['company_id'];
+                $type_name = $rowCompany['type_name']; // Add type_name to the response
 
                 // Retrieve information from the need_student table using prepared statement
                 $stmtNeedStudents = $conn->prepare("SELECT * FROM need_student WHERE company_id = ?");
@@ -44,17 +45,18 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
                 if ($resultStudents->num_rows > 0) {
                     // Loop through students
                     while ($rowStudent = $resultStudents->fetch_assoc()) {
-                        $student_code = $rowStudent['student_code'];
+                        // Include type_name in student data
+                        $rowStudent['type_name'] = $type_name;
 
                         // Retrieve information from the training table using prepared statement
                         $stmtTraining = $conn->prepare("SELECT * FROM training WHERE student_code = ? AND company_id = ?");
-                        $stmtTraining->bind_param("ss", $student_code, $company_id);
+                        $stmtTraining->bind_param("ss", $rowStudent['student_code'], $company_id);
                         $stmtTraining->execute();
                         $resultTraining = $stmtTraining->get_result();
                         $training = fetchRecords($resultTraining);
 
                         $students[] = [
-                            'student_code' => $student_code,
+                            'student_code' => $rowStudent['student_code'],
                             'student_name' => $rowStudent['student_name'],
                             'student_lastname' => $rowStudent['student_lastname'],
                             'student_mobile' => $rowStudent['student_mobile'],
@@ -62,6 +64,7 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
                             'year' => $rowStudent['year'],
                             'training' => $training,
                             'company_status' => isset($training[0]['company_status']) ? $training[0]['company_status'] : null,
+                            'type_name' => $type_name, // Include type_name in student data
                         ];
                     }
                 }
