@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { Location } from '@angular/common';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router, NavigationExtras } from '@angular/router';
 import { CompanyStudentService } from '../../search-company-student/company-student/company-student.service';
 import { MatDialog } from '@angular/material/dialog';
@@ -66,26 +66,26 @@ export class EditProfileComponent implements OnInit {
       student_name: [''],
       student_lastname: [''],
       student_nickname: [''],
-      student_pic: [''],
+      student_pic: [null],
       student_citizen: [''],
       student_email: [''],
-      student_mobile: [''],
+      student_mobile: ['', [Validators.required, Validators.minLength(10), Validators.maxLength(10), this.validateMobileNumber]],
       student_facebook: [''],
       student_line: [''],
-      st_address: ['' ],
+      st_address: [''],
       st_tambol: [''],
       st_ampher: [''],
       st_province: [''],
-      st_zipcode: [''],
-      st_tel: [''],
+      st_zipcode: ['', [Validators.required, Validators.minLength(5), Validators.maxLength(5), this.validateZipcode]],
+      st_tel: ['', [Validators.minLength(10), Validators.maxLength(10), this.validateMobileNumber]],
       st_contact: [''],
-      st_mobile: [''],
+      st_mobile: ['', [Validators.required, Validators.minLength(10), Validators.maxLength(10), this.validateMobileNumber]],
       ct_address: [''],
       ct_tambol: [''],
       ct_ampher: [''],
       ct_province: [''],
-      ct_zipcode: [''],
-      ct_tel: [''],
+      ct_zipcode: ['', [Validators.required, Validators.minLength(5), Validators.maxLength(5), this.validateZipcode]],
+      ct_tel: ['', [Validators.minLength(10), Validators.maxLength(10), this.validateMobileNumber]]
     });
   }
 
@@ -210,6 +210,19 @@ export class EditProfileComponent implements OnInit {
         duration: 3000,
       });
     }
+  }
+
+  validateMobileNumber(control: FormControl) {
+    if (control.value && control.value.trim() !== '') {
+      const regexp = /^[0-9]{10}$/;
+      return regexp.test(control.value) ? null : { invalidMobileNumber: true };
+    }
+    return null; // Return null if field is empty
+  }
+
+  validateZipcode(control: FormControl) {
+    const regexp = /^[0-9]{5}$/;
+    return regexp.test(control.value) ? null : { invalidZipcode: true };
   }
 
   logout() {

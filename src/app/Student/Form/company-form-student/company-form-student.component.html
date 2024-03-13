@@ -48,9 +48,26 @@
                 <input style="width: 300px;" type="text" id="student_pak" formControlName="student_pak">
             </div>
 
-            <div class="list">
+            <div class="list"
+                [class.error]="studentyForm.get('student_mobile')?.invalid && (studentyForm.get('student_mobile')?.dirty || studentyForm.get('student_mobile')?.touched)">
                 <label for="student_mobile">เบอร์โทรศัพท์ที่สามารถติดต่อได้</label>
-                <input type="number" id="student_mobile" formControlName="student_mobile">
+                <input type="text" id="student_mobile" formControlName="student_mobile">
+                <div
+                    *ngIf="studentyForm.get('student_mobile')?.hasError('required') && (studentyForm.get('student_mobile')?.dirty || studentyForm.get('student_mobile')?.touched)">
+                    โปรดระบุเบอร์โทรศัพท์
+                </div>
+                <div
+                    *ngIf="studentyForm.get('student_mobile')?.hasError('minlength') && (studentyForm.get('student_mobile')?.dirty || studentyForm.get('student_mobile')?.touched)">
+                    โปรดกรอกเบอร์โทรศัพท์ให้ครบ 10 หลัก
+                </div>
+                <div
+                    *ngIf="studentyForm.get('student_mobile')?.hasError('maxlength') && (studentyForm.get('student_mobile')?.dirty || studentyForm.get('student_mobile')?.touched)">
+                    โปรดกรอกเบอร์โทรศัพท์ให้ครบ 10 หลัก
+                </div>
+                <div
+                    *ngIf="studentyForm.get('student_mobile')?.hasError('invalidMobileNumber') && (studentyForm.get('student_mobile')?.dirty || studentyForm.get('student_mobile')?.touched)">
+                    โปรดกรอกเบอร์โทรศัพท์เป็นตัวเลขเท่านั้น
+                </div>
             </div>
 
             <div class="list">
@@ -81,6 +98,7 @@
                     </select><br>
                     <div style="color: red;">กรุณาเลือกประเภท: ฝึกงานตามายวิชา(หลักสูตร)</div>
                 </div>
+
                 <p>ข้อมูลหน่วยงาน</p>
 
                 <div class="list">
@@ -123,9 +141,26 @@
                     <input type="email" id="send_email" formControlName="send_email">
                 </div>
 
-                <div class="list">
+                <div class="list"
+                    [class.error]="companyForm.get('send_mobile')?.invalid && (companyForm.get('send_mobile')?.dirty || companyForm.get('send_mobile')?.touched)">
                     <label for="send_mobile">โทรศัพท์มือถือ</label>
-                    <input type="number" id="send_mobile" formControlName="send_mobile">
+                    <input type="text" id="send_mobile" formControlName="send_mobile">
+                    <div
+                        *ngIf="companyForm.get('send_mobile')?.hasError('required') && (companyForm.get('send_mobile')?.dirty || companyForm.get('send_mobile')?.touched)">
+                        โปรดระบุเบอร์โทรศัพท์
+                    </div>
+                    <div
+                        *ngIf="companyForm.get('send_mobile')?.hasError('minlength') && (companyForm.get('send_mobile')?.dirty || companyForm.get('send_mobile')?.touched)">
+                        โปรดกรอกเบอร์โทรศัพท์ให้ครบ 10 หลัก
+                    </div>
+                    <div
+                        *ngIf="companyForm.get('send_mobile')?.hasError('maxlength') && (companyForm.get('send_mobile')?.dirty || companyForm.get('send_mobile')?.touched)">
+                        โปรดกรอกเบอร์โทรศัพท์ให้ครบ 10 หลัก
+                    </div>
+                    <div
+                        *ngIf="companyForm.get('send_mobile')?.hasError('invalidMobileNumber') && (companyForm.get('send_mobile')?.dirty || companyForm.get('send_mobile')?.touched)">
+                        โปรดกรอกเบอร์โทรศัพท์เป็นตัวเลขเท่านั้น
+                    </div>
                 </div>
 
                 <div class="list">

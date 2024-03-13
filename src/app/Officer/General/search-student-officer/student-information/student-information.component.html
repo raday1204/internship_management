@@ -15,23 +15,39 @@
     </header>
 
     <p>ปีการศึกษา {{ selectedOption3 }} ประเภทที่ {{ selectedOption4 }}</p>
+
+    <div class="button-container">
+        <div class="show-all-button" [ngClass]="{ 'active': selectedButton === 'all' }">
+          <button (click)="onClick('all')">แสดงข้อมูลนิสิตทั้งหมด</button>
+        </div>
+        <div class="show-all-button" [ngClass]="{ 'active': selectedButton === 'withCompany' }">
+          <button (click)="onClick('withCompany')">นิสิตที่เลือกหน่วยงานแล้ว</button>
+        </div>
+        <div class="show-all-button" [ngClass]="{ 'active': selectedButton === 'withoutCompany' }">
+          <button (click)="onClick('withoutCompany')">นิสิตที่ยังไม่เลือกหน่วยงาน</button>
+        </div>
+        <div class="show-all-button" [ngClass]="{ 'active': selectedButton === 'export' }">
+          <button (click)="onClick('export')">บันทึกรายชื่อนิสิต</button>
+        </div>
+      </div>
+      
     <table class="table-container" style="width: 900px;">
-        <thead style="font-size: 15px;">
+        <thead style="font-size: 14px;">
             <tr>
                 <th>ลำดับ</th>
-                <th>หมายเลขประจำตัว</th>
                 <th>รหัสนิสิต</th>
                 <th>ชื่อ-นามสกุล</th>
+                <th>หน่วยงาน</th>
                 <th>โทรศัพท์มือถือ</th>
                 <th>ข้อมูลเพิ่มเติม</th>
             </tr>
         </thead>
-        <tbody style="font-size: 15px;">
+        <tbody style="font-size: 14px;">
             <tr *ngFor="let student of displayedStudentInformation; let i = index">
                 <td class="text-center">{{ i + 1 + (currentPage*10) - 10 }}</td>
-                <td class="text-center">{{ student.student_citizen }}</td>
                 <td class="text-center">{{ student.student_code }}</td>
                 <td>{{ student.student_name }} {{ student.student_lastname }}</td>
+                <td>{{ student.company_name }}</td>
                 <td class="text-center">{{ student.student_mobile }}</td>
                 <td class="text-center">
                     <button (click)="handleStudentClick(student)"
@@ -40,14 +56,16 @@
             </tr>
         </tbody>
     </table>
-
-    <p *ngIf="!displayedStudentInformation || displayedStudentInformation.length === 0">No student information available.</p>
+    
+    <p *ngIf="!displayedStudentInformation || displayedStudentInformation.length === 0">No student information
+        available.</p>
 
     <div class="pagination-wrapper">
         <div class="pagination">
-          <button (click)="paginate(currentPage - 1)" [disabled]="currentPage === 1">Previous</button>
-          <span>{{ currentPage }}</span>
-          <button (click)="paginate(currentPage + 1)" [disabled]="currentPage * itemsPerPage >= totalItems">Next</button>
+            <button (click)="paginate(currentPage - 1)" [disabled]="currentPage === 1">Previous</button>
+            <span>{{ currentPage }}</span>
+            <button (click)="paginate(currentPage + 1)"
+                [disabled]="currentPage * itemsPerPage >= totalItems">Next</button>
         </div>
     </div>
 </body>

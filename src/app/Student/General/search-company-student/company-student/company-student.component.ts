@@ -25,6 +25,7 @@ interface Student {
   student_lastname: string;
 }
 
+
 interface CompanyInformation {
   selected: any;
   company: Company;
@@ -114,9 +115,18 @@ export class CompanyStudentComponent implements OnInit {
                 this.need_student[company.company.company_id] = company.need_students;
                 this.student[company.company.company_id] = company.students;
               });
+
+              // Filter out companies with zero student slots
+              this.companyInformation = this.companyInformation.filter(company => {
+                const slotsAvailable = company.need_students && company.need_students.length > 0
+                  ? +company.need_students[0].number_student_train
+                  : 0;
+                const enrolledStudents = this.student[company.company.company_id]?.length || 0;
+                return slotsAvailable > enrolledStudents;
+              });
+
               // Sort the data alphabetically by company name (Thai)
               this.companyInformation.sort((a, b) => a.company.company_name.localeCompare(b.company.company_name, 'th'));
-
             } else {
               console.error('Invalid response from the server.');
               this.router.navigate(['/search-company-student']);
@@ -129,8 +139,9 @@ export class CompanyStudentComponent implements OnInit {
     }
   }
 
+
   //เลือกหน่วยงานที่นิสิตต้องการไปฝึกงาน
-  selectCompany(selectedCompany: CompanyInformation) {
+  selectCompany(selectedCompany: CompanyInformation, typeName: string) {
     if (this.username) {
       if (selectedCompany && selectedCompany.company && selectedCompany.company.company_id) {
         if (this.hasSelectedCompany) {
@@ -151,7 +162,7 @@ export class CompanyStudentComponent implements OnInit {
           console.log('The dialog was closed', result);
           if (result && result.saveData) {
             this.selectedCompany = selectedCompany.company;
-            this.setSelectedCompany(selectedCompany.company);
+            this.setSelectedCompany(selectedCompany.company, typeName); // Pass typeName here
             this.hasSelectedCompany = true;
             console.log('Company selected successfully.');
           } else {
@@ -167,14 +178,16 @@ export class CompanyStudentComponent implements OnInit {
     }
   }
 
+
   //save company_id to student table
-  private setSelectedCompany(selectedCompany: Company) {
+  private setSelectedCompany(selectedCompany: Company, typeName: string) {
 
     const insertUrl = 'http://localhost/PJ/Backend/Student/Company/select-company.php';
 
     const requestData = {
       username: this.username,
-      company_id: selectedCompany.company_id
+      company_id: selectedCompany.company_id,
+      type_name: typeName // Add type_name parameter
     };
 
     this.http.post<CompanyResponse>(insertUrl, requestData).subscribe(
@@ -183,6 +196,7 @@ export class CompanyStudentComponent implements OnInit {
         if (response.success) {
           this.router.navigate(['/select-company']);
           localStorage.setItem('selectedCompanyID', selectedCompany.company_id);
+          localStorage.setItem('selectedTypeName', typeName); // Save selected type_name
         }
       },
       (error: HttpErrorResponse) => {

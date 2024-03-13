@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { formatDate } from '@angular/common';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { CompanyStudentService } from '../../General/search-company-student/company-student/company-student.service';
@@ -67,8 +67,8 @@ export class CompanyFormStudentComponent implements OnInit {
       student_lastname: ['', Validators.required],
       depart_name: ['', Validators.required],
       student_pak: ['', Validators.required],
-      student_mobile: [''],
-      student_facebook: [''],
+      student_mobile: ['', [Validators.required, Validators.minLength(10), Validators.maxLength(10), this.validateMobileNumber]],
+      student_facebook: ['', Validators.required],
     });
     this.companyForm = this.fb.group({
       year: ['', Validators.required],
@@ -76,11 +76,11 @@ export class CompanyFormStudentComponent implements OnInit {
       term: ['', Validators.required],
       company_name: ['', Validators.required],
       send_name: ['', Validators.required],
-      send_coordinator: [''],
-      send_position: [''],
+      send_coordinator: ['', Validators.required],
+      send_position: ['', Validators.required],
       send_tel: [''],
       send_email: [''],
-      send_mobile: [''],
+      send_mobile: ['', [Validators.required, Validators.minLength(10), Validators.maxLength(10), this.validateMobileNumber]],
       type_position: [''],
       type_special: [''],
       date_addtraining: ['', Validators.required],
@@ -96,7 +96,7 @@ export class CompanyFormStudentComponent implements OnInit {
       this.router.navigateByUrl('/login-student', { replaceUrl: true });
       return;
     }
-
+  
     if (this.username) {
       this.http
         .get(`http://localhost/PJ/Backend/Student/Company-Form/get-profile-student.php?username=${this.username}`)
@@ -115,10 +115,18 @@ export class CompanyFormStudentComponent implements OnInit {
           }
         );
     }
-    this.getOptions();
-  }
+  this.getOptions();
+}
 
-  //update ข้อมูลนิสิต
+validateMobileNumber(control: FormControl) {
+  if (control.value && control.value.trim() !== '') {
+    const regexp = /^[0-9]{10}$/;
+    return regexp.test(control.value) ? null : { invalidMobileNumber: true };
+  }
+  return null; // Return null if field is empty
+}
+
+//update ข้อมูลนิสิต
   updateData() {
     if (this.username) {
       // Update student data

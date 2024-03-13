@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute, NavigationExtras } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { DataStorageService } from '../data-storage.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { CompanyStudentService } from 'src/app/Student/General/search-company-student/company-student/company-student.service';
@@ -49,7 +49,7 @@ export class AddCompanyComponent {
       send_position: ['', Validators.required],
       send_tel: [''],
       send_email: [''],
-      send_mobile: ['']
+      send_mobile: ['', [Validators.minLength(10), Validators.maxLength(10), this.validateMobileNumber]]
     });
   }
 
@@ -124,6 +124,14 @@ export class AddCompanyComponent {
         console.error('HTTP Error:', error);
       }
     );
+  }
+
+  validateMobileNumber(control: FormControl) {
+    const mobileNumberPattern = /^[0-9]*$/;
+    if (!mobileNumberPattern.test(control.value)) {
+      return { invalidMobileNumber: true };
+    }
+    return null;
   }
 
   logout() {

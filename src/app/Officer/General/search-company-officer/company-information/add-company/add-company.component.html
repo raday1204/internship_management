@@ -32,7 +32,7 @@
             </div>
 
             <div class="list">
-                <label style="min-width: 120px;" for="type_name">ประเภท</label>
+                <label for="type_code">ประเภท</label>
                 <select formControlName="type_name">
                     <option value="">-- เลือกประเภท --</option>
                     <option *ngFor="let option of selectedOption2" [value]="option">{{ option }}</option>
@@ -81,9 +81,26 @@
                 <input type="email" id="send_email" formControlName="send_email">
             </div>
 
-            <div class="list">
+            <div class="list"
+                [class.error]="companyForm.get('send_mobile')?.invalid && (companyForm.get('send_mobile')?.dirty || companyForm.get('send_mobile')?.touched)">
                 <label for="send_mobile">โทรศัพท์มือถือ</label>
                 <input type="text" id="send_mobile" formControlName="send_mobile">
+                <div
+                    *ngIf="companyForm.get('send_mobile')?.hasError('required') && (companyForm.get('send_mobile')?.dirty || companyForm.get('send_mobile')?.touched)">
+                    โปรดระบุเบอร์โทรศัพท์
+                </div>
+                <div
+                    *ngIf="companyForm.get('send_mobile')?.hasError('minlength') && (companyForm.get('send_mobile')?.dirty || companyForm.get('send_mobile')?.touched)">
+                    โปรดกรอกเบอร์โทรศัพท์ให้ครบ 10 หลัก
+                </div>
+                <div
+                    *ngIf="companyForm.get('send_mobile')?.hasError('maxlength') && (companyForm.get('send_mobile')?.dirty || companyForm.get('send_mobile')?.touched)">
+                    โปรดกรอกเบอร์โทรศัพท์ให้ครบ 10 หลัก
+                </div>
+                <div
+                    *ngIf="companyForm.get('send_mobile')?.hasError('invalidMobileNumber') && (companyForm.get('send_mobile')?.dirty || companyForm.get('send_mobile')?.touched)">
+                    โปรดกรอกเบอร์โทรศัพท์เป็นตัวเลขเท่านั้น
+                </div>
             </div>
 
             <div class="button-container">

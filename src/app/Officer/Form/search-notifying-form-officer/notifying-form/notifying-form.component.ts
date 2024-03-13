@@ -81,7 +81,7 @@ export class NotifyingFormComponent {
     this.fetchData();
 
     if (!this.username) {
-      this.router.navigateByUrl('/login-officer', { replaceUrl: true });
+      this.router.navigateByUrl('/home-officer', { replaceUrl: true });
       return;
     }
   }
@@ -124,53 +124,55 @@ export class NotifyingFormComponent {
     }
   }
 
-  //เลือกพิมพ์หนังสือ
-  selectForm(studentCode: string) {
-    // Assuming that you have fetched the data and stored it in the 'companyInformation' array
-    const studentCompanyIds = Object.keys(this.student);
+  onPrintButtonClick(): void {
+    const selectedCompanyNames = this.companyInformation.map(companyInfo => companyInfo.company.company_name);
+    if (selectedCompanyNames && selectedCompanyNames.length > 0) {
+      this.selectForm(selectedCompanyNames);
+    } else {
+      console.error('No companies selected for printing.');
+    }
+  }
 
-    // Iterate through the companies with students
-    for (const companyId of studentCompanyIds) {
-      const studentsInCompany = this.student[companyId];
-      const needStudentsInCompany = this.need_student[companyId];
-
-      // Find the student with the given student_code in the current company
-      const selectedStudent = studentsInCompany.find(student => student.student_code === studentCode);
-
-      if (selectedStudent) {
-        // Found the student, now get the corresponding company and need_student
-        const company = this.company[companyId];
-        const needStudentsForCompany = needStudentsInCompany;
-
-        if (company && needStudentsForCompany) {
-          const fileContent = this.generateFileUrl(selectedStudent, company, needStudentsForCompany);
-
-          if (fileContent) {
-            // Open the file URL in a new tab
-            const newTab = window.open(fileContent, '_blank');
-
-            if (newTab) {
-              newTab.document.write(fileContent);
-              newTab.document.close();
-
-              console.log('Student Year:', selectedStudent.year);
-            } else {
-              console.error('Unable to open new tab. Please check your popup settings.');
-            }
-          }
-        } else {
-          console.error('Company or need_student not found for the selected student. companyId:', companyId);
-          console.log('Available company IDs:', Object.keys(this.company));
-        }
-
-        // Exit the loop since we found the student
-        return;
+  //เลือกพิมพ์เอกสารเฉพาะหน่วยงาน
+  selectForm(selectedCompanyNames: string[]): void {
+    if (selectedCompanyNames && selectedCompanyNames.length > 0) {
+      const newTab = window.open('', '_blank');
+      if (newTab) {
+        newTab.document.write(`
+          <html xmlns="http://www.w3.org/1999/xhtml">
+          <head>
+          <meta http-equiv="Content-Type" content="text/html; charset=windows-874" />
+          <title>หนังสือแจ้งผู้ปกครองเรื่องการฝึกงาน</title>
+          <style type="text/css">
+            <!--
+              .style3 {
+                font-family: "TH SarabunPSK"; 
+                font-size:14px; 
+              }
+  
+              .style8 {
+                font-family: "TH SarabunPSK";
+                font-size:18px; 
+              }
+            -->
+          </style>
+          </head>
+          <body>
+        `);
+  
+        this.companyInformation.forEach(companyInfo => {
+          companyInfo.students.forEach(student => {
+            const htmlContent = this.generateFileUrl(student, companyInfo.company, companyInfo.need_students);
+            newTab.document.body.innerHTML += htmlContent;
+          });
+        });
+  
+        newTab.document.write('</body></html>');
+      } else {
+        console.error('Unable to open new tab.');
       }
     }
-
-    // If no student is found, log an error or handle it as needed
-    console.error('Student with student_code not found. studentCode:', studentCode);
-  }
+  }  
 
   //สร้างหน้า html เพื่อพิมพ์เอกสาร
   generateFileUrl(student: Student, company: Company, needStudents: NeedStudent[]): string {
@@ -217,7 +219,7 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD
     <meta http-equiv="Content-Type" content="text/html; charset=windows-874" />
     <title>หนังสือแจ้งผู้ปกครองเรื่องการฝึกงาน</title>
     <style type="text/css">
-        <!--
+
         .style3 {
             font-family: "TH SarabunPSK";
             font-size: 14px;
@@ -232,7 +234,7 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD
             font-family: "TH SarabunPSK";
             font-size: 18px;
         }
-        -->
+
     </style>
 </head>
 
@@ -368,13 +370,13 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD
 
             <table cellpadding="0" cellspacing="0">
                 <tr>
-                  <td width="180">
+                  <td width="180" style="vertical-align: top;">
                     <span class="style8">
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                     <strong> สถานที่ฝึกงาน </strong>
                     </span>
                   </td>
-                  <td>
+                  <td style="vertical-align: top;">
                     <span class="style8">
                     ${company_name} ${company_building} มหาวิทยาลัยนเรศวร 
                     </span>
@@ -411,8 +413,9 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD
         <tr>
             <td align="center"><span class="style8">คณบดีคณะวิศวกรรมศาสตร์ มหาวิทยาลัยนเรศวร</span></td>
         </tr>
+
         <tr>
-            <td><span class="style3">&nbsp;</span></td>
+        <td><span class="style3">&nbsp;</span></td>
         </tr>
         <tr>
             <td><span class="style3">&nbsp;</span></td>
@@ -420,6 +423,13 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD
         <tr>
             <td><span class="style3">&nbsp;</span></td>
         </tr>
+        <tr>
+            <td><span class="style3">&nbsp;</span></td>
+        </tr>
+        <tr>
+            <td><span class="style3">&nbsp;</span></td>
+        </tr>
+
         <tr>
             <td><span class="style3">งานกิจการนิสิตและศิษย์เก่าสัมพันธ์</span></td>
         </tr>
@@ -433,6 +443,12 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD
             <td><span class="style3">E-mail : training.eng.nu@gmail.com</span></td>
         </tr>
     </table>
+    <tr>
+      <td><span class="style3">&nbsp;</span></td>
+    </tr>
+    <tr>
+        <td><span class="style3">&nbsp;</span></td>
+    </tr>
 </body>
 </html>
 `;
@@ -461,15 +477,6 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD
 
 <body topmargin="top">
     <table width="620" border="0" align="center">
-        <tr>
-            <td><span class="style3">&nbsp;</span></td>
-        </tr>
-        <tr>
-            <td><span class="style3">&nbsp;</span></td>
-        </tr>
-        <tr>
-            <td><span class="style3">&nbsp;</span></td>
-        </tr>
         <tr>
             <td><span class="style3">&nbsp;</span></td>
         </tr>
@@ -588,7 +595,6 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD
         <tr>
         <td><span class="style3">&nbsp;</span></td>
         </tr>
-  
         <tr>
             <td align="center"><span class="style6">--------------------------------------------------------------------------------------------------------------------------------------------------------------</span></td>
         </tr>
@@ -598,6 +604,44 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD
         <tr>
             <td align="center"><span class="style6"><strong> ภายในวันที่  20 ตุลาคม  2566 </strong></span></td>
         </tr>
+
+        <tr>
+            <td><span class="style3">&nbsp;</span></td>
+        </tr>
+        <tr>
+            <td><span class="style3">&nbsp;</span></td>
+        </tr>
+        <tr>
+            <td><span class="style3">&nbsp;</span></td>
+        </tr>
+        <tr>
+            <td><span class="style3">&nbsp;</span></td>
+        </tr>
+        <tr>
+            <td><span class="style3">&nbsp;</span></td>
+        </tr>
+        <tr>
+            <td><span class="style3">&nbsp;</span></td>
+        </tr>
+        <tr>
+            <td><span class="style3">&nbsp;</span></td>
+        </tr>
+        <tr>
+            <td><span class="style3">&nbsp;</span></td>
+        </tr>
+        <tr>
+            <td><span class="style3">&nbsp;</span></td>
+        </tr>
+        <tr>
+            <td><span class="style3">&nbsp;</span></td>
+        </tr>
+        <tr>
+            <td><span class="style3">&nbsp;</span></td>
+        </tr>
+        <tr>
+            <td><span class="style3">&nbsp;</span></td>
+        </tr>
+       
     </table>
 </body>
 

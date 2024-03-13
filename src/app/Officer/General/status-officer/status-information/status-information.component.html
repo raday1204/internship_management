@@ -5,7 +5,7 @@
             <ul>
                 <div class="header-list">
                     <li class="list-item"><a routerLink="/home-officer">ข้อมูลทั่วไป </a> > </li>
-                    <li class="list-item">ยืนยันสถานะการฝึกงาน</li>
+                    <li class="list-item">ข้อมูลหน่วยงาน</li>
                 </div>
                 <button (click)="logout()">
                     ออกจากระบบ <i class="fa-solid fa-arrow-right-from-bracket p-1"></i>
@@ -17,7 +17,7 @@
     <p>ปีการศึกษา {{ selectedOption1 }} ประเภทที่ {{ selectedOption2 }}</p>
 
     <table class="table-container" style="width: 900px;">
-        <thead style="font-size: 14px;">
+        <thead style="font-size: 13px;">
             <tr>
                 <th>ลำดับ</th>
                 <th>ชื่อหน่วยงาน</th>
@@ -29,8 +29,7 @@
                 <th>ยืนยันแบบประเมิน</th>
             </tr>
         </thead>
-
-        <tbody style="font-size: 14px;">
+        <tbody style="font-size: 13px;">
             <ng-container *ngFor="let company of displayedCompanyInformation; let i = index">
                 <!-- Loop through students of each company -->
                 <ng-container *ngFor="let studentItem of company.students; let j = index">
@@ -72,7 +71,7 @@
                                     <button *ngIf="trainingItem.company_status === 1" class="button"
                                         (click)="confirmCompany(studentItem.student_code)"
                                         style="background-color: white; color: #0075FF;">ยืนยัน</button>
-                                    <button style="font-size: 13px;" *ngIf="trainingItem.company_status === 1" class="button"
+                                    <button *ngIf="trainingItem.company_status === 1" class="button"
                                         (click)="rejectCompany(studentItem.student_code)"
                                         style="background-color: white; color: #FF0000;">ไม่รับนิสิตฝึกงาน</button>
 
@@ -87,14 +86,17 @@
                                 </td>
 
                                 <td class="text-center">
-                                    <button *ngIf="trainingItem.assessment_status === 1" class="button"
-                                        (click)="confirmAssessmentStatus(studentItem.student_code)"
-                                        style="background-color: white; color: #0075FF;">ยืนยัน</button>
-                                    <p *ngIf="trainingItem.assessment_status === 2"
-                                        style="background-color: white; color: #4c9a4c;">ยืนยันเรียบร้อย</p>
+                                    <ng-container *ngIf="trainingItem.company_status !== 3">
+                                        <button *ngIf="trainingItem.assessment_status === 1" class="button"
+                                            (click)="confirmAssessmentStatus(studentItem.student_code)"
+                                            style="background-color: white; color: #0075FF;">ยืนยัน</button>
+                                        <p *ngIf="trainingItem.assessment_status === 2"
+                                            style="background-color: white; color: #4c9a4c;">ยืนยันเรียบร้อย</p>
+                                    </ng-container>
                                 </td>
                             </ng-container>
                         </ng-container>
+
                     </tr>
                 </ng-container>
             </ng-container>

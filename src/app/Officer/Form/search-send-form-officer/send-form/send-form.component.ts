@@ -70,7 +70,7 @@ export class SendFormComponent {
     this.fetchData();
 
     if (!this.username) {
-      this.router.navigateByUrl('/login-officer', { replaceUrl: true });
+      this.router.navigateByUrl('/home-officer', { replaceUrl: true });
       return;
     }
   }
@@ -109,29 +109,54 @@ export class SendFormComponent {
     }
   }
 
-  //เลือกพิมพ์หนังสือ
-  selectForm(company: Company) {
-    if (company && company.company_id) {
-      const students = this.student[company.company_id];
-      const need_students = this.need_student[company.company_id];
-      if (students && need_students && students.length > 0 && need_students.length > 0) {
-        const fileContent = this.generateFileUrl(company, students, need_students);
-
-        if (fileContent) {
-          const newTab = window.open(fileContent, '_blank');
-
-          if (newTab) {
-            newTab.document.write(fileContent);
-            newTab.document.close();
-          } else {
-            console.error('Unable to open new tab. Please check your popup settings.');
-          }
-        }
-      } else {
-        console.error('No student or need_student data found for the selected company.');
-      }
+  onPrintButtonClick(): void {
+    const selectedCompanyNames = this.companyInformation.map(companyInfo => companyInfo.company.company_name);
+    if (selectedCompanyNames && selectedCompanyNames.length > 0) {
+      this.selectForm(selectedCompanyNames);
     } else {
-      this.router.navigate(['/search-permission-form-officer']);
+      console.error('No companies selected for printing.');
+    }
+  }
+
+  //เลือกพิมพ์เอกสารเฉพาะหน่วยงาน
+  selectForm(selectedCompanyNames: string[]): void {
+    if (selectedCompanyNames && selectedCompanyNames.length > 0) {
+      const newTab = window.open('', '_blank');
+      if (newTab) {
+        newTab.document.write(`
+          <html xmlns="http://www.w3.org/1999/xhtml">
+          <head>
+              <meta http-equiv="Content-Type" content="text/html; charset=windows-874" />
+              <title>หนังสือแจ้งรายชื่อนิสิตเข้าฝึกงาน</title>
+              <style type="text/css">
+                  <!--
+                  .style3 {
+                      font-family: "TH SarabunPSK"; 
+                      font-size:14px; 
+                  }
+  
+                  .style8 {
+                      font-family: "TH SarabunPSK";
+                      font-size:18px; 
+                  }
+                  -->
+              </style>
+          </head>
+          <body>
+        `);
+
+        this.companyInformation.forEach(companyInfo => {
+          const company = companyInfo.company;
+          const students = companyInfo.students;
+          const need_students = companyInfo.need_students;
+          const htmlContent = this.generateFileUrl(company, students, need_students);
+          newTab.document.body.innerHTML += htmlContent;
+        });
+
+        newTab.document.write('</body></html>');
+      } else {
+        console.error('Unable to open new tab.');
+      }
     }
   }
 
@@ -187,7 +212,7 @@ export class SendFormComponent {
     <html xmlns="http://www.w3.org/1999/xhtml">
     <head>
     <meta http-equiv="Content-Type" content="text/html; charset=windows-874" />
-    <title>หนังสือแจ้งการยืนยันเข้าฝึกงาน</title>
+    <title>หนังสือแจ้งรายชื่อนิสิตเข้าฝึกงาน</title>
     <style type="text/css">
       <!--
         .style3 {
@@ -286,13 +311,13 @@ export class SendFormComponent {
           <td>
             <table cellpadding="0" cellspacing="0">
                 <tr>
-                  <td width="180">
+                  <td width="180" style="vertical-align: top;">
                     <span class="style8">
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                     <strong> สถานที่ฝึกงาน </strong>
                     </span>
                   </td>
-                  <td>
+                  <td style="vertical-align: top;">
                     <span class="style8">
                     ${company_name} ${company_building} มหาวิทยาลัยนเรศวร 
                     </span>
@@ -360,6 +385,52 @@ export class SendFormComponent {
         <tr>
           <td align="center"><span class="style8">คณบดีคณะวิศวกรรมศาสตร์</span></td>
         </tr>
+        <tr>
+        <td><span class="style3">&nbsp;</span></td>
+    </tr>
+    <tr>
+        <td><span class="style3">&nbsp;</span></td>
+    </tr>
+    <tr>
+    <td><span class="style3">&nbsp;</span></td>
+  </tr>
+  <tr>
+    <td><span class="style3">&nbsp;</span></td>
+  </tr>
+        <tr>
+        <td><span class="style3">&nbsp;</span></td>
+    </tr>
+    <tr>
+        <td><span class="style3">&nbsp;</span></td>
+    </tr>
+    <tr>
+    <td><span class="style3">&nbsp;</span></td>
+  </tr>
+  <tr>
+    <td><span class="style3">&nbsp;</span></td>
+  </tr>
+  <tr>
+  <td><span class="style3">&nbsp;</span></td>
+  </tr>
+  <tr>
+    <td><span class="style3">&nbsp;</span></td>
+  </tr>
+  <tr>
+  <td><span class="style3">&nbsp;</span></td>
+  </tr>
+  <tr>
+  <td><span class="style3">&nbsp;</span></td>
+  </tr>
+  <tr>
+    <td><span class="style3">&nbsp;</span></td>
+  </tr>
+  <tr>
+  <td><span class="style3">&nbsp;</span></td>
+  </tr>
+  <tr>
+  <td><span class="style3">&nbsp;</span></td>
+  </tr>
+
       </table>
     </body>
     </html>

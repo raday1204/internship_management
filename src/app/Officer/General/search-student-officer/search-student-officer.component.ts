@@ -50,10 +50,11 @@ export class SearchStudentOfficerComponent {
         if (data.success) {
           if (Array.isArray(data.data)) {
             // Create a Set to store unique values for selectedOption1 and selectedOption2
-            const uniqueYears = new Set(data.data.map((item: any) => item.year));
-            const uniqueTypeNames = new Set(data.data.map((item: any) => item.type_name));
+            const uniqueYears = new Set<number>(data.data.map((item: any) => item.year));
+            const uniqueTypeNames = new Set<string>(data.data.map((item: any) => item.type_name));
 
-            this.selectedOption3 = Array.from(uniqueYears);
+            // Convert Set to array and sort the years numerically
+            this.selectedOption3 = Array.from(uniqueYears).sort((a: number, b: number) => a - b);
             this.selectedOption4 = Array.from(uniqueTypeNames);
           } else {
             console.error('Invalid data structure in the API response.');

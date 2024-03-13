@@ -69,7 +69,7 @@ export class ThanksFormComponent {
     this.fetchData();
 
     if (!this.username) {
-      this.router.navigateByUrl('/login-officer', { replaceUrl: true });
+      this.router.navigateByUrl('/home-officer', { replaceUrl: true });
       return;
     }
   }
@@ -108,34 +108,58 @@ export class ThanksFormComponent {
     }
   }
 
-  //เลือกฟอร์มเพื่อพิมพ์เอกสาร
-  selectForm(company: Company) {
-    if (company && company.company_id) {
-      const students = this.student[company.company_id];
-      const need_students = this.need_student[company.company_id];
-
-      if (students && need_students && students.length > 0 && need_students.length > 0) {
-        const fileContent = this.generateFileUrl(company, students, need_students);
-
-        if (fileContent) {
-          const newTab = window.open(fileContent, '_blank');
-
-          if (newTab) {
-            newTab.document.write(fileContent);
-            newTab.document.close();
-          } else {
-            console.error('Unable to open new tab. Please check your popup settings.');
-          }
-        }
-      } else {
-        console.error('No student or need_student data found for the selected company.');
-      }
+  onPrintButtonClick(): void {
+    const selectedCompanyNames = this.companyInformation.map(companyInfo => companyInfo.company.company_name);
+    if (selectedCompanyNames && selectedCompanyNames.length > 0) {
+      this.selectForm(selectedCompanyNames);
     } else {
-      this.router.navigate(['/search-permission-form-officer']);
+      console.error('No companies selected for printing.');
     }
   }
 
-  //สร้างหน้าhtml เพื่อพิมพ์หนังสาือขอบคุณหน่วยงาน
+  //เลือกพิมพ์เอกสารเฉพาะหน่วยงาน
+  selectForm(selectedCompanyNames: string[]): void {
+    if (selectedCompanyNames && selectedCompanyNames.length > 0) {
+      const newTab = window.open('', '_blank');
+      if (newTab) {
+        newTab.document.write(`
+          <html xmlns="http://www.w3.org/1999/xhtml">
+          <head>
+              <meta http-equiv="Content-Type" content="text/html; charset=windows-874" />
+              <title>หนังสือขอบคุณหน่วยงาน</title>
+              <style type="text/css">
+                  <!--
+                  .style3 {
+                      font-family: "TH SarabunPSK"; 
+                      font-size:14px; 
+                  }
+  
+                  .style8 {
+                      font-family: "TH SarabunPSK";
+                      font-size:18px; 
+                  }
+                  -->
+              </style>
+          </head>
+          <body>
+        `);
+
+        this.companyInformation.forEach(companyInfo => {
+          const company = companyInfo.company;
+          const students = companyInfo.students;
+          const need_students = companyInfo.need_students;
+          const htmlContent = this.generateFileUrl(company, students, need_students);
+          newTab.document.body.innerHTML += htmlContent;
+        });
+
+        newTab.document.write('</body></html>');
+      } else {
+        console.error('Unable to open new tab.');
+      }
+    }
+  }
+
+  // สร้างหน้าhtml เพื่อพิมพ์หนังสาือขอบคุณหน่วยงาน
   generateFileUrl(company: Company, students: Student[], need_students: NeedStudent[]): string {
     const currentDate = new Date();
     const formattedDate = currentDate.toLocaleDateString('th-TH', {
@@ -144,12 +168,10 @@ export class ThanksFormComponent {
       day: 'numeric',
     });
 
-    const { depart_name } = this.student;
-
     const studentNames = students.map(student => `${student.student_name} ${student.student_lastname}`).join(', ');
 
     const { company_name, company_building, send_name, year } = company;
-    // const { date_addtraining, date_endtraining} = need_student;
+
     const datesInfo = need_students && need_students.length > 0
       ? need_students.map(need_student => {
         const startDate = new Date(need_student.date_addtraining);
@@ -171,196 +193,232 @@ export class ThanksFormComponent {
       }).join(', ')
       : '';
 
-
-    return `
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=windows-874" />
-<title>หนังสือขอบคุณหน่วยงาน</title>
-<style type="text/css">
-  <!--
-    .style3 {
-      font-family: "TH SarabunPSK"; 
-      font-size:12px; 
-    }
-
-    .style8 {
-      font-family: "TH SarabunPSK"; 
-      font-size:16px; 
-    }
-  -->
-</style>
-</head>
-
-<body topmargin="top">
-  <table width="600" border="0" align="center">
-    <tr>
-      <td>
-        <table width="100%" border="0" align="center">
-          <tr>
-            <td width="200" height="160">
-              <p class="style8">ที่ อว. 0603.09/ว.01321</p>
-              <p class="style8">&nbsp;</p>
-            </td>
-            <td valign="top" colspan="2">
-            <div align="center"><img src="http://www.thailibrary.in.th/wp-content/uploads/2013/04/482457_10200601494981789_1825578775_n.jpg" width="79" height="83" /></div>
-              <p>&nbsp;</p>
-            </td>
-            <td width="200"><p class="style3" align="right">&nbsp;เลขที่ ......................</p><p></p>
-              <p class="style8">คณะวิศวกรรมศาสตร์<br />
-                มหาวิทยาลัยนเรศวร<br />
-                ตำบลท่าโพธิ์ อำเภอเมืองฯ<br />
-                จังหวัดพิษณุโลก 65000 </p>          
-            </td>
-          </tr>
-          <tr>
-            <td height="28"><span class="style4"></span></td>
-            <td width="100"><span class="style4"></span></td>
-            <td colspan="2"><span class="style8"><?php echo LongThaiDate($docdate) ; ?>
-              ${formattedDate} 
-              </span>
-            </td>
-          </tr>
-        </table>
-      </td>
-    </tr>
-
-    <tr>
-      <td><span class="style3">&nbsp;</span></td>
-    </tr>
-    <tr>
-      <td><span class="style8">เรื่อง &nbsp;&nbsp;ขอขอบคุณ </span></td>
-    </tr>
-    <tr>
-      <td><span class="style3">&nbsp;</span></td>
-    </tr>
-
-    <tr>
-      <td>
-        <span class="style8">เรียน <strong>&nbsp;&nbsp; 
-        ${send_name}</strong><br />&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 
-        <strong> <? } ?>
-              ${company_name}  
-              ${company_building}</strong>
-        </span>
-      </td>
-    </tr>
-
-    <tr>
-      <td><span class="style3">&nbsp;</span></td>
-    </tr>
-
-    <tr>
-      <td>
-        <table width="600" cellpadding="0" cellspacing="0">
-          <tr>
-              <td width="40"><span class="style8">อ้างถึง </span></td>
-              <td colspan="2"><span class="style8"> หนังสือราชการคณะวิศวกรรมศาสตร์ มหาวิทยาลัยนเรศวร ที่ อว.0603.09/ว.01648</span></td>
-          </tr>
-        </table>
-      </td>
-    </tr>
-
-    <tr>
-      <td><span class="style3">&nbsp;</span></td>
-    </tr>
-
-    <!--
-    <tr>
-      <td><span class="style8">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ด้วย คณะวิศวกรรมศาสตร์  มหาวิทยาลัยนเรศวร ได้กำหนดให้นิสิตระดับปริญญาตรี  ออกฝึกงานตามหลักสูตรภาคเรียนฤดูร้อน ประจำปีการศึกษา 2564  โดยเน้นให้นิสิตศึกษาหาความรู้  และประสบการณ์นอกเหนือจากการเรียนการสอน  ระหว่างวันที่ (8 สัปดาห์)</span></td>
-    </tr>
-    -->
+    const htmlContent = `
+    <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+    <html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=windows-874" />
+    <title>หนังสือขอบคุณหน่วยงาน</title>
+    <style type="text/css">
+      <!--
+        .style3 {
+          font-family: "TH SarabunPSK"; 
+          font-size:12px; 
+        }
     
-    <tr>
-      <td>
-      ${datesInfo && datesInfo.length > 0 ? `
-        <span class="style8">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-          ด้วยหลักสูตรวิศวกรรมศาสตรบัณฑิต ได้กำหนดให้นิสิตชั้นปีที่ 3 คณะวิศวกรรมศาสตร์ มหาวิทยาลัยนเรศวร   จำนวน 8 หลักสูตร ออกฝึกงานในภาคเรียนฤดูร้อน ประจำปีการศึกษา ${year} 
-          โดยเริ่มฝึกงานตั้งแต่วันที่ ${datesInfo} และ ทางคณะฯ ได้รับความอนุเคราะห์จากหน่วยงานของท่านรับนิสิตสาขา${students[0].depart_name} จำนวน  ${students.length}  ราย คือ  
-        </span>
-        ` : ''} 
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        <table cellpadding="0" cellspacing="0">
-          ${students.map(student => `
-            <tr>
-              <td width="300">
-                <span class="style8">
-                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                  ${student.student_name} ${student.student_lastname}
-                </span>
-              </td>
-              <td>
-                <span class="style8">
-                  รหัสประจำตัวนิสิต &nbsp; ${student.student_code}
-                </span>
-              </td>
-            </tr>
-          `).join('')}
-        </table>
-      </td>
-    </tr>
-
-  <tr>
-      <td><span class="style8">&nbsp; </span></td>
-    </tr> 
-    <tr>
-      <td>
-        <span class="style8">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-          เข้าฝึกงานในช่วงระยะเวลาดังกล่าว นิสิตที่เข้าฝึกงานได้รับความรู้ประสบการณ์ในการปฎิบัติงานจริงและสามารถนำมาประยุกต์ใช้กับสาขาวิชาชีพที่ได้ศึกษา  
-          รวมทั้งการต้อนรับจากหน่วยงานของท่านเป็นอย่างดียิ่ง                  
-          คณะวิศวกรรมศาสตร์ มหาวิทยาลัยนเรศวรจึงใคร่ขอขอบคุณในความอนุเคราะห์ของท่านและผู้เกี่ยวข้องเป็นอย่างยิ่งมา ณ โอกาสนี้
-        </span>
-      </td>
-    </tr>
-
-    <tr>
-      <td><span class="style3">&nbsp;</span></td>
-    </tr>
-    <tr>
-      <td><span class="style8">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;จึงเรียนมาเพื่อโปรดทราบ คณะวิศวกรรมศาสตร์ มหาวิทยาลัยนเรศวร หวังเป็นอย่างยิ่งว่าคงได้รับความอนุเคราะห์จากท่านด้วยดี</span></td>
-    </tr>
-    <tr>
-      <td><span class="style3">&nbsp;</span></td>
-    </tr>
-    <tr>
-      <td align="center"><span class="style8">ขอแสดงความนับถือ</span></td>
-    </tr>
-    <tr>
-      <td height="75" align="center"><!--<img src="images/sitphank.png" width="223" height="76"/>--></td>
-    </tr>
-    <tr>
-      <td align="center"><span class="style8">(นายภัคพงศ์ หอมเนียม)</span></td>
-    </tr>
-    <tr>
-      <td align="center"><span class="style8">รองคณบดีฝ่ายกิจการนิสิต  ปฏิบัติราชการแทน</span></td>
-    </tr>
-    <tr>
-      <td align="center"><span class="style8">คณบดีคณะวิศวกรรมศาสตร์</span></td>
-    </tr>
-    <tr>
-      <td><span class="style3">&nbsp;</span></td>
-    </tr>
-    <tr>
-      <td><span class="style3">งานกิจการนิสิตและศิษย์เก่าสัมพันธ์</span></td>
-    </tr>
-    <tr>
-      <td><span class="style3">โทรศัพท์.055-964015/4017/4018</span></td>
-    </tr>
-    <tr>
-      <td><span class="style3">โทรสาร.055-964000</span></td>
-    </tr>
-    <tr>
-      <td><span class="style3">E-mail :  training.eng.nu@gmail.com</span></td>
-    </tr>
-  </table>
-</body>
-</html>
-    `;
+        .style8 {
+          font-family: "TH SarabunPSK"; 
+          font-size:16px; 
+        }
+      -->
+    </style>
+    </head>
+    
+    <body topmargin="top">
+      <table width="600" border="0" align="center">
+        <tr>
+          <td>
+            <table width="100%" border="0" align="center">
+              <tr>
+                <td width="200" height="160">
+                  <p class="style8">ที่ อว. 0603.09/ว.01321</p>
+                  <p class="style8">&nbsp;</p>
+                </td>
+                <td valign="top" colspan="2">
+                <div align="center"><img src="http://www.thailibrary.in.th/wp-content/uploads/2013/04/482457_10200601494981789_1825578775_n.jpg" width="79" height="83" /></div>
+                  <p>&nbsp;</p>
+                </td>
+                <td width="200"><p class="style3" align="right">&nbsp;เลขที่ ......................</p><p></p>
+                  <p class="style8">คณะวิศวกรรมศาสตร์<br />
+                    มหาวิทยาลัยนเรศวร<br />
+                    ตำบลท่าโพธิ์ อำเภอเมืองฯ<br />
+                    จังหวัดพิษณุโลก 65000 </p>          
+                </td>
+              </tr>
+              <tr>
+                <td height="28"><span class="style4"></span></td>
+                <td width="100"><span class="style4"></span></td>
+                <td colspan="2"><span class="style8"><?php echo LongThaiDate($docdate) ; ?>
+                  ${formattedDate} 
+                  </span>
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+    
+        <tr>
+          <td><span class="style3">&nbsp;</span></td>
+        </tr>
+        <tr>
+          <td><span class="style8">เรื่อง &nbsp;&nbsp;ขอขอบคุณ </span></td>
+        </tr>
+        <tr>
+          <td><span class="style3">&nbsp;</span></td>
+        </tr>
+    
+        <tr>
+          <td>
+            <span class="style8">เรียน <strong>&nbsp;&nbsp; 
+            ${send_name}</strong><br />&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 
+            <strong> <? } ?>
+                  ${company_name}  
+                  ${company_building}</strong>
+            </span>
+          </td>
+        </tr>
+    
+        <tr>
+          <td><span class="style3">&nbsp;</span></td>
+        </tr>
+    
+        <tr>
+          <td>
+            <table width="600" cellpadding="0" cellspacing="0">
+              <tr>
+                  <td width="40"><span class="style8">อ้างถึง </span></td>
+                  <td colspan="2"><span class="style8"> หนังสือราชการคณะวิศวกรรมศาสตร์ มหาวิทยาลัยนเรศวร ที่ อว.0603.09/ว.01648</span></td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+    
+        <tr>
+          <td><span class="style3">&nbsp;</span></td>
+        </tr>
+    
+        <!--
+        <tr>
+          <td><span class="style8">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ด้วย คณะวิศวกรรมศาสตร์  มหาวิทยาลัยนเรศวร ได้กำหนดให้นิสิตระดับปริญญาตรี  ออกฝึกงานตามหลักสูตรภาคเรียนฤดูร้อน ประจำปีการศึกษา 2564  โดยเน้นให้นิสิตศึกษาหาความรู้  และประสบการณ์นอกเหนือจากการเรียนการสอน  ระหว่างวันที่ (8 สัปดาห์)</span></td>
+        </tr>
+        -->
+        
+        <tr>
+          <td>
+          ${datesInfo && datesInfo.length > 0 ? `
+            <span class="style8">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+              ด้วยหลักสูตรวิศวกรรมศาสตรบัณฑิต ได้กำหนดให้นิสิตชั้นปีที่ 3 คณะวิศวกรรมศาสตร์ มหาวิทยาลัยนเรศวร   จำนวน 8 หลักสูตร ออกฝึกงานในภาคเรียนฤดูร้อน ประจำปีการศึกษา ${year} 
+              โดยเริ่มฝึกงานตั้งแต่วันที่ ${datesInfo} และ ทางคณะฯ ได้รับความอนุเคราะห์จากหน่วยงานของท่านรับนิสิตสาขา${students[0].depart_name} จำนวน  ${students.length}  ราย คือ  
+            </span>
+            ` : ''} 
+          </td>
+        </tr>
+    
+        <tr>
+          <td>
+            <table cellpadding="0" cellspacing="0">
+              ${students.map(student => `
+                <tr>
+                  <td width="300">
+                    <span class="style8">
+                      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                      ${student.student_name} ${student.student_lastname}
+                    </span>
+                  </td>
+                  <td>
+                    <span class="style8">
+                      รหัสประจำตัวนิสิต &nbsp; ${student.student_code}
+                    </span>
+                  </td>
+                </tr>
+              `).join('')}
+            </table>
+          </td>
+        </tr>
+    
+      <tr>
+          <td><span class="style8">&nbsp; </span></td>
+        </tr> 
+        <tr>
+          <td>
+            <span class="style8">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+              เข้าฝึกงานในช่วงระยะเวลาดังกล่าว นิสิตที่เข้าฝึกงานได้รับความรู้ประสบการณ์ในการปฎิบัติงานจริงและสามารถนำมาประยุกต์ใช้กับสาขาวิชาชีพที่ได้ศึกษา  
+              รวมทั้งการต้อนรับจากหน่วยงานของท่านเป็นอย่างดียิ่ง                  
+              คณะวิศวกรรมศาสตร์ มหาวิทยาลัยนเรศวรจึงใคร่ขอขอบคุณในความอนุเคราะห์ของท่านและผู้เกี่ยวข้องเป็นอย่างยิ่งมา ณ โอกาสนี้
+            </span>
+          </td>
+        </tr>
+    
+        <tr>
+          <td><span class="style3">&nbsp;</span></td>
+        </tr>
+        <tr>
+          <td><span class="style8">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;จึงเรียนมาเพื่อโปรดทราบ คณะวิศวกรรมศาสตร์ มหาวิทยาลัยนเรศวร หวังเป็นอย่างยิ่งว่าคงได้รับความอนุเคราะห์จากท่านด้วยดี</span></td>
+        </tr>
+        <tr>
+          <td><span class="style3">&nbsp;</span></td>
+        </tr>
+        <tr>
+          <td align="center"><span class="style8">ขอแสดงความนับถือ</span></td>
+        </tr>
+        <tr>
+          <td height="75" align="center"><!--<img src="images/sitphank.png" width="223" height="76"/>--></td>
+        </tr>
+        <tr>
+          <td align="center"><span class="style8">(นายภัคพงศ์ หอมเนียม)</span></td>
+        </tr>
+        <tr>
+          <td align="center"><span class="style8">รองคณบดีฝ่ายกิจการนิสิต  ปฏิบัติราชการแทน</span></td>
+        </tr>
+        <tr>
+          <td align="center"><span class="style8">คณบดีคณะวิศวกรรมศาสตร์</span></td>
+        </tr>
+        <tr>
+          <td><span class="style3">&nbsp;</span></td>
+        </tr>
+        <tr>
+          <td><span class="style3">งานกิจการนิสิตและศิษย์เก่าสัมพันธ์</span></td>
+        </tr>
+        <tr>
+          <td><span class="style3">โทรศัพท์.055-964015/4017/4018</span></td>
+        </tr>
+        <tr>
+          <td><span class="style3">โทรสาร.055-964000</span></td>
+        </tr>
+        <tr>
+          <td><span class="style3">E-mail :  training.eng.nu@gmail.com</span></td>
+        </tr>
+        <tr>
+        <td><span class="style3">&nbsp;</span></td>
+        </tr>
+        <tr>
+            <td><span class="style3">&nbsp;</span></td>
+        </tr>
+        <tr>
+        <td><span class="style3">&nbsp;</span></td>
+        </tr>
+        <tr>
+          <td><span class="style3">&nbsp;</span></td>
+        </tr>
+              <tr>
+              <td><span class="style3">&nbsp;</span></td>
+          </tr>
+          <tr>
+              <td><span class="style3">&nbsp;</span></td>
+          </tr>
+          <tr>
+          <td><span class="style3">&nbsp;</span></td>
+        </tr>
+        <tr>
+          <td><span class="style3">&nbsp;</span></td>
+        </tr>
+        <tr>
+        <td><span class="style3">&nbsp;</span></td>
+        </tr>
+        <tr>
+          <td><span class="style3">&nbsp;</span></td>
+        </tr>
+        <tr>
+        <td><span class="style3">&nbsp;</span></td>
+        </tr>
+        <tr>
+        <td><span class="style3">&nbsp;</span></td>
+        </tr>
+      </table>
+    </body>
+    </html>
+`;
+    return htmlContent;
   }
 
   logout() {

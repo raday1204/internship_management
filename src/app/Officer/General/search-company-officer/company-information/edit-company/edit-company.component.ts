@@ -5,7 +5,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { Location } from '@angular/common';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { formatDate } from '@angular/common';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { EditCompanyPopupComponent } from 'src/app/Officer/General/search-company-officer/company-information/edit-company/edit-company-popup/edit-company-popup.component'
 import { CompanyStudentService } from 'src/app/Student/General/search-company-student/company-student/company-student.service';
 
@@ -74,7 +74,7 @@ export class EditCompanyComponent implements OnInit {
       send_position: [''],
       send_tel: [''],
       send_email: [''],
-      send_mobile: [''],
+      send_mobile: ['', [Validators.minLength(10), Validators.maxLength(10), this.validateMobileNumber]],
       company_job: [''],
       number_student_train: [''],
       date_addtraining: [''],
@@ -84,9 +84,9 @@ export class EditCompanyComponent implements OnInit {
 
   ngOnInit(): void {
     const companyId = this.route.snapshot.params['company_id'];
-    console.log('Company ID:', companyId); 
+    console.log('Company ID:', companyId);
     this.getCompanyData(companyId);
-    
+
     this.username = this.companyStudentService.getUsername();
     console.log('Username from service:', this.username);
     if (!this.username) {
@@ -95,6 +95,7 @@ export class EditCompanyComponent implements OnInit {
     }
   }
 
+  //get แสดงข้อมูลหน่วยงานโดยการเลือกจาก company_id
   getCompanyData(companyId: string): void {
     this.http.get<CompanyResponse>(`http://localhost/PJ/Backend/Officer/Company/company-detail.php?company_id=${companyId}`)
       .subscribe((response: CompanyResponse) => {
@@ -130,7 +131,7 @@ export class EditCompanyComponent implements OnInit {
       });
   }
 
-
+  // update ข้อมูลหน่วยงานและหน่วยงานภายใน
   updateCompany() {
     if (this.companyForm.valid) {
       const formattedDateAddTraining = this.companyForm.value.date_addtraining ?
@@ -138,34 +139,34 @@ export class EditCompanyComponent implements OnInit {
 
       const formattedDateEndTraining = this.companyForm.value.date_endtraining ?
         formatDate(this.companyForm.value.date_endtraining, 'yyyy-MM-dd', 'en-US') : '';
-        const formDataCompany = new FormData();
-        formDataCompany.append('company_id', this.companyForm.value.company_id);
-        formDataCompany.append('send_name', this.companyForm.value.send_name);
-        formDataCompany.append('send_coordinator', this.companyForm.value.send_coordinator);
-        formDataCompany.append('send_position', this.companyForm.value.send_position);
-        formDataCompany.append('send_tel', this.companyForm.value.send_tel);
-        formDataCompany.append('send_email', this.companyForm.value.send_email);
-        formDataCompany.append('send_mobile', this.companyForm.value.send_mobile);
-        formDataCompany.append('company_job', this.companyForm.value.company_job);
-        formDataCompany.append('number_student_train', this.companyForm.value.number_student_train || '');
-        formDataCompany.append('date_addtraining', formattedDateAddTraining);
-        formDataCompany.append('date_endtraining', formattedDateEndTraining);
-    
-        formDataCompany.append('company_name', this.companyForm.value.company_name);
-        formDataCompany.append('company_building', this.companyForm.value.company_building);
-    
-        const excludedFields = ['company_name', 'company_building', 'date_addtraining', 'date_endtraining'];
-    
-        Object.keys(this.companyForm.controls).forEach((key) => {
-          if (!excludedFields.includes(key)) {
-            const control = this.companyForm.get(key);
-            if (control) {
-              formDataCompany.append(key, control.value);
-            }
-          }
-        });
+      const formDataCompany = new FormData();
+      formDataCompany.append('company_id', this.companyForm.value.company_id);
+      formDataCompany.append('send_name', this.companyForm.value.send_name);
+      formDataCompany.append('send_coordinator', this.companyForm.value.send_coordinator);
+      formDataCompany.append('send_position', this.companyForm.value.send_position);
+      formDataCompany.append('send_tel', this.companyForm.value.send_tel);
+      formDataCompany.append('send_email', this.companyForm.value.send_email);
+      formDataCompany.append('send_mobile', this.companyForm.value.send_mobile);
+      formDataCompany.append('company_job', this.companyForm.value.company_job);
+      formDataCompany.append('number_student_train', this.companyForm.value.number_student_train || '');
+      formDataCompany.append('date_addtraining', formattedDateAddTraining);
+      formDataCompany.append('date_endtraining', formattedDateEndTraining);
 
-        this.http.post('http://localhost/PJ/Backend/Officer/Company/edit-company.php', formDataCompany)
+      formDataCompany.append('company_name', this.companyForm.value.company_name);
+      formDataCompany.append('company_building', this.companyForm.value.company_building);
+
+      const excludedFields = ['company_name', 'company_building', 'date_addtraining', 'date_endtraining'];
+
+      Object.keys(this.companyForm.controls).forEach((key) => {
+        if (!excludedFields.includes(key)) {
+          const control = this.companyForm.get(key);
+          if (control) {
+            formDataCompany.append(key, control.value);
+          }
+        }
+      });
+
+      this.http.post('http://localhost/PJ/Backend/Officer/Company/edit-company.php', formDataCompany)
         .subscribe(
           (responseCompany: any) => {
             if (responseCompany.success) {
@@ -177,19 +178,18 @@ export class EditCompanyComponent implements OnInit {
           (error) => {
             console.error('Error:', error);
           }
-          );
-      }
+        );
     }
-
+  }
 
   // Method to open a simple alert as a popup displaying the updated data
   openUpdatePopup(): void {
     const formattedDateAddTraining = this.companyForm.value.date_addtraining ?
       formatDate(this.companyForm.value.date_addtraining, 'yyyy-MM-dd', 'en-US') : '';
-  
+
     const formattedDateEndTraining = this.companyForm.value.date_endtraining ?
       formatDate(this.companyForm.value.date_endtraining, 'yyyy-MM-dd', 'en-US') : '';
-  
+
     if (this.companyForm.valid) {
       const dialogRef = this.dialog.open(EditCompanyPopupComponent, {
         data: {
@@ -210,7 +210,7 @@ export class EditCompanyComponent implements OnInit {
           }
         },
       });
-  
+
       dialogRef.afterClosed().subscribe(result => {
         console.log('The dialog was closed');
         if (result && result.saveData) {
@@ -224,11 +224,20 @@ export class EditCompanyComponent implements OnInit {
     }
   }
 
+  validateMobileNumber(control: FormControl) {
+    const mobileNumberPattern = /^[0-9]*$/;
+    if (!mobileNumberPattern.test(control.value)) {
+      return { invalidMobileNumber: true };
+    }
+    return null;
+  }
+
+  //ปฏิทิน
   openDatePicker() {
   }
 
-  goback(){
-  this.location.back();
+  goback() {
+    this.location.back();
   }
 
   logout() {

@@ -19,8 +19,8 @@
     <h6 style="color: red;">*นิสิตสามารถลงทะเบียนได้เพียง 1 หน่วยงาน เท่านั้น</h6>
 
     <table class="table-container" style="width: 900px;">
-        <thead style="font-size: 14px;">
-            <tr>
+        <thead style="font-size: 13px;">
+            <tr style="font-size: 13px;">
                 <th>ลำดับ</th>
                 <th>ชื่อหน่วยงาน</th>
                 <th>หน่วยงานภายใน</th>
@@ -31,8 +31,7 @@
                 <th></th>
             </tr>
         </thead>
-
-        <tbody style="font-size: 14px;">
+        <tbody style="font-size: 13px;">
             <tr *ngFor="let company of companyInformation; let i = index">
                 <td class="text-center">{{ i + 1 }}</td>
                 <td style="word-wrap: break-word;">{{ company.company.company_name }}</td>
@@ -79,15 +78,15 @@
                                 (student[company.company.company_id] && student[company.company.company_id].length <
                                 (company.need_students && company.need_students.length > 0
                                     ? +company.need_students[0].number_student_train
-                                    : 0))" (click)="selectCompany(company)"
-                    style="background-color: #66B366; color: #FDFDF6;" [disabled]="company.selected">
+                                    : 0))"
+                        (click)="selectCompany(company, selectedOption6)" style="background-color: #66B366; color: #FDFDF6;"
+                        [disabled]="company.selected">
                     ยื่นขอเข้าฝึกงาน
                 </button>
             </td>
             </tr>
         </tbody>
     </table>
-
     <!-- <h6 style="color: red;">*นิสิตสามารถลงทะเบียนได้เพียง 1 หน่วยงาน เท่านั้น</h6> -->
 
     <div class="text-box">

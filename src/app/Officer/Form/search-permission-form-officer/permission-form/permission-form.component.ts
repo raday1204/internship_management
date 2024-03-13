@@ -69,7 +69,7 @@ export class PermissionFormComponent {
     this.fetchData();
 
     if (!this.username) {
-      this.router.navigateByUrl('/login-officer', { replaceUrl: true });
+      this.router.navigateByUrl('/home-officer', { replaceUrl: true });
       return;
     }
   }
@@ -108,34 +108,58 @@ export class PermissionFormComponent {
     }
   }
 
-  //พิมพ์เอกสาร
-  selectForm(company: Company) {
-    if (company && company.company_id) {
-      const students = this.student[company.company_id];
-      const need_students = this.need_student[company.company_id];
-      // console.log('Students:', students);
-      // console.log('company:', company);
-      // console.log('Need Students:', need_students);
-      if (students && need_students && students.length > 0 && need_students.length > 0) {
-        const fileContent = this.generateFileUrl(company, students, need_students);
+//พิมพ์เอกสาร
+onPrintButtonClick(): void {
+  const selectedCompanyNames = this.companyInformation.map(companyInfo => companyInfo.company.company_name);
+  if (selectedCompanyNames && selectedCompanyNames.length > 0) {
+    this.selectForm(selectedCompanyNames);
+  } else {
+    console.error('No companies selected for printing.');
+  }
+}
 
-        if (fileContent) {
-          const newTab = window.open(fileContent, '_blank');
+//เลือกพิมพ์เอกสารเฉพาะหน่วยงาน
+selectForm(selectedCompanyNames: string[]): void {
+  if (selectedCompanyNames && selectedCompanyNames.length > 0) {
+    const newTab = window.open('', '_blank');
+    if (newTab) {
+      newTab.document.write(`
+        <html xmlns="http://www.w3.org/1999/xhtml">
+        <head>
+            <meta http-equiv="Content-Type" content="text/html; charset=windows-874" />
+            <title>หนังสือขอความอนุเคราะห์รับนิสิตเข้าฝึกงาน</title>
+            <style type="text/css">
+                <!--
+                .style3 {
+                    font-family: "TH SarabunPSK"; 
+                    font-size:14px; 
+                }
 
-          if (newTab) {
-            newTab.document.write(fileContent);
-            newTab.document.close();
-          } else {
-            console.error('Unable to open new tab. Please check your popup settings.');
-          }
-        }
-      } else {
-        console.error('No student or need_student data found for the selected company.');
-      }
+                .style8 {
+                    font-family: "TH SarabunPSK";
+                    font-size:18px; 
+                }
+                -->
+            </style>
+        </head>
+        <body>
+      `);
+
+      this.companyInformation.forEach(companyInfo => {
+        const company = companyInfo.company;
+        const students = companyInfo.students;
+        const need_students = companyInfo.need_students;
+        const htmlContent = this.generateFileUrl(company, students, need_students);
+        newTab.document.body.innerHTML += htmlContent;
+      });
+
+      newTab.document.write('</body></html>');
     } else {
-      this.router.navigate(['/search-permission-form-officer']);
+      console.error('Unable to open new tab.');
     }
   }
+}
+
 
   //สร้างหน้า html เอกสาร
   generateFileUrl(company: Company, students: Student[], need_students: NeedStudent[]): string {
@@ -290,10 +314,11 @@ export class PermissionFormComponent {
           <span class="style8">
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
             คณะวิศวกรรมศาสตร์ มหาวิทยาลัยนเรศวร เห็นว่าหน่วยงานของท่านมีความเหมาะสมที่จะให้ความรู้และประสบการณ์ตรงกับนิสิตได้เป็นอย่างดี จึงขอความอนุเคราะห์รับนิสิตสาขาวิชาวิศวกรรมคอมพิวเตอร์ 
-            จำนวน ${students.length} ราย ตามรายชื่อข้างท้ายนี้ เข้าฝึกงานในหน่วยงาน ของท่าน
+            จำนวน ${ students.length } ราย ตามรายชื่อข้างท้ายนี้ เข้าฝึกงานในหน่วยงาน ของท่าน
           </span>
         </td>
       </tr>
+
       
       <tr>
           <td>
@@ -321,15 +346,16 @@ export class PermissionFormComponent {
           <td><span class="style8">&nbsp; </span></td>
         </tr> 
         
-        <tr>
-          <td>
-            <span class="style8">
-              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-              ทั้งนี้ คณะวิศวกรรมศาสตร์  จึงใคร่ขอความอนุเคราะห์ท่านแจ้งผลการตอบรับในแบบฟอร์มตอบรับนิสิตเข้าฝึกงานให้คณะฯ ทราบด้วยโดยทางโทรสารฯ 
-              จดหมายอีเมล์ : training.eng.nu@gmail.com ภายในวันที่ 1 กันยายน 2566
-            </span>
-          </td>
-        </tr>
+        
+      <tr>
+        <td>
+          <span class="style8">
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            ทั้งนี้ คณะวิศวกรรมศาสตร์  จึงใคร่ขอความอนุเคราะห์ท่านแจ้งผลการตอบรับในแบบฟอร์มตอบรับนิสิตเข้าฝึกงานให้คณะฯ ทราบด้วยโดยทางโทรสารฯ 
+            จดหมายอีเมล์ : training.eng.nu@gmail.com ภายในวันที่ 1 กันยายน 2566
+          </span>
+        </td>
+      </tr>
 
         <tr>
           <td><span class="style3">&nbsp;</span></td>
@@ -383,9 +409,44 @@ export class PermissionFormComponent {
             <td><span class="style3">E-mail : training.eng.nu@gmail.com</span></td>
         </tr>
         -->
-
-</table>
-</body>
+        <tr>
+        <td><span class="style3">&nbsp;</span></td>
+        </tr>
+        <tr>
+            <td><span class="style3">&nbsp;</span></td>
+        </tr>
+        <tr>
+        <td><span class="style3">&nbsp;</span></td>
+        </tr>
+        <tr>
+          <td><span class="style3">&nbsp;</span></td>
+        </tr>
+              <tr>
+              <td><span class="style3">&nbsp;</span></td>
+          </tr>
+          <tr>
+              <td><span class="style3">&nbsp;</span></td>
+          </tr>
+          <tr>
+          <td><span class="style3">&nbsp;</span></td>
+        </tr>
+        <tr>
+          <td><span class="style3">&nbsp;</span></td>
+        </tr>
+        <tr>
+        <td><span class="style3">&nbsp;</span></td>
+      </tr>
+      <tr>
+        <td><span class="style3">&nbsp;</span></td>
+      </tr>
+      <tr>
+      <td><span class="style3">&nbsp;</span></td>
+      </tr>
+      <tr>
+      <td><span class="style3">&nbsp;</span></td>
+      </tr>
+    </table>
+  </body>
 </html>
   `;
   }
