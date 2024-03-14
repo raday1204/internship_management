@@ -7,7 +7,10 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
     $studentInformation = [];
 
-    $sqlStudent = "SELECT * FROM student WHERE year = '$year' AND type_name = '$type_name'";
+    $sqlStudent = "SELECT s.*, c.company_name , c.company_building
+                   FROM student s 
+                   LEFT JOIN company c ON s.company_id = c.company_id
+                   WHERE s.year = '$year' AND s.type_name = '$type_name'";
     $resultStudent = $conn->query($sqlStudent);
 
     if ($resultStudent) {

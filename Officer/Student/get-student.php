@@ -9,7 +9,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['year']) && isset($_GET[
 
     // Modify your SQL query to join student and company tables based on company_id
     $sqlStudent = "SELECT s.*, c.company_name, c.company_building FROM student s 
-                   INNER JOIN company c ON s.company_id = c.company_id
+                   LEFT JOIN company c ON s.company_id = c.company_id
                    WHERE s.year = '$year' AND s.type_name = '$type_name'";
 
     $resultStudent = $conn->query($sqlStudent);
