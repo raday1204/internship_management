@@ -206,8 +206,8 @@ export class HomeStudentComponent implements OnInit {
 
   menuSidebar = [
     {
-      link_name: "คำอธิบายรายวิชา",
-      link: "/assets/pdfs/คำอธิบายรายวิชา.pdf",
+      link_name: "คู่มือการใช้งานระบบ",
+      link: "/assets/pdfs/คู่มือการใช้งาน.pdf",
       icon: "fa-regular fa-paste",
       sub_menu: [],
       openInNewTab: true
